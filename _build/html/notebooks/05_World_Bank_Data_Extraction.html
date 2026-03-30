@@ -400,13 +400,13 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gdp-growth-analysis-of-major-countries-before-and-after-covid-19"><span style="color: blue;"><strong>1. GDP Growth Analysis of Major Countries Before and After COVID-19</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-response"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-response"><strong>Claude: Response</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#execution-results"><span style="color: blue;"><strong>2. Execution Results</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-from-running-the-python-code-provided-by-claude"><strong>Results from Running the Python Code Provided by Claude</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-results-from-running-the-python-code"><strong>Claude: Results from Running the Python Code</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-direct-api-calling-not-possible"><span style="color: blue;"><strong>3. Is Direct API Calling Not Possible?</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude: Response</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-world-bank-wdi"><span style="color: blue;"><strong>4. Introduction to World Bank WDI</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-explanation"><strong>Claude’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-explanation"><strong>Claude: Explanation</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poverty-inequality">1. Poverty &amp; Inequality</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#people">2. People</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment">3. Environment</a></li>
@@ -416,7 +416,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api-call-format">API Call Format</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-code">💻 <strong>Python Code</strong></a></li>
 </ul>
             </nav>
         </div>
@@ -434,8 +434,8 @@ document.write(`
 <h2><span style="color: blue;"><strong>1. GDP Growth Analysis of Major Countries Before and After COVID-19</strong></span><a class="headerlink" href="#gdp-growth-analysis-of-major-countries-before-and-after-covid-19" title="Link to this heading">#</a></h2>
 <p><span style="color: blue;"><strong>Using the World Bank WDI API, create tables and graphs showing changes in GDP growth rates around COVID-19 for major advanced economies including South Korea, the United States, Japan, and China. (Use Python code)</strong></span></p>
 </section>
-<section id="claude-s-response">
-<h2><strong>Claude’s Response</strong><a class="headerlink" href="#claude-s-response" title="Link to this heading">#</a></h2>
+<section id="claude-response">
+<h2><strong>Claude: Response</strong><a class="headerlink" href="#claude-response" title="Link to this heading">#</a></h2>
 <p>Both the graph and the Python code have been generated. Key findings summary:</p>
 <p><strong>COVID-19 Shock (2020)</strong></p>
 <ul class="simple">
@@ -453,8 +453,8 @@ document.write(`
 <section id="execution-results">
 <h2><span style="color: blue;"><strong>2. Execution Results</strong></span><a class="headerlink" href="#execution-results" title="Link to this heading">#</a></h2>
 </section>
-<section id="results-from-running-the-python-code-provided-by-claude">
-<h2><strong>Results from Running the Python Code Provided by Claude</strong><a class="headerlink" href="#results-from-running-the-python-code-provided-by-claude" title="Link to this heading">#</a></h2>
+<section id="claude-results-from-running-the-python-code">
+<h2><strong>Claude: Results from Running the Python Code</strong><a class="headerlink" href="#claude-results-from-running-the-python-code" title="Link to this heading">#</a></h2>
 <p><strong>GDP Growth Rate (annual %) — World Bank WDI (NY.GDP.MKTP.KD.ZG)</strong></p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
@@ -601,7 +601,7 @@ document.write(`
 <h2><span style="color: blue;"><strong>3. Is Direct API Calling Not Possible?</strong></span><a class="headerlink" href="#is-direct-api-calling-not-possible" title="Link to this heading">#</a></h2>
 </section>
 <section id="id1">
-<h2><strong>Claude’s Response</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<h2><strong>Claude: Response</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
 <p>In my environment, external network access is blocked, so the World Bank API call fails. My environment’s settings have <strong>external network access disabled (Enabled: false)</strong>, which means HTTP requests to <code class="docutils literal notranslate"><span class="pre">api.worldbank.org</span></code> are blocked entirely.</p>
 <p><span style="color: blue;"><strong>Then where does the built-in data come from?</strong></span></p>
 <p>To be frank, the built-in data included as a fallback in the code was <strong>World Bank WDI figures that I recalled from my training data and manually typed as a Python dictionary</strong>.</p>
@@ -611,8 +611,8 @@ document.write(`
 <section id="introduction-to-world-bank-wdi">
 <h2><span style="color: blue;"><strong>4. Introduction to World Bank WDI</strong></span><a class="headerlink" href="#introduction-to-world-bank-wdi" title="Link to this heading">#</a></h2>
 </section>
-<section id="claude-s-explanation">
-<h2><strong>Claude’s Explanation</strong><a class="headerlink" href="#claude-s-explanation" title="Link to this heading">#</a></h2>
+<section id="claude-explanation">
+<h2><strong>Claude: Explanation</strong><a class="headerlink" href="#claude-explanation" title="Link to this heading">#</a></h2>
 <p>The World Bank WDI (World Development Indicators) is a comprehensive collection of global development data covering more than 200 countries and territories with over 1,500 indicators. The API provides access to approximately 16,000 time-series indicators, many of which go back more than 50 years.</p>
 <p>WDI is currently organized into six major thematic areas, and the World Bank Open Data site classifies them into 20 detailed topics. Below is a summary organized by major area.</p>
 <hr class="docutils" />
@@ -666,8 +666,8 @@ document.write(`
 <p>Access is available without an API key or any other authentication method, so data can be retrieved as long as you know the desired indicator code. The full list of indicators can be queried at <code class="docutils literal notranslate"><span class="pre">https://api.worldbank.org/v2/indicator?format=json&amp;per_page=20000</span></code>.</p>
 </section>
 </section>
-<section id="reference-python-code">
-<h2><strong>Reference: Python Code</strong><a class="headerlink" href="#reference-python-code" title="Link to this heading">#</a></h2>
+<section id="python-code">
+<h2>💻 <strong>Python Code</strong><a class="headerlink" href="#python-code" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
@@ -1042,13 +1042,13 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gdp-growth-analysis-of-major-countries-before-and-after-covid-19"><span style="color: blue;"><strong>1. GDP Growth Analysis of Major Countries Before and After COVID-19</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-response"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-response"><strong>Claude: Response</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#execution-results"><span style="color: blue;"><strong>2. Execution Results</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results-from-running-the-python-code-provided-by-claude"><strong>Results from Running the Python Code Provided by Claude</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-results-from-running-the-python-code"><strong>Claude: Results from Running the Python Code</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-direct-api-calling-not-possible"><span style="color: blue;"><strong>3. Is Direct API Calling Not Possible?</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude: Response</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-world-bank-wdi"><span style="color: blue;"><strong>4. Introduction to World Bank WDI</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-explanation"><strong>Claude’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-explanation"><strong>Claude: Explanation</strong></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#poverty-inequality">1. Poverty &amp; Inequality</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#people">2. People</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment">3. Environment</a></li>
@@ -1058,7 +1058,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#api-call-format">API Call Format</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-code">💻 <strong>Python Code</strong></a></li>
 </ul>
   </nav></div>
 

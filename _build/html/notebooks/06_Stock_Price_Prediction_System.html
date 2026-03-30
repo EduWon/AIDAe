@@ -400,13 +400,13 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt"><span style="color: blue;"><strong>1. Prompt</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-idea"><strong>Claude’s Idea</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-idea"><strong>Claude: Idea</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rationale-for-weight-settings"><span style="color: blue;"><strong>2. Rationale for Weight Settings</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-response"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-response"><strong>Claude: Response</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-1-p-up-the-probability-of-decline"><span style="color: blue;"><strong>3. Is (1 - P(Up)) the Probability of Decline?</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude: Response</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-upgrade-3-class-classification"><span style="color: blue;"><strong>4. Model Upgrade: 3-Class Classification</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-work"><strong>Claude’s Work</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-work"><strong>Claude: Work</strong></a></li>
 </ul>
             </nav>
         </div>
@@ -426,8 +426,8 @@ document.write(`
 <p><img alt="Stock" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/6-1.png" /></p>
 <p>Source: Two screenshots from the Mirae Asset Securities mobile app</p>
 </section>
-<section id="claude-s-idea">
-<h2><strong>Claude’s Idea</strong><a class="headerlink" href="#claude-s-idea" title="Link to this heading">#</a></h2>
+<section id="claude-idea">
+<h2><strong>Claude: Idea</strong><a class="headerlink" href="#claude-idea" title="Link to this heading">#</a></h2>
 <p>I identified the order book and 1-minute candlestick chart data from the images. I will build a dashboard that estimates the probability of a price increase in real time by combining order flow imbalance, price momentum, trading volume, and other factors. Based on the uploaded order book and chart data, I have created a real-time probability estimation system for price increases.</p>
 <p><strong>Estimation Model Structure</strong> — Weighted sum of 6 factors:</p>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -474,8 +474,8 @@ document.write(`
 <section id="rationale-for-weight-settings">
 <h2><span style="color: blue;"><strong>2. Rationale for Weight Settings</strong></span><a class="headerlink" href="#rationale-for-weight-settings" title="Link to this heading">#</a></h2>
 </section>
-<section id="claude-s-response">
-<h2><strong>Claude’s Response</strong><a class="headerlink" href="#claude-s-response" title="Link to this heading">#</a></h2>
+<section id="claude-response">
+<h2><strong>Claude: Response</strong><a class="headerlink" href="#claude-response" title="Link to this heading">#</a></h2>
 <p>Good question. Let me explain the rationale behind each factor’s weight.</p>
 <p><strong>Near-Price Order Book Imbalance (25%) — Highest Weight</strong></p>
 <p>The bid-ask volume difference at the 3 price levels immediately above and below the current price has the most direct impact on ultra-short-term price direction. While orders at distant price levels are frequently canceled or modified, near-price orders have a higher probability of being executed. In your uploaded data, the difference between the ask volume just above the current price (161,100: 15,800) and the bid volume just below (160,900: 11,965) suggests the short-term direction.</p>
@@ -494,7 +494,7 @@ document.write(`
 <h2><span style="color: blue;"><strong>3. Is (1 - P(Up)) the Probability of Decline?</strong></span><a class="headerlink" href="#is-1-p-up-the-probability-of-decline" title="Link to this heading">#</a></h2>
 </section>
 <section id="id1">
-<h2><strong>Claude’s Response</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<h2><strong>Claude: Response</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
 <p>Strictly speaking, no.</p>
 <p>The next price movement has three possible outcomes — up, unchanged, or down — so <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">P(up)</span></code> = <code class="docutils literal notranslate"><span class="pre">P(unchanged)</span> <span class="pre">+</span> <span class="pre">P(down)</span></code>. The current model does not distinguish between these and treats the output as a binary score. For example, if the estimated probability of an increase is 40%, it is impossible to tell whether the remaining 60% represents a likely decline or a likely flat market.</p>
 <p>There are three directions for improvement.</p>
@@ -506,8 +506,8 @@ document.write(`
 <section id="model-upgrade-3-class-classification">
 <h2><span style="color: blue;"><strong>4. Model Upgrade: 3-Class Classification</strong></span><a class="headerlink" href="#model-upgrade-3-class-classification" title="Link to this heading">#</a></h2>
 </section>
-<section id="claude-s-work">
-<h2><strong>Claude’s Work</strong><a class="headerlink" href="#claude-s-work" title="Link to this heading">#</a></h2>
+<section id="claude-work">
+<h2><strong>Claude: Work</strong><a class="headerlink" href="#claude-work" title="Link to this heading">#</a></h2>
 <p>I will rewrite the entire file as a 3-class model. The key changes are softmax-based 3-class probabilities, introduction of an unchanged-zone threshold, and a 3-color probability trend chart. The upgrade to a 3-class model is complete. The major changes are as follows.</p>
 <p><strong>Model Structure Change</strong></p>
 <p>Instead of the previous binary score (0–100%), the model first computes a directional score from the weighted sum of 6 factors, then combines it with a volatility indicator to produce 3 logits. The up-logit increases when the directional score is positive, the down-logit increases when it is negative, and the unchanged-logit strengthens when volatility is low and directionality is weak. Softmax is applied to these 3 logits to convert them into a probability distribution summing to 100%.</p>
@@ -587,13 +587,13 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt"><span style="color: blue;"><strong>1. Prompt</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-idea"><strong>Claude’s Idea</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-idea"><strong>Claude: Idea</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rationale-for-weight-settings"><span style="color: blue;"><strong>2. Rationale for Weight Settings</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-response"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-response"><strong>Claude: Response</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-1-p-up-the-probability-of-decline"><span style="color: blue;"><strong>3. Is (1 - P(Up)) the Probability of Decline?</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude: Response</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-upgrade-3-class-classification"><span style="color: blue;"><strong>4. Model Upgrade: 3-Class Classification</strong></span></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-work"><strong>Claude’s Work</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-work"><strong>Claude: Work</strong></a></li>
 </ul>
   </nav></div>
 

@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -1226,17 +1226,21 @@ This change is extremely advantageous for identification.</p></li>
 <section id="level-b-eligibility-after-income-requirement-relaxation-leveraging-the-december-2024-change">
 <h4>2.2 Level B: Eligibility After Income Requirement Relaxation (Leveraging the December 2024 Change)<a class="headerlink" href="#level-b-eligibility-after-income-requirement-relaxation-leveraging-the-december-2024-change" title="Link to this heading">#</a></h4>
 <p>This is the truly powerful identification point.</p>
-<ul class="simple">
+<ul>
 <li><p><span class="math notranslate nohighlight">\(Eligible^{B}_{h,t}=1\)</span> if <span class="math notranslate nohighlight">\(HHInc_{h,\mathrm{year}(t)} \le 200\)</span> million won</p></li>
-<li><p>Define the newly eligible group:
-$<span class="math notranslate nohighlight">\(
-NewlyEligible_h = 1\big[130\text{ million} &lt; HHInc_{h,year} \le 200\text{ million}\big]
-\)</span>$</p></li>
-<li><p>Post-relaxation:
-$<span class="math notranslate nohighlight">\(
-Post^{B}_t = 1[t \ge \text{December 2024}]
-\)</span>$
-This creates a group that suddenly gained policy exposure after the relaxation, strengthening the DID-RD design.</p></li>
+<li><p>Define the newly eligible group:</p>
+<div class="math notranslate nohighlight">
+\[
+  NewlyEligible_h = 1\big[130\text{ million} &lt; HHInc_{h,year} \le 200\text{ million}\big]
+  \]</div>
+</li>
+<li><p>Post-relaxation:</p>
+<div class="math notranslate nohighlight">
+\[
+  Post^{B}_t = 1[t \ge \text{December 2024}]
+  \]</div>
+<p>This creates a group that suddenly gained policy exposure after the relaxation, strengthening the DID-RD design.</p>
+</li>
 </ul>
 </section>
 </section>

@@ -1,0 +1,1747 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 4. PPP Graph Analysis &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/04_PPP_Graph_Analysis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 5. World Bank Data Extraction" href="05_World_Bank_Data_Extraction.html" />
+    <link rel="prev" title="Ch 3. KBO Regular Season Team Performance Analysis" href="03_KBO_Regular_Season_Team_Performance.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/04_PPP_Graph_Analysis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/04_PPP_Graph_Analysis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 4. PPP Graph Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uploading-the-graph"><span style="color: blue;"><strong>1. Uploading the Graph</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-explanation"><strong>Claude’s Explanation</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#it-should-be-depreciation-rate-not-depreciation-of-value"><span style="color: blue;"><strong>It should be “depreciation rate,” not “depreciation of value”!</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Explanation</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-explanation"><strong>ChatGPT’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meaning-of-the-axes">1. Meaning of the Axes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-relationship-predicted-by-ppp">2. The Relationship Predicted by PPP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meaning-of-the-data-points">3. Meaning of the Data Points</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-interpretation">4. Economic Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important-additional-interpretation-empirical-perspective">5. Important Additional Interpretation (Empirical Perspective)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#updating-the-graph-period"><span style="color: blue;"><strong>2. Updating the Graph Period</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-analysis"><strong>ChatGPT’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-source">1. Data Source</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#world-bank-world-development-indicators-wdi">World Bank: World Development Indicators (WDI)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-used">2. Variables Used</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inflation">(1) Inflation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exchange-rate">(2) Exchange Rate</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-variables-for-ppp-analysis">3. Derived Variables for PPP Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inflation-differential-relative-to-the-u-s">(1) Inflation Differential (relative to the U.S.)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#average-exchange-rate-depreciation">(2) Average Exchange Rate Depreciation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-to-ppp-theory">4. Connection to PPP Theory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-variable-combination-is-used-empirical-rationale">5. Why This Variable Combination Is Used (Empirical Rationale)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-example">6. Interpretation Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notes-differences-from-the-original-figure">7. Notes (Differences from the Original Figure)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-two-periods"><span style="color: blue;"><strong>3. Comparing Two Periods</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>ChatGPT’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-summary">1. Overall Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-corr">2. Correlation (corr)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#slope-ols-b">3. Slope (OLS b)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intercept-ols-a">4. Intercept (OLS a)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppp-baseline-errors-most-important">5. PPP Baseline Errors (Most Important)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rmse">RMSE</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mae">MAE</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanatory-power-r2">6. Explanatory Power (R²)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comprehensive-interpretation">7. Comprehensive Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-these-results-emerge-structural-reasons">8. Why These Results Emerge (Structural Reasons)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaway">9. Key Takeaway</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-4-ppp-graph-analysis">
+<h1><strong>Ch 4. PPP Graph Analysis</strong><a class="headerlink" href="#ch-4-ppp-graph-analysis" title="Link to this heading">#</a></h1>
+<section id="uploading-the-graph">
+<h2><span style="color: blue;"><strong>1. Uploading the Graph</strong></span><a class="headerlink" href="#uploading-the-graph" title="Link to this heading">#</a></h2>
+<p><img alt="PPP" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/4-1.png" /></p>
+<p>Source: Feenstra and Taylor (2017), <em>Essential International Economics</em>, 3rd ed., Figure 11-2.</p>
+</section>
+<section id="claude-s-explanation">
+<h2><strong>Claude’s Explanation</strong><a class="headerlink" href="#claude-s-explanation" title="Link to this heading">#</a></h2>
+<p>This graph is a scatter plot that empirically tests the predictions of <strong>Purchasing Power Parity (PPP)</strong>.</p>
+<p><strong>Axis Descriptions:</strong></p>
+<ul class="simple">
+<li><p><strong>Horizontal axis</strong>: Difference between each country’s inflation rate and the U.S. inflation rate over 1975–2005 (annual %)</p></li>
+<li><p><strong>Vertical axis</strong>: Rate of depreciation of each country’s currency against the U.S. dollar over the same period (annual %)</p></li>
+</ul>
+<p><strong>Key Content:</strong></p>
+<p>The black diagonal line represents the theoretical relationship predicted by PPP: exchange rates should change by the same amount as the inflation differential. For example, if a country’s inflation is 10% higher than the U.S. per year, PPP predicts that its currency should depreciate by 10% per year.</p>
+<p>Each point represents an individual country, and most points are distributed near this diagonal line. This shows that PPP holds reasonably well in the long run.</p>
+<p><strong>Interpretation:</strong></p>
+<ul class="simple">
+<li><p>Countries with low inflation (left side) experienced little currency depreciation</p></li>
+<li><p>Countries with high inflation (right side, +30–40%) experienced large currency depreciation</p></li>
+<li><p>While there are frequent short-run deviations from PPP, over a 30-year period a strong positive correlation emerges between inflation differentials and exchange rate changes</p></li>
+</ul>
+<p>This is a classic graph frequently used in international economics textbooks to illustrate the long-run validity of PPP.</p>
+</section>
+<section id="it-should-be-depreciation-rate-not-depreciation-of-value">
+<h2><span style="color: blue;"><strong>It should be “depreciation rate,” not “depreciation of value”!</strong></span><a class="headerlink" href="#it-should-be-depreciation-rate-not-depreciation-of-value" title="Link to this heading">#</a></h2>
+</section>
+<section id="id1">
+<h2><strong>Claude’s Explanation</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>Correct, I stand corrected. Translating “depreciation” here as <strong>currency depreciation rate</strong> is more appropriate.</p>
+<p>The vertical axis represents the <strong>depreciation rate</strong> of each country’s currency against the U.S. dollar (annual %). In other words, the graph shows that countries with higher inflation than the U.S. experienced greater currency depreciation relative to the dollar.</p>
+<p>The rest of the interpretation remains the same. It demonstrates that the PPP prediction — that exchange rates depreciate by the amount of the inflation differential in the long run — is well supported by the empirical data.</p>
+</section>
+<section id="chatgpt-s-explanation">
+<h2><strong>ChatGPT’s Explanation</strong><a class="headerlink" href="#chatgpt-s-explanation" title="Link to this heading">#</a></h2>
+<p>This figure is a scatter plot showing how well the long-run predictions of Purchasing Power Parity (PPP) match actual data.</p>
+<section id="meaning-of-the-axes">
+<h3>1. Meaning of the Axes<a class="headerlink" href="#meaning-of-the-axes" title="Link to this heading">#</a></h3>
+<p><strong>Horizontal axis</strong><br />
+Inflation differential over 1975–2005: <span class="math notranslate nohighlight">\(\pi_{country} - \pi_{US}\)</span> (how much higher the inflation rate was compared to the U.S., annual average %)</p>
+<p><strong>Vertical axis</strong><br />
+Exchange rate depreciation over the same period (how much the country’s currency weakened against the dollar, annual average %)</p>
+<p>In other words:</p>
+<ul class="simple">
+<li><p>Horizontal axis: Price differential</p></li>
+<li><p>Vertical axis: Exchange rate change</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="the-relationship-predicted-by-ppp">
+<h3>2. The Relationship Predicted by PPP<a class="headerlink" href="#the-relationship-predicted-by-ppp" title="Link to this heading">#</a></h3>
+<p>The basic equation of PPP is:</p>
+<div class="math notranslate nohighlight">
+\[
+\Delta s \approx \pi_{domestic} - \pi_{foreign}
+\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\Delta s\)</span>: Rate of exchange rate change (domestic currency depreciation rate)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\pi\)</span>: Inflation rate</p></li>
+</ul>
+<p>The meaning is as follows:</p>
+<p>If domestic prices rise faster than in the U.S. → the domestic currency depreciates by that amount.</p>
+<p>The diagonal (45-degree) line in the graph represents exactly the relationship predicted by PPP.</p>
+</section>
+<hr class="docutils" />
+<section id="meaning-of-the-data-points">
+<h3>3. Meaning of the Data Points<a class="headerlink" href="#meaning-of-the-data-points" title="Link to this heading">#</a></h3>
+<p>Each point represents one country.</p>
+<p>Observed characteristics:</p>
+<ul class="simple">
+<li><p>Most points cluster around the diagonal line</p></li>
+<li><p>Larger inflation differentials correspond to greater currency depreciation</p></li>
+</ul>
+<p>In other words, PPP holds reasonably well in the long run.</p>
+<p>Example:</p>
+<p>If inflation is +10%p higher than the U.S.<br />
+→ the currency tends to depreciate by about +10%</p>
+</section>
+<hr class="docutils" />
+<section id="economic-interpretation">
+<h3>4. Economic Interpretation<a class="headerlink" href="#economic-interpretation" title="Link to this heading">#</a></h3>
+<p>The key message of this figure is:</p>
+<p>In the long run, exchange rates reflect price differentials.</p>
+<p>Specifically:</p>
+<ul class="simple">
+<li><p>High-inflation countries → currency weakness</p></li>
+<li><p>Low-inflation countries → currency strength or stability</p></li>
+</ul>
+<p>This is a critically important long-run relationship in international economics.</p>
+</section>
+<hr class="docutils" />
+<section id="important-additional-interpretation-empirical-perspective">
+<h3>5. Important Additional Interpretation (Empirical Perspective)<a class="headerlink" href="#important-additional-interpretation-empirical-perspective" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>In the short run, PPP does not hold well (exchange rate volatility is high)</p></li>
+<li><p>However, over long-run averages like 30 years, a strong linear relationship emerges</p></li>
+</ul>
+<p>Reasons for imperfect alignment:</p>
+<ul class="simple">
+<li><p>Capital movements</p></li>
+<li><p>Productivity differences (Balassa–Samuelson effect)</p></li>
+<li><p>Policy, crises, financial market factors</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h3>
+<p>In the long run:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Exchange rate change} \approx \text{Inflation differential}
+\]</div>
+<p>This graph shows that Purchasing Power Parity is quite well supported by the data.</p>
+</section>
+</section>
+<section id="updating-the-graph-period">
+<h2><span style="color: blue;"><strong>2. Updating the Graph Period</strong></span><a class="headerlink" href="#updating-the-graph-period" title="Link to this heading">#</a></h2>
+</section>
+<section id="chatgpt-s-analysis">
+<h2><strong>ChatGPT’s Analysis</strong><a class="headerlink" href="#chatgpt-s-analysis" title="Link to this heading">#</a></h2>
+<p>Below is a precise summary of the <strong>data sources</strong> and <strong>variable definitions</strong> used to create the <strong>updated PPP scatter plot</strong>. The key idea is to use the World Bank’s long-run country-level panel data to compute:</p>
+<div class="math notranslate nohighlight">
+\[\text{Average inflation differential} \quad \text{vs} \quad \text{Average exchange rate depreciation}\]</div>
+<hr class="docutils" />
+<section id="data-source">
+<h3>1. Data Source<a class="headerlink" href="#data-source" title="Link to this heading">#</a></h3>
+<section id="world-bank-world-development-indicators-wdi">
+<h4>World Bank: World Development Indicators (WDI)<a class="headerlink" href="#world-bank-world-development-indicators-wdi" title="Link to this heading">#</a></h4>
+<ul>
+<li><p>Provider: World Bank</p></li>
+<li><p>Database: <strong>World Development Indicators</strong></p></li>
+<li><p>URL
+<a class="reference external" href="https://data.worldbank.org/">https://data.worldbank.org/</a></p></li>
+<li><p>API usage:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>https://api.worldbank.org/v2/country/all/indicator/{indicator}
+</pre></div>
+</div>
+</li>
+</ul>
+<p>Features:</p>
+<ul class="simple">
+<li><p>Covers nearly all countries</p></li>
+<li><p>Annual time series (1960–present)</p></li>
+<li><p>The most standard publicly available data for international comparative research</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="variables-used">
+<h3>2. Variables Used<a class="headerlink" href="#variables-used" title="Link to this heading">#</a></h3>
+<section id="inflation">
+<h4>(1) Inflation<a class="headerlink" href="#inflation" title="Link to this heading">#</a></h4>
+<p><strong>Indicator code</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>FP.CPI.TOTL.ZG
+</pre></div>
+</div>
+<p><strong>Name</strong>
+Inflation, consumer prices (annual %)</p>
+<p><strong>Definition</strong>
+<span class="math notranslate nohighlight">\(
+\pi_{i,t} = \frac{CPI_{i,t} - CPI_{i,t-1}}{CPI_{i,t-1}} \times 100
+\)</span></p>
+<p>Meaning:</p>
+<ul class="simple">
+<li><p>Annual inflation rate (%) based on the Consumer Price Index (CPI) for country <span class="math notranslate nohighlight">\(i\)</span></p></li>
+<li><p>An <strong>approximation of relative price changes</strong> used in PPP theory</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="exchange-rate">
+<h4>(2) Exchange Rate<a class="headerlink" href="#exchange-rate" title="Link to this heading">#</a></h4>
+<p><strong>Indicator code</strong></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>PA.NUS.FCRF
+</pre></div>
+</div>
+<p><strong>Name</strong>
+Official exchange rate (LCU per US$, period average)</p>
+<p><strong>Definition</strong></p>
+<p>Exchange rate:
+<span class="math notranslate nohighlight">\(
+e_{i,t} = \text{local currency units per US dollar}
+\)</span></p>
+<p>Examples:</p>
+<ul class="simple">
+<li><p>South Korea: KRW/USD</p></li>
+<li><p>Japan: JPY/USD</p></li>
+</ul>
+<p>Interpretation:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(e\)</span> rises → domestic currency <strong>depreciates</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(e\)</span> falls → domestic currency <strong>appreciates</strong></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="derived-variables-for-ppp-analysis">
+<h3>3. Derived Variables for PPP Analysis<a class="headerlink" href="#derived-variables-for-ppp-analysis" title="Link to this heading">#</a></h3>
+<section id="inflation-differential-relative-to-the-u-s">
+<h4>(1) Inflation Differential (relative to the U.S.)<a class="headerlink" href="#inflation-differential-relative-to-the-u-s" title="Link to this heading">#</a></h4>
+<p>Annual:
+<span class="math notranslate nohighlight">\(
+d_{i,t} = \pi_{i,t} - \pi_{US,t}
+\)</span></p>
+<p>Period average:
+<span class="math notranslate nohighlight">\(
+\overline{d_i} = \frac{1}{T} \sum_t d_{i,t}
+\)</span></p>
+<p>Plotted on the <strong>horizontal axis</strong></p>
+</section>
+<hr class="docutils" />
+<section id="average-exchange-rate-depreciation">
+<h4>(2) Average Exchange Rate Depreciation<a class="headerlink" href="#average-exchange-rate-depreciation" title="Link to this heading">#</a></h4>
+<p>Using log changes:
+<span class="math notranslate nohighlight">\(
+\Delta s_{i,t} = \ln(e_{i,t}) - \ln(e_{i,t-1})
+\)</span></p>
+<p>Period average:
+<span class="math notranslate nohighlight">\(
+\overline{\Delta s}_i = \frac{1}{T} \left[\ln(e_{i,T}) - \ln(e_{i,0})\right]
+\)</span></p>
+<p>Expressed in percent:
+<span class="math notranslate nohighlight">\(
+100 \times \overline{\Delta s}_i
+\)</span></p>
+<p>Plotted on the <strong>vertical axis</strong></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="connection-to-ppp-theory">
+<h3>4. Connection to PPP Theory<a class="headerlink" href="#connection-to-ppp-theory" title="Link to this heading">#</a></h3>
+<p>Relative PPP:
+<span class="math notranslate nohighlight">\(
+\Delta s_i \approx \pi_i - \pi_{US}
+\)</span></p>
+<p>Therefore, in the scatter plot:</p>
+<ul class="simple">
+<li><p>x-axis: Average inflation differential</p></li>
+<li><p>y-axis: Average exchange rate depreciation</p></li>
+<li><p>Reference line:
+<span class="math notranslate nohighlight">\(
+y = x
+\)</span></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="why-this-variable-combination-is-used-empirical-rationale">
+<h3>5. Why This Variable Combination Is Used (Empirical Rationale)<a class="headerlink" href="#why-this-variable-combination-is-used-empirical-rationale" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>CPI inflation
+→ Standard measure of cross-country price level changes</p></li>
+<li><p>LCU/USD exchange rate
+→ Depreciation direction aligns with the PPP equation</p></li>
+<li><p>Log changes
+→ Can be interpreted as long-run growth rates (annualized)</p></li>
+<li><p>Period averages
+→ Eliminate short-run exchange rate noise to reveal the <strong>long-run PPP relationship</strong></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="interpretation-example">
+<h3>6. Interpretation Example<a class="headerlink" href="#interpretation-example" title="Link to this heading">#</a></h3>
+<p>For a given country:</p>
+<ul class="simple">
+<li><p>Average inflation differential: +8%</p></li>
+<li><p>Average depreciation rate: +9%</p></li>
+</ul>
+<p>→ PPP holds well in the long run</p>
+</section>
+<hr class="docutils" />
+<section id="notes-differences-from-the-original-figure">
+<h3>7. Notes (Differences from the Original Figure)<a class="headerlink" href="#notes-differences-from-the-original-figure" title="Link to this heading">#</a></h3>
+<p>Original figure:</p>
+<ul class="simple">
+<li><p>Period: 1975–2005</p></li>
+<li><p>Partial country sample</p></li>
+</ul>
+<p>Updated version:</p>
+<p><img alt="Updated" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/4-2.png" /></p>
+<ul class="simple">
+<li><p>Period: 1975–present (e.g., 2024)</p></li>
+<li><p>All World Bank countries</p></li>
+<li><p>Same concept, more recent data</p></li>
+</ul>
+<hr class="docutils" />
+<p>If desired, the following additional analyses can be performed:</p>
+<ul class="simple">
+<li><p>Whether PPP fit has <strong>strengthened or weakened</strong> after 2005</p></li>
+<li><p>Linear regression estimation:
+<span class="math notranslate nohighlight">\(
+\bar{\Delta s}_i = \alpha + \beta \bar{d}_i
+\)</span>
+(PPP implies <span class="math notranslate nohighlight">\(\beta \approx 1\)</span>)</p></li>
+<li><p>Advanced vs. emerging economies comparison</p></li>
+</ul>
+<p>This analysis yields quite significant results in international finance empirics.</p>
+</section>
+</section>
+<section id="comparing-two-periods">
+<h2><span style="color: blue;"><strong>3. Comparing Two Periods</strong></span><a class="headerlink" href="#comparing-two-periods" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;"><strong>Explain the following results</strong></span></p>
+<p>Number of common countries: 120</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Period</p></th>
+<th class="head"><p>N</p></th>
+<th class="head"><p>corr(x,y)</p></th>
+<th class="head"><p>OLS a</p></th>
+<th class="head"><p>OLS b</p></th>
+<th class="head"><p>R²</p></th>
+<th class="head"><p>RMSE (y-x)</p></th>
+<th class="head"><p>MAE (y-x)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1975–2005 (common)</p></td>
+<td><p>120</p></td>
+<td><p>0.784</p></td>
+<td><p>-0.689</p></td>
+<td><p>1.029</p></td>
+<td><p>0.614</p></td>
+<td><p>9.240</p></td>
+<td><p>4.309</p></td>
+</tr>
+<tr class="row-odd"><td><p>1975–2024 (common)</p></td>
+<td><p>120</p></td>
+<td><p>0.835</p></td>
+<td><p>-0.225</p></td>
+<td><p>1.024</p></td>
+<td><p>0.697</p></td>
+<td><p>5.532</p></td>
+<td><p>2.660</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="id2">
+<h2><strong>ChatGPT’s Analysis</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>Using the same World Bank WDI API approach as before, the analysis <strong>computes each of the two periods (1975–2005, 1975–2024) separately</strong>, then:</p>
+<ol class="arabic simple">
+<li><p><strong>Retains only the “same set of countries” with sufficient observations in both periods</strong>, and</p></li>
+<li><p><strong>Compares</strong> the scatter plots, regression coefficients, and error metrics <strong>side by side</strong>.</p></li>
+</ol>
+<p><img alt="Comparison" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/4-3.png" /></p>
+<hr class="docutils" />
+<p>The results compare how well the relative PPP relationship
+<span class="math notranslate nohighlight">\(
+y = \Delta s \approx x = (\pi_i - \pi_{US})
+\)</span>
+holds for the <strong>same 120 countries</strong> across the two periods. Below is an interpretation focused on economic meaning.</p>
+<hr class="docutils" />
+<section id="overall-summary">
+<h3>1. Overall Summary<a class="headerlink" href="#overall-summary" title="Link to this heading">#</a></h3>
+<p>Key changes:</p>
+<ul class="simple">
+<li><p>Correlation: <strong>0.784 → 0.835 (improved)</strong></p></li>
+<li><p>PPP baseline errors:</p>
+<ul>
+<li><p>RMSE: <strong>9.24 → 5.53 (substantially reduced)</strong></p></li>
+<li><p>MAE: <strong>4.31 → 2.66 (substantially reduced)</strong></p></li>
+</ul>
+</li>
+<li><p>Slope: <strong>1.03 → 1.02 (still close to 1)</strong></p></li>
+</ul>
+<p>In other words:</p>
+<p><strong>Including post-2005 data improves the long-run PPP fit.</strong></p>
+</section>
+<hr class="docutils" />
+<section id="correlation-corr">
+<h3>2. Correlation (corr)<a class="headerlink" href="#correlation-corr" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Period</p></th>
+<th class="head"><p>corr</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1975–2005</p></td>
+<td><p>0.784</p></td>
+</tr>
+<tr class="row-odd"><td><p>1975–2024</p></td>
+<td><p>0.835</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Meaning:</p>
+<ul class="simple">
+<li><p>The relationship that countries with larger inflation differentials experience greater currency depreciation has <strong>strengthened</strong></p></li>
+<li><p>In the long run, exchange rates <strong>more faithfully reflect</strong> price differentials</p></li>
+</ul>
+<p>Economic interpretation:</p>
+<p>→ The <strong>price–exchange rate linkage has strengthened</strong> in the more recent period</p>
+<p>Possible reasons:</p>
+<ul class="simple">
+<li><p>Decline of fixed exchange rate regimes</p></li>
+<li><p>Expansion of capital mobility</p></li>
+<li><p>Inflation stabilization</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="slope-ols-b">
+<h3>3. Slope (OLS b)<a class="headerlink" href="#slope-ols-b" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Period</p></th>
+<th class="head"><p>b</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1975–2005</p></td>
+<td><p>1.029</p></td>
+</tr>
+<tr class="row-odd"><td><p>1975–2024</p></td>
+<td><p>1.024</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>PPP theory:
+<span class="math notranslate nohighlight">\(
+\Delta s = 1 \times (\pi_i - \pi_{US})
+\)</span></p>
+<p>Results:</p>
+<ul class="simple">
+<li><p>Both periods yield slopes <strong>nearly perfectly equal to 1</strong></p></li>
+<li><p>In the long run, PPP is <strong>quantitatively very accurate</strong></p></li>
+</ul>
+<p>That is, “if prices are 5% higher than the U.S., the currency depreciates by about 5%.”</p>
+</section>
+<hr class="docutils" />
+<section id="intercept-ols-a">
+<h3>4. Intercept (OLS a)<a class="headerlink" href="#intercept-ols-a" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Period</p></th>
+<th class="head"><p>a</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1975–2005</p></td>
+<td><p>-0.69</p></td>
+</tr>
+<tr class="row-odd"><td><p>1975–2024</p></td>
+<td><p>-0.22</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Meaning:</p>
+<ul class="simple">
+<li><p>Overall, there was a slight <strong>dollar strength bias</strong></p></li>
+<li><p>In the more recent period, this bias has <strong>diminished</strong></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="ppp-baseline-errors-most-important">
+<h3>5. PPP Baseline Errors (Most Important)<a class="headerlink" href="#ppp-baseline-errors-most-important" title="Link to this heading">#</a></h3>
+<section id="rmse">
+<h4>RMSE<a class="headerlink" href="#rmse" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Period</p></th>
+<th class="head"><p>RMSE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1975–2005</p></td>
+<td><p>9.24</p></td>
+</tr>
+<tr class="row-odd"><td><p>1975–2024</p></td>
+<td><p>5.53</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>→ The average deviation from PPP predictions <strong>decreased by about 40%</strong></p>
+</section>
+<section id="mae">
+<h4>MAE<a class="headerlink" href="#mae" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Period</p></th>
+<th class="head"><p>MAE</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1975–2005</p></td>
+<td><p>4.31</p></td>
+</tr>
+<tr class="row-odd"><td><p>1975–2024</p></td>
+<td><p>2.66</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>→ Typical errors also decreased substantially</p>
+<p>Economic meaning:</p>
+<p><strong>In the more recent period, exchange rates moved much more closely in line with price differentials</strong></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="explanatory-power-r2">
+<h3>6. Explanatory Power (R²)<a class="headerlink" href="#explanatory-power-r2" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Period</p></th>
+<th class="head"><p>R²</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1975–2005</p></td>
+<td><p>0.614</p></td>
+</tr>
+<tr class="row-odd"><td><p>1975–2024</p></td>
+<td><p>0.697</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>→ Price differentials alone explain approximately <strong>70% of exchange rate variation</strong></p>
+<p>This is a very high level of explanatory power in international finance empirics.</p>
+</section>
+<hr class="docutils" />
+<section id="comprehensive-interpretation">
+<h3>7. Comprehensive Interpretation<a class="headerlink" href="#comprehensive-interpretation" title="Link to this heading">#</a></h3>
+<p>Conclusions:</p>
+<ol class="arabic simple">
+<li><p>Long-run PPP holds strongly in both periods</p></li>
+<li><p>Including post-2005 data shows:</p>
+<ul class="simple">
+<li><p>Increased correlation</p></li>
+<li><p>Reduced errors</p></li>
+<li><p>Increased explanatory power</p></li>
+</ul>
+</li>
+<li><p>That is,<br />
+<strong>In the recent global economy, exchange rates have moved closer to price differentials.</strong></p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="why-these-results-emerge-structural-reasons">
+<h3>8. Why These Results Emerge (Structural Reasons)<a class="headerlink" href="#why-these-results-emerge-structural-reasons" title="Link to this heading">#</a></h3>
+<p>1975–2005:</p>
+<ul class="simple">
+<li><p>Many high-inflation countries (Latin America, Turkey, etc.)</p></li>
+<li><p>Fixed and managed exchange rate regimes still present</p></li>
+<li><p>Incomplete financial market integration</p></li>
+</ul>
+<p>Post-2005:</p>
+<ul class="simple">
+<li><p>Global inflation stabilization</p></li>
+<li><p>Widespread adoption of inflation targeting</p></li>
+<li><p>Floating exchange rate regimes become the norm</p></li>
+<li><p>Increased capital mobility</p></li>
+</ul>
+<p>→ PPP convergence mechanisms strengthened</p>
+</section>
+<hr class="docutils" />
+<section id="key-takeaway">
+<h3>9. Key Takeaway<a class="headerlink" href="#key-takeaway" title="Link to this heading">#</a></h3>
+<p><strong>When including the post-2005 period, relative PPP — that exchange rates ≈ inflation differentials in the long run — becomes more accurate.</strong></p>
+<hr class="docutils" />
+<p>If desired, the analysis can go one step further to examine:</p>
+<ul class="simple">
+<li><p>Advanced vs. emerging economies comparison</p></li>
+<li><p>Which countries deviate most from PPP</p></li>
+<li><p>Countries where the PPP relationship improved most after 2005</p></li>
+</ul>
+<p>This analysis yields quite interesting results in international finance empirics.</p>
+</section>
+</section>
+<section id="reference-python-code">
+<h2><strong>Reference: Python Code</strong><a class="headerlink" href="#reference-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Update graph period</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">INF</span> <span class="o">=</span> <span class="s2">&quot;FP.CPI.TOTL.ZG&quot;</span>   <span class="c1"># Inflation, consumer prices (annual %)</span>
+<span class="n">EXR</span> <span class="o">=</span> <span class="s2">&quot;PA.NUS.FCRF&quot;</span>      <span class="c1"># Official exchange rate (LCU per US$, period average)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">wb_indicator_all_countries</span><span class="p">(</span><span class="n">indicator</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="c1"># World Bank API: all countries, JSON</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://api.worldbank.org/v2/country/all/indicator/</span><span class="si">{</span><span class="n">indicator</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="mi">20000</span><span class="p">,</span>
+        <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unexpected World Bank API response&quot;</span><span class="p">)</span>
+
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">obs</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">obs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;country_code&quot;</span><span class="p">:</span> <span class="n">obs</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="n">obs</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build_ppp_scatter</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">1975</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">2024</span><span class="p">,</span> <span class="n">min_years</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">drop_extreme_inflation</span><span class="o">=</span><span class="mf">200.0</span><span class="p">):</span>
+    <span class="c1"># 1) Load data</span>
+    <span class="n">inf</span> <span class="o">=</span> <span class="n">wb_indicator_all_countries</span><span class="p">(</span><span class="n">INF</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;infl&quot;</span><span class="p">})</span>
+    <span class="n">exr</span> <span class="o">=</span> <span class="n">wb_indicator_all_countries</span><span class="p">(</span><span class="n">EXR</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;exr&quot;</span><span class="p">})</span>
+
+    <span class="c1"># 2) U.S. inflation time series (by year)</span>
+    <span class="n">us_inf</span> <span class="o">=</span> <span class="p">(</span><span class="n">inf</span><span class="p">[</span><span class="n">inf</span><span class="p">[</span><span class="s2">&quot;country_code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;US&quot;</span><span class="p">][[</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;infl&quot;</span><span class="p">]]</span>
+              <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;infl&quot;</span><span class="p">:</span> <span class="s2">&quot;infl_us&quot;</span><span class="p">}))</span>
+
+    <span class="c1"># 3) Inflation differential: (country - U.S.), merge by year then average</span>
+    <span class="n">inf2</span> <span class="o">=</span> <span class="n">inf</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">us_inf</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+    <span class="n">inf2</span><span class="p">[</span><span class="s2">&quot;infl_diff&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf2</span><span class="p">[</span><span class="s2">&quot;infl&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">inf2</span><span class="p">[</span><span class="s2">&quot;infl_us&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Remove extreme hyperinflation observations (optional)</span>
+    <span class="n">inf2</span> <span class="o">=</span> <span class="n">inf2</span><span class="p">[</span><span class="n">inf2</span><span class="p">[</span><span class="s2">&quot;infl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">drop_extreme_inflation</span><span class="p">]</span>
+
+    <span class="n">infl_summary</span> <span class="o">=</span> <span class="p">(</span><span class="n">inf2</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;country_code&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
+                        <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">infl_diff_mean</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;infl_diff&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                             <span class="n">n_years_infl</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;infl_diff&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">))</span>
+                        <span class="o">.</span><span class="n">reset_index</span><span class="p">())</span>
+
+    <span class="c1"># 4) Exchange rate depreciation: log change of LCU/USD (annualized)</span>
+    <span class="c1">#    Rising e (LCU/USD) means domestic currency depreciates</span>
+    <span class="n">exr</span> <span class="o">=</span> <span class="n">exr</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;country_code&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">])</span>
+    <span class="n">exr</span><span class="p">[</span><span class="s2">&quot;ln_exr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">exr</span><span class="p">[</span><span class="s2">&quot;exr&quot;</span><span class="p">])</span>
+
+    <span class="n">exr_summary</span> <span class="o">=</span> <span class="p">(</span><span class="n">exr</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;country_code&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
+                      <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">year_min</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">),</span>
+                           <span class="n">year_max</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">),</span>
+                           <span class="n">ln_exr_min</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ln_exr&quot;</span><span class="p">,</span> <span class="s2">&quot;first&quot;</span><span class="p">),</span>
+                           <span class="n">ln_exr_max</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ln_exr&quot;</span><span class="p">,</span> <span class="s2">&quot;last&quot;</span><span class="p">),</span>
+                           <span class="n">n_years_exr</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ln_exr&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">))</span>
+                      <span class="o">.</span><span class="n">reset_index</span><span class="p">())</span>
+
+    <span class="c1"># Data may not span the full start-end range; filter by minimum observation years</span>
+    <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;year_max&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;year_min&quot;</span><span class="p">]</span>
+    <span class="n">exr_summary</span> <span class="o">=</span> <span class="n">exr_summary</span><span class="p">[</span><span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Annualized depreciation rate (%) = 100 * (ln e_end - ln e_start) / T</span>
+    <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;dep_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;ln_exr_max&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;ln_exr_min&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span>
+
+    <span class="c1"># 5) Merge + filter (require sufficiently long series for both inflation and exchange rate)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">infl_summary</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">exr_summary</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country_code&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n_years_infl&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_years</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n_years_exr&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_years</span><span class="p">)]</span>
+
+    <span class="k">return</span> <span class="n">df</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_ppp_scatter</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;infl_diff_mean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;dep_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="c1"># Set axis range with a small margin based on data</span>
+    <span class="n">lo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">()])</span>
+    <span class="n">hi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+    <span class="n">pad</span> <span class="o">=</span> <span class="mf">0.05</span> <span class="o">*</span> <span class="p">(</span><span class="n">hi</span> <span class="o">-</span> <span class="n">lo</span><span class="p">)</span> <span class="k">if</span> <span class="n">hi</span> <span class="o">&gt;</span> <span class="n">lo</span> <span class="k">else</span> <span class="mf">1.0</span>
+    <span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span> <span class="o">=</span> <span class="n">lo</span> <span class="o">-</span> <span class="n">pad</span><span class="p">,</span> <span class="n">hi</span> <span class="o">+</span> <span class="n">pad</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span><span class="p">],</span> <span class="p">[</span><span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span><span class="p">])</span>  <span class="c1"># PPP prediction line: y = x</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Inflation differential vs U.S. (avg % per year)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Rate of depreciation vs U.S. dollar (avg % per year)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Run: update to 1975–latest available (e.g., 2024)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">build_ppp_scatter</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">1975</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">2024</span><span class="p">,</span> <span class="n">min_years</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">drop_extreme_inflation</span><span class="o">=</span><span class="mf">200.0</span><span class="p">)</span>
+<span class="n">plot_ppp_scatter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s2">&quot;Relative PPP: depreciation vs inflation differential (1975</span><span class="se">\u2013</span><span class="s2">2024)&quot;</span><span class="p">)</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/374f065cfe06a2e67d39e577d809a7bcfaae8110421ee366348c44998ab77a05.png" src="../_images/374f065cfe06a2e67d39e577d809a7bcfaae8110421ee366348c44998ab77a05.png" />
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>country_code</th>
+      <th>country</th>
+      <th>infl_diff_mean</th>
+      <th>n_years_infl</th>
+      <th>year_min</th>
+      <th>year_max</th>
+      <th>ln_exr_min</th>
+      <th>ln_exr_max</th>
+      <th>n_years_exr</th>
+      <th>T</th>
+      <th>dep_rate</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>AF</td>
+      <td>Afghanistan</td>
+      <td>2.669859</td>
+      <td>20</td>
+      <td>1975</td>
+      <td>2020</td>
+      <td>3.553335</td>
+      <td>4.341381</td>
+      <td>46</td>
+      <td>45</td>
+      <td>1.751212</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>AG</td>
+      <td>Antigua and Barbuda</td>
+      <td>-0.284433</td>
+      <td>26</td>
+      <td>1975</td>
+      <td>2024</td>
+      <td>0.774633</td>
+      <td>0.993252</td>
+      <td>50</td>
+      <td>49</td>
+      <td>0.446161</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>AL</td>
+      <td>Albania</td>
+      <td>5.189904</td>
+      <td>32</td>
+      <td>1992</td>
+      <td>2024</td>
+      <td>4.317921</td>
+      <td>4.533925</td>
+      <td>33</td>
+      <td>32</td>
+      <td>0.675011</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>AM</td>
+      <td>Armenia</td>
+      <td>7.692888</td>
+      <td>30</td>
+      <td>1993</td>
+      <td>2024</td>
+      <td>2.208824</td>
+      <td>5.973121</td>
+      <td>32</td>
+      <td>31</td>
+      <td>12.142895</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>AO</td>
+      <td>Angola</td>
+      <td>33.628776</td>
+      <td>26</td>
+      <td>1975</td>
+      <td>2024</td>
+      <td>-17.482543</td>
+      <td>6.768316</td>
+      <td>50</td>
+      <td>49</td>
+      <td>49.491550</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>186</th>
+      <td>XC</td>
+      <td>Euro area</td>
+      <td>0.385607</td>
+      <td>50</td>
+      <td>1999</td>
+      <td>2024</td>
+      <td>-0.063704</td>
+      <td>-0.079163</td>
+      <td>26</td>
+      <td>25</td>
+      <td>-0.061837</td>
+    </tr>
+    <tr>
+      <th>187</th>
+      <td>XK</td>
+      <td>Kosovo</td>
+      <td>-0.277035</td>
+      <td>22</td>
+      <td>2002</td>
+      <td>2024</td>
+      <td>0.055963</td>
+      <td>-0.078646</td>
+      <td>23</td>
+      <td>22</td>
+      <td>-0.611859</td>
+    </tr>
+    <tr>
+      <th>188</th>
+      <td>YE</td>
+      <td>Yemen, Rep.</td>
+      <td>14.983923</td>
+      <td>24</td>
+      <td>1990</td>
+      <td>2023</td>
+      <td>2.485745</td>
+      <td>7.211643</td>
+      <td>34</td>
+      <td>33</td>
+      <td>14.320903</td>
+    </tr>
+    <tr>
+      <th>189</th>
+      <td>ZA</td>
+      <td>South Africa</td>
+      <td>4.915459</td>
+      <td>50</td>
+      <td>1975</td>
+      <td>2024</td>
+      <td>-0.301771</td>
+      <td>2.908466</td>
+      <td>50</td>
+      <td>49</td>
+      <td>6.551503</td>
+    </tr>
+    <tr>
+      <th>190</th>
+      <td>ZM</td>
+      <td>Zambia</td>
+      <td>32.443721</td>
+      <td>39</td>
+      <td>1975</td>
+      <td>2024</td>
+      <td>-7.349008</td>
+      <td>3.264477</td>
+      <td>50</td>
+      <td>49</td>
+      <td>21.660174</td>
+    </tr>
+  </tbody>
+</table>
+<p>175 rows × 11 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PPP theory: two-period comparison</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">INF</span> <span class="o">=</span> <span class="s2">&quot;FP.CPI.TOTL.ZG&quot;</span>   <span class="c1"># Inflation, consumer prices (annual %)</span>
+<span class="n">EXR</span> <span class="o">=</span> <span class="s2">&quot;PA.NUS.FCRF&quot;</span>      <span class="c1"># Official exchange rate (LCU per US$, period average)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">wb_indicator_all_countries</span><span class="p">(</span><span class="n">indicator</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://api.worldbank.org/v2/country/all/indicator/</span><span class="si">{</span><span class="n">indicator</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="s2">&quot;per_page&quot;</span><span class="p">:</span> <span class="mi">20000</span><span class="p">,</span> <span class="s2">&quot;date&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">}</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+    <span class="n">r</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Unexpected World Bank API response&quot;</span><span class="p">)</span>
+
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">obs</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">obs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;country_code&quot;</span><span class="p">:</span> <span class="n">obs</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="n">obs</span><span class="p">[</span><span class="s2">&quot;country&quot;</span><span class="p">][</span><span class="s2">&quot;value&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;year&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]),</span>
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]),</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">build_ppp_period</span><span class="p">(</span><span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">min_years</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">drop_extreme_inflation</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">200.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="c1"># 1) Load data</span>
+    <span class="n">inf</span> <span class="o">=</span> <span class="n">wb_indicator_all_countries</span><span class="p">(</span><span class="n">INF</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;infl&quot;</span><span class="p">})</span>
+    <span class="n">exr</span> <span class="o">=</span> <span class="n">wb_indicator_all_countries</span><span class="p">(</span><span class="n">EXR</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;exr&quot;</span><span class="p">})</span>
+
+    <span class="c1"># 2) U.S. inflation (by year)</span>
+    <span class="n">us_inf</span> <span class="o">=</span> <span class="p">(</span><span class="n">inf</span><span class="p">[</span><span class="n">inf</span><span class="p">[</span><span class="s2">&quot;country_code&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;US&quot;</span><span class="p">][[</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;infl&quot;</span><span class="p">]]</span>
+              <span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;infl&quot;</span><span class="p">:</span> <span class="s2">&quot;infl_us&quot;</span><span class="p">}))</span>
+
+    <span class="c1"># 3) Inflation differential (country - U.S.), merge by year then average</span>
+    <span class="n">inf2</span> <span class="o">=</span> <span class="n">inf</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">us_inf</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+    <span class="n">inf2</span> <span class="o">=</span> <span class="n">inf2</span><span class="p">[</span><span class="n">inf2</span><span class="p">[</span><span class="s2">&quot;infl&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">drop_extreme_inflation</span><span class="p">]</span>  <span class="c1"># Hyperinflation mitigation (optional)</span>
+    <span class="n">inf2</span><span class="p">[</span><span class="s2">&quot;infl_diff&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">inf2</span><span class="p">[</span><span class="s2">&quot;infl&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">inf2</span><span class="p">[</span><span class="s2">&quot;infl_us&quot;</span><span class="p">]</span>
+
+    <span class="n">infl_summary</span> <span class="o">=</span> <span class="p">(</span><span class="n">inf2</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;country_code&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
+                        <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">infl_diff_mean</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;infl_diff&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">),</span>
+                             <span class="n">n_years_infl</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;infl_diff&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">))</span>
+                        <span class="o">.</span><span class="n">reset_index</span><span class="p">())</span>
+
+    <span class="c1"># 4) Exchange rate depreciation: annualized average growth rate of ln(e) (%)</span>
+    <span class="n">exr</span> <span class="o">=</span> <span class="n">exr</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;country_code&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">])</span>
+    <span class="n">exr</span><span class="p">[</span><span class="s2">&quot;ln_exr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">exr</span><span class="p">[</span><span class="s2">&quot;exr&quot;</span><span class="p">])</span>
+
+    <span class="c1"># Compute first/last within the available range for each country, then annualized change rate</span>
+    <span class="n">exr_summary</span> <span class="o">=</span> <span class="p">(</span><span class="n">exr</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s2">&quot;country_code&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">])</span>
+                      <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">year_min</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">),</span>
+                           <span class="n">year_max</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;year&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">),</span>
+                           <span class="n">ln_exr_min</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ln_exr&quot;</span><span class="p">,</span> <span class="s2">&quot;first&quot;</span><span class="p">),</span>
+                           <span class="n">ln_exr_max</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ln_exr&quot;</span><span class="p">,</span> <span class="s2">&quot;last&quot;</span><span class="p">),</span>
+                           <span class="n">n_years_exr</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ln_exr&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">))</span>
+                      <span class="o">.</span><span class="n">reset_index</span><span class="p">())</span>
+
+    <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;year_max&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;year_min&quot;</span><span class="p">]</span>
+    <span class="n">exr_summary</span> <span class="o">=</span> <span class="n">exr_summary</span><span class="p">[</span><span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;dep_rate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;ln_exr_max&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;ln_exr_min&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">exr_summary</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">]</span>
+
+    <span class="c1"># 5) Merge + minimum observation filter</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">infl_summary</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">exr_summary</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;country_code&quot;</span><span class="p">,</span> <span class="s2">&quot;country&quot;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n_years_infl&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_years</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;n_years_exr&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">min_years</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;period&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">end</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;country_code&quot;</span><span class="p">,</span><span class="s2">&quot;country&quot;</span><span class="p">,</span><span class="s2">&quot;period&quot;</span><span class="p">,</span><span class="s2">&quot;infl_diff_mean&quot;</span><span class="p">,</span><span class="s2">&quot;dep_rate&quot;</span><span class="p">,</span><span class="s2">&quot;n_years_infl&quot;</span><span class="p">,</span><span class="s2">&quot;n_years_exr&quot;</span><span class="p">,</span><span class="s2">&quot;year_min&quot;</span><span class="p">,</span><span class="s2">&quot;year_max&quot;</span><span class="p">]]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ols_beta</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="c1"># y = a + b * x</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">x</span><span class="p">])</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">beta</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">beta</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">yhat</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="n">x</span>
+    <span class="n">resid</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">yhat</span>
+    <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">yhat</span><span class="p">,</span> <span class="n">resid</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">period_metrics</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;infl_diff_mean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;dep_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">yhat</span><span class="p">,</span> <span class="n">resid</span> <span class="o">=</span> <span class="n">ols_beta</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Error relative to PPP baseline y = x</span>
+    <span class="n">ppp_err</span> <span class="o">=</span> <span class="n">y</span> <span class="o">-</span> <span class="n">x</span>
+    <span class="n">rmse_ppp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ppp_err</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">mae_ppp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">ppp_err</span><span class="p">))</span>
+
+    <span class="c1"># Regression goodness of fit (R²)</span>
+    <span class="n">ss_res</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">resid</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ss_tot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">ss_res</span><span class="o">/</span><span class="n">ss_tot</span> <span class="k">if</span> <span class="n">ss_tot</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">),</span>
+        <span class="s2">&quot;corr(x,y)&quot;</span><span class="p">:</span> <span class="n">corr</span><span class="p">,</span>
+        <span class="s2">&quot;OLS a&quot;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span>
+        <span class="s2">&quot;OLS b&quot;</span><span class="p">:</span> <span class="n">b</span><span class="p">,</span>
+        <span class="s2">&quot;R2&quot;</span><span class="p">:</span> <span class="n">r2</span><span class="p">,</span>
+        <span class="s2">&quot;RMSE(y-x)&quot;</span><span class="p">:</span> <span class="n">rmse_ppp</span><span class="p">,</span>
+        <span class="s2">&quot;MAE(y-x)&quot;</span><span class="p">:</span> <span class="n">mae_ppp</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_two_periods</span><span class="p">(</span><span class="n">df1</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">df2</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">title1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">title2</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_plot</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;infl_diff_mean&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;dep_rate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+        <span class="n">lo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">()])</span>
+        <span class="n">hi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">([</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()])</span>
+        <span class="n">pad</span> <span class="o">=</span> <span class="mf">0.05</span><span class="o">*</span><span class="p">(</span><span class="n">hi</span><span class="o">-</span><span class="n">lo</span><span class="p">)</span> <span class="k">if</span> <span class="n">hi</span> <span class="o">&gt;</span> <span class="n">lo</span> <span class="k">else</span> <span class="mf">1.0</span>
+        <span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span> <span class="o">=</span> <span class="n">lo</span> <span class="o">-</span> <span class="n">pad</span><span class="p">,</span> <span class="n">hi</span> <span class="o">+</span> <span class="n">pad</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span><span class="p">],</span> <span class="p">[</span><span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span><span class="p">])</span>  <span class="c1"># PPP: y = x</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">lo2</span><span class="p">,</span> <span class="n">hi2</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Inflation differential vs U.S. (avg % per year)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Depreciation vs US$ (avg % per year)&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">_plot</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df1</span><span class="p">,</span> <span class="n">title1</span><span class="p">)</span>
+    <span class="n">_plot</span><span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">df2</span><span class="p">,</span> <span class="n">title2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># =========================</span>
+<span class="c1"># Run: compute both periods</span>
+<span class="c1"># =========================</span>
+<span class="n">min_years</span> <span class="o">=</span> <span class="mi">20</span>
+
+<span class="n">df_7505</span> <span class="o">=</span> <span class="n">build_ppp_period</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">2005</span><span class="p">,</span> <span class="n">min_years</span><span class="o">=</span><span class="n">min_years</span><span class="p">)</span>
+<span class="n">df_7524</span> <span class="o">=</span> <span class="n">build_ppp_period</span><span class="p">(</span><span class="mi">1975</span><span class="p">,</span> <span class="mi">2024</span><span class="p">,</span> <span class="n">min_years</span><span class="o">=</span><span class="n">min_years</span><span class="p">)</span>
+
+<span class="c1"># =========================</span>
+<span class="c1"># Keep only common countries (intersection)</span>
+<span class="c1"># =========================</span>
+<span class="n">common</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">df_7505</span><span class="p">[</span><span class="s2">&quot;country_code&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">df_7524</span><span class="p">[</span><span class="s2">&quot;country_code&quot;</span><span class="p">])))</span>
+
+<span class="n">df_7505_c</span> <span class="o">=</span> <span class="n">df_7505</span><span class="p">[</span><span class="n">df_7505</span><span class="p">[</span><span class="s2">&quot;country_code&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">common</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df_7524_c</span> <span class="o">=</span> <span class="n">df_7524</span><span class="p">[</span><span class="n">df_7524</span><span class="p">[</span><span class="s2">&quot;country_code&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">common</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of common countries:&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">common</span><span class="p">))</span>
+
+<span class="c1"># =========================</span>
+<span class="c1"># Summary metrics for comparison</span>
+<span class="c1"># =========================</span>
+<span class="n">m1</span> <span class="o">=</span> <span class="n">period_metrics</span><span class="p">(</span><span class="n">df_7505_c</span><span class="p">)</span>
+<span class="n">m2</span> <span class="o">=</span> <span class="n">period_metrics</span><span class="p">(</span><span class="n">df_7524_c</span><span class="p">)</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">m1</span><span class="p">,</span> <span class="n">m2</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;1975-2005 (common)&quot;</span><span class="p">,</span> <span class="s2">&quot;1975-2024 (common)&quot;</span><span class="p">])</span>
+<span class="n">display</span><span class="p">(</span><span class="n">summary</span><span class="p">)</span>
+
+<span class="c1"># =========================</span>
+<span class="c1"># Scatter plot comparison (same countries)</span>
+<span class="c1"># =========================</span>
+<span class="n">plot_two_periods</span><span class="p">(</span>
+    <span class="n">df_7505_c</span><span class="p">,</span> <span class="n">df_7524_c</span><span class="p">,</span>
+    <span class="n">title1</span><span class="o">=</span><span class="s2">&quot;Relative PPP (1975</span><span class="se">\u2013</span><span class="s2">2005) </span><span class="se">\u2014</span><span class="s2"> same countries&quot;</span><span class="p">,</span>
+    <span class="n">title2</span><span class="o">=</span><span class="s2">&quot;Relative PPP (1975</span><span class="se">\u2013</span><span class="s2">2024) </span><span class="se">\u2014</span><span class="s2"> same countries&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Number of common countries: 120
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>N</th>
+      <th>corr(x,y)</th>
+      <th>OLS a</th>
+      <th>OLS b</th>
+      <th>R2</th>
+      <th>RMSE(y-x)</th>
+      <th>MAE(y-x)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1975-2005 (common)</th>
+      <td>120</td>
+      <td>0.783525</td>
+      <td>-0.689067</td>
+      <td>1.029313</td>
+      <td>0.613912</td>
+      <td>9.240113</td>
+      <td>4.308870</td>
+    </tr>
+    <tr>
+      <th>1975-2024 (common)</th>
+      <td>120</td>
+      <td>0.834884</td>
+      <td>-0.224975</td>
+      <td>1.024266</td>
+      <td>0.697032</td>
+      <td>5.532394</td>
+      <td>2.660401</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><img alt="../_images/6a8cd7286c9ce8645790ff4987d3d12b61e5bb8f11df96ce0e1cce24b4918c49.png" src="../_images/6a8cd7286c9ce8645790ff4987d3d12b61e5bb8f11df96ce0e1cce24b4918c49.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="03_KBO_Regular_Season_Team_Performance.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="05_World_Bank_Data_Extraction.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 5. World Bank Data Extraction</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#uploading-the-graph"><span style="color: blue;"><strong>1. Uploading the Graph</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-explanation"><strong>Claude’s Explanation</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#it-should-be-depreciation-rate-not-depreciation-of-value"><span style="color: blue;"><strong>It should be “depreciation rate,” not “depreciation of value”!</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Explanation</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-explanation"><strong>ChatGPT’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meaning-of-the-axes">1. Meaning of the Axes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-relationship-predicted-by-ppp">2. The Relationship Predicted by PPP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#meaning-of-the-data-points">3. Meaning of the Data Points</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-interpretation">4. Economic Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#important-additional-interpretation-empirical-perspective">5. Important Additional Interpretation (Empirical Perspective)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#updating-the-graph-period"><span style="color: blue;"><strong>2. Updating the Graph Period</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-analysis"><strong>ChatGPT’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-source">1. Data Source</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#world-bank-world-development-indicators-wdi">World Bank: World Development Indicators (WDI)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-used">2. Variables Used</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inflation">(1) Inflation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#exchange-rate">(2) Exchange Rate</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#derived-variables-for-ppp-analysis">3. Derived Variables for PPP Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inflation-differential-relative-to-the-u-s">(1) Inflation Differential (relative to the U.S.)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#average-exchange-rate-depreciation">(2) Average Exchange Rate Depreciation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#connection-to-ppp-theory">4. Connection to PPP Theory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-variable-combination-is-used-empirical-rationale">5. Why This Variable Combination Is Used (Empirical Rationale)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-example">6. Interpretation Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notes-differences-from-the-original-figure">7. Notes (Differences from the Original Figure)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comparing-two-periods"><span style="color: blue;"><strong>3. Comparing Two Periods</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>ChatGPT’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-summary">1. Overall Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-corr">2. Correlation (corr)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#slope-ols-b">3. Slope (OLS b)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intercept-ols-a">4. Intercept (OLS a)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ppp-baseline-errors-most-important">5. PPP Baseline Errors (Most Important)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rmse">RMSE</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mae">MAE</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanatory-power-r2">6. Explanatory Power (R²)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comprehensive-interpretation">7. Comprehensive Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-these-results-emerge-structural-reasons">8. Why These Results Emerge (Structural Reasons)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaway">9. Key Takeaway</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1309 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 3. KBO Regular Season Team Performance Analysis &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/03_KBO_Regular_Season_Team_Performance';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 4. PPP Graph Analysis" href="04_PPP_Graph_Analysis.html" />
+    <link rel="prev" title="Ch 2. Presidential Approval Rating Analysis" href="02_Presidential_Approval_Rating_Analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/03_KBO_Regular_Season_Team_Performance.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/03_KBO_Regular_Season_Team_Performance.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 3. KBO Regular Season Team Performance Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#input-2025-kbo-regular-season-team-records"><span style="color: blue;"><strong>1. Input 2025 KBO Regular Season Team Records</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-dataset-construction-excel-file"><strong>Claude Dataset Construction: Excel File</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploratory-data-analysis"><span style="color: blue;"><strong>2. Exploratory Data Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-dashboard"><strong>Claude Dashboard</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploratory-data-analysis-python-analysis"><span style="color: blue;"><strong>3. Exploratory Data Analysis: Python Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-analysis"><strong>Claude Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">1. Data Loading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-statistics">2. Descriptive Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#team-win-percentage-ranking">3. Team Win Percentage Ranking</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batting-stats-comparison-avg-ops-hr-r">4. Batting Stats Comparison (AVG, OPS, HR, R)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitching-stats-era-whip">5. Pitching Stats — ERA &amp; WHIP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runs-scored-vs-runs-allowed">6. Runs Scored vs Runs Allowed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ops-vs-era-quadrant-analysis">7. OPS vs ERA — Quadrant Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#actual-vs-pythagorean-expected-win-percentage">8. Actual vs Pythagorean Expected Win Percentage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batting-stats-correlation-heatmap">9. Batting Stats Correlation Heatmap</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#win-percentage-determinants">10. Win Percentage Determinants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#team-capability-radar-chart">11. Team Capability Radar Chart</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fielding-baserunning-stats">12. Fielding &amp; Baserunning Stats</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-differential">13. Run Differential</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">14. Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-findings">Key Findings</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#team-profiles">Team Profiles</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-3-kbo-regular-season-team-performance-analysis">
+<h1><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong><a class="headerlink" href="#ch-3-kbo-regular-season-team-performance-analysis" title="Link to this heading">#</a></h1>
+<section id="input-2025-kbo-regular-season-team-records">
+<h2><span style="color: blue;"><strong>1. Input 2025 KBO Regular Season Team Records</strong></span><a class="headerlink" href="#input-2025-kbo-regular-season-team-records" title="Link to this heading">#</a></h2>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-1.png" /></p>
+<p>Source: <a class="reference external" href="https://www.koreabaseball.com/Record/Team/Hitter/Basic1.aspx">KBO Records</a> (6 screenshot image files uploaded)</p>
+</section>
+<section id="claude-dataset-construction-excel-file">
+<h2><strong>Claude Dataset Construction: Excel File</strong><a class="headerlink" href="#claude-dataset-construction-excel-file" title="Link to this heading">#</a></h2>
+<p>The 2025 KBO regular season team records dataset has been organized into 6 sheets.</p>
+<ul class="simple">
+<li><p><strong>Batting(1)</strong>: AVG, G, PA, AB, R, H, 2B, 3B, HR, TB, RBI, SAC, SF</p></li>
+<li><p><strong>Batting(2)</strong>: BB, IBB, HBP, SO, GDP, SLG, OBP, OPS, MH, RISP, PH-BA</p></li>
+<li><p><strong>Pitching(1)</strong>: ERA, W, L, SV, HLD, WPCT, IP, H, HR, BB, HBP, SO, R, ER, WHIP</p></li>
+<li><p><strong>Pitching(2)</strong>: CG, SHO, QS, BSV, TBF, NP, AVG, 2B, 3B, SAC, SF, IBB, WP, BK</p></li>
+<li><p><strong>Fielding</strong>: E, PKO, PO, A, DP, FPCT, PB, SB, CS, CS%</p></li>
+<li><p><strong>Baserunning</strong>: SBA, SB, CS, SB%, OOB, PKO</p></li>
+</ul>
+<p>Each sheet contains data for 10 teams plus totals.</p>
+</section>
+<section id="exploratory-data-analysis">
+<h2><span style="color: blue;"><strong>2. Exploratory Data Analysis</strong></span><a class="headerlink" href="#exploratory-data-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="claude-dashboard">
+<h2><strong>Claude Dashboard</strong><a class="headerlink" href="#claude-dashboard" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>🔗 <strong>KBO Regular Season Team Performance Dashboard</strong> (<a class="reference external" href="https://claude.ai/public/artifacts/e413b6d6-4472-489d-af2e-e848e0a1791b">https://claude.ai/public/artifacts/e413b6d6-4472-489d-af2e-e848e0a1791b</a>)</p>
+</div></blockquote>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-13.png" /></p>
+</section>
+<section id="exploratory-data-analysis-python-analysis">
+<h2><span style="color: blue;"><strong>3. Exploratory Data Analysis: Python Analysis</strong></span><a class="headerlink" href="#exploratory-data-analysis-python-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="claude-analysis">
+<h2><strong>Claude Analysis</strong><a class="headerlink" href="#claude-analysis" title="Link to this heading">#</a></h2>
+<blockquote>
+<div><p>10 clubs · 144 games · Comprehensive batting / pitching / fielding / baserunning analysis</p>
+</div></blockquote>
+<section id="data-loading">
+<h3>1. Data Loading<a class="headerlink" href="#data-loading" title="Link to this heading">#</a></h3>
+</section>
+<section id="descriptive-statistics">
+<h3>2. Descriptive Statistics<a class="headerlink" href="#descriptive-statistics" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Mean</p></th>
+<th class="head"><p>Std Dev</p></th>
+<th class="head"><p>Min</p></th>
+<th class="head"><p>Max</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AVG</p></td>
+<td><p>.262</p></td>
+<td><p>.010</p></td>
+<td><p>.244</p></td>
+<td><p>.278</p></td>
+</tr>
+<tr class="row-odd"><td><p>OPS</p></td>
+<td><p>.727</p></td>
+<td><p>.032</p></td>
+<td><p>.671</p></td>
+<td><p>.780</p></td>
+</tr>
+<tr class="row-even"><td><p>HR</p></td>
+<td><p>119.1</p></td>
+<td><p>24.4</p></td>
+<td><p>75</p></td>
+<td><p>161</p></td>
+</tr>
+<tr class="row-odd"><td><p>R (Runs)</p></td>
+<td><p>681.3</p></td>
+<td><p>67.1</p></td>
+<td><p>581</p></td>
+<td><p>788</p></td>
+</tr>
+<tr class="row-even"><td><p>ERA</p></td>
+<td><p>4.31</p></td>
+<td><p>0.59</p></td>
+<td><p>3.55</p></td>
+<td><p>5.39</p></td>
+</tr>
+<tr class="row-odd"><td><p>WHIP</p></td>
+<td><p>1.40</p></td>
+<td><p>0.09</p></td>
+<td><p>1.27</p></td>
+<td><p>1.57</p></td>
+</tr>
+<tr class="row-even"><td><p>FPCT</p></td>
+<td><p>.980</p></td>
+<td><p>.003</p></td>
+<td><p>.977</p></td>
+<td><p>.984</p></td>
+</tr>
+<tr class="row-odd"><td><p>SB</p></td>
+<td><p>107.8</p></td>
+<td><p>38.9</p></td>
+<td><p>48</p></td>
+<td><p>186</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="team-win-percentage-ranking">
+<h3>3. Team Win Percentage Ranking<a class="headerlink" href="#team-win-percentage-ranking" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-2.png" /></p>
+<p>LG (.603) and Hanwha (.593) are the top 2 teams with winning percentages above .500. Kiwoom (.336) has the lowest in the league as the only team in the .300s. The dashed line (0.500) clearly separates the top 6 teams from the bottom 4.</p>
+</section>
+<hr class="docutils" />
+<section id="batting-stats-comparison-avg-ops-hr-r">
+<h3>4. Batting Stats Comparison (AVG, OPS, HR, R)<a class="headerlink" href="#batting-stats-comparison-avg-ops-hr-r" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-3.png" /></p>
+<ul class="simple">
+<li><p><strong>AVG</strong>: LG (.278) dominant 1st place. Kiwoom (.244) the only team in the .240s</p></li>
+<li><p><strong>OPS</strong>: Samsung (.780) 1st — ahead of batting leader LG (.770) → power hitting difference</p></li>
+<li><p><strong>HR</strong>: Samsung (161) league-leading. Lotte (75) lowest, more than 2x gap</p></li>
+<li><p><strong>R</strong>: LG (788) most runs scored. Kiwoom (581) fewest — 207-run difference</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="pitching-stats-era-whip">
+<h3>5. Pitching Stats — ERA &amp; WHIP<a class="headerlink" href="#pitching-stats-era-whip" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-4.png" /></p>
+<ul class="simple">
+<li><p><strong>ERA</strong>: Hanwha (3.55) league 1st. Kiwoom (5.39) the only team above 5.00 → 1.84-point gap</p></li>
+<li><p><strong>WHIP</strong>: Hanwha (1.27) also 1st. Hanwha pitching staff’s overall excellence is evident</p></li>
+<li><p>ERA gap of about 1+ points between top 3 teams (Hanwha/SSG/LG) and the bottom tier</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="runs-scored-vs-runs-allowed">
+<h3>6. Runs Scored vs Runs Allowed<a class="headerlink" href="#runs-scored-vs-runs-allowed" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-5.png" /></p>
+<p>Above the diagonal (green area) = Runs Scored &gt; Runs Allowed. LG/Hanwha/Samsung are clearly positioned above the diagonal. Kiwoom is isolated in the lower right with extremely high runs allowed (860). NC has high runs scored (732) but also high runs allowed (766), placing it just below the diagonal.</p>
+</section>
+<hr class="docutils" />
+<section id="ops-vs-era-quadrant-analysis">
+<h3>7. OPS vs ERA — Quadrant Analysis<a class="headerlink" href="#ops-vs-era-quadrant-analysis" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-6.png" /></p>
+<p>The dashed line intersection = league average (OPS .727, ERA 4.31). The upper-left quadrant (high OPS + low ERA) is the ideal position.</p>
+<ul class="simple">
+<li><p><strong>LG</strong>: The only team clearly in the upper-left → strong on both offense and defense</p></li>
+<li><p><strong>Hanwha</strong>: Lowest ERA but OPS near average → pitching-centered team</p></li>
+<li><p><strong>Samsung</strong>: Highest OPS but ERA above average → offense-centered team</p></li>
+<li><p><strong>Kiwoom</strong>: Isolated in the lower-right → worst on both offense and defense</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="actual-vs-pythagorean-expected-win-percentage">
+<h3>8. Actual vs Pythagorean Expected Win Percentage<a class="headerlink" href="#actual-vs-pythagorean-expected-win-percentage" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-7.png" /></p>
+<p>Pythagorean Win% = RS² / (RS² + RA²).</p>
+<ul class="simple">
+<li><p><strong>Samsung</strong>: Expected (.589) ≫ Actual (.521) → win% is low relative to run differential. Possible weakness in close games or concentration of runs in blowout wins</p></li>
+<li><p><strong>NC</strong>: Expected (.477) &lt; Actual (.514) → a team that is strong in close games. Suggests bullpen/clutch ability</p></li>
+<li><p><strong>LG</strong>: Expected (.645) &gt; Actual (.603) → slightly unlucky relative to run differential</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="batting-stats-correlation-heatmap">
+<h3>9. Batting Stats Correlation Heatmap<a class="headerlink" href="#batting-stats-correlation-heatmap" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-8.png" /></p>
+<ul class="simple">
+<li><p><strong>OPS ↔ R (0.96)</strong>: OPS has the strongest correlation with runs → the key metric for team offense</p></li>
+<li><p><strong>OBP ↔ R (0.93)</strong>: On-base percentage is more important for scoring than slugging (0.88)</p></li>
+<li><p><strong>SO ↔ AVG (-0.71)</strong>: More strikeouts = lower batting average → importance of contact ability</p></li>
+<li><p><strong>HR ↔ AVG (0.27)</strong>: Home runs are nearly unrelated to batting average → power and contact are separate</p></li>
+<li><p><strong>SO ↔ HR (0.13)</strong>: Strikeouts and home runs are nearly uncorrelated</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="win-percentage-determinants">
+<h3>10. Win Percentage Determinants<a class="headerlink" href="#win-percentage-determinants" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-9.png" /></p>
+<p>Strongest positive correlation with win%: <strong>Run Differential</strong> &gt; <strong>Runs Scored</strong> &gt; <strong>OPS</strong>. Strongest negative correlation: <strong>ERA</strong> &gt; <strong>WHIP</strong> &gt; <strong>Errors</strong>. The negative correlation of pitching metrics (ERA/WHIP) exceeds the positive correlation of batting metrics (AVG/OPS) in absolute value → pitching is more decisive for winning.</p>
+</section>
+<hr class="docutils" />
+<section id="team-capability-radar-chart">
+<h3>11. Team Capability Radar Chart<a class="headerlink" href="#team-capability-radar-chart" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-10.png" /></p>
+<p>6 metrics normalized to 0–100 (ERA/WHIP inversely transformed).</p>
+<ul class="simple">
+<li><p><strong>LG</strong>: Top in AVG/OPS + high in pitching/fielding → the most balanced team</p></li>
+<li><p><strong>Hanwha</strong>: Top in 1/ERA · 1/WHIP · FPCT → pitching and fielding centered</p></li>
+<li><p><strong>SSG</strong>: Top in pitching, bottom in batting → pitching-dependent</p></li>
+<li><p><strong>Kiwoom</strong>: Bottom in all areas → complete rebuild needed</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="fielding-baserunning-stats">
+<h3>12. Fielding &amp; Baserunning Stats<a class="headerlink" href="#fielding-baserunning-stats" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-11.png" /></p>
+<ul class="simple">
+<li><p><strong>Errors (E)</strong>: Hanwha (86) fewest → fielding stability. KIA (123) most</p></li>
+<li><p><strong>FPCT</strong>: Hanwha/Samsung (.984) tied for 1st. Differences among lower teams are minimal (.977)</p></li>
+<li><p><strong>SB</strong>: NC (186) far ahead of 2nd-place Doosan (144) by 42. KT (48) lowest</p></li>
+<li><p><strong>SB%</strong>: Kiwoom (84.7%) 1st → few attempts but highly efficient</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="run-differential">
+<h3>13. Run Differential<a class="headerlink" href="#run-differential" title="Link to this heading">#</a></h3>
+<p><img alt="KBO" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/3-12.png" /></p>
+<p>LG (+204) overwhelmingly 1st. Hanwha (+135) and Samsung (+128) follow. Kiwoom (-279) is incomparable even to other bottom teams. Among .500+ teams, NC (-34) and KT (-9) have negative run differentials yet maintain above-.500 records → suggesting high win rates in close games.</p>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h3>14. Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h3>
+<section id="key-findings">
+<h4>Key Findings<a class="headerlink" href="#key-findings" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Finding</p></th>
+<th class="head"><p>Evidence</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>OPS is the best batting metric for predicting runs</p></td>
+<td><p>OPS↔R correlation 0.96</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>OBP is more important than SLG for scoring</p></td>
+<td><p>OBP↔R 0.93 &gt; SLG↔R 0.88</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Pitching is more decisive than batting for win%</p></td>
+<td><p>ERA↔Win% negative correlation exceeds OPS↔Win% positive correlation in absolute value</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Samsung’s Pythagorean paradox</p></td>
+<td><p>Expected .589 vs Actual .521 — significantly lower win% relative to run differential</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>NC’s aggressive baserunning</p></td>
+<td><p>League-leading 186 SB, 42 ahead of 2nd place (Doosan 144)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="team-profiles">
+<h4>Team Profiles<a class="headerlink" href="#team-profiles" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Team</p></th>
+<th class="head"><p>Win%</p></th>
+<th class="head"><p>Key Strength</p></th>
+<th class="head"><p>Key Weakness</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>LG</p></td>
+<td><p>.603</p></td>
+<td><p>1st in AVG, most runs scored</p></td>
+<td><p>3rd in HR</p></td>
+</tr>
+<tr class="row-odd"><td><p>Hanwha</p></td>
+<td><p>.593</p></td>
+<td><p>1st in ERA/WHIP/FPCT across the board</p></td>
+<td><p>5th in OPS</p></td>
+</tr>
+<tr class="row-even"><td><p>SSG</p></td>
+<td><p>.536</p></td>
+<td><p>2nd in ERA, 2nd in WHIP</p></td>
+<td><p>8th in OPS, 9th in runs</p></td>
+</tr>
+<tr class="row-odd"><td><p>Samsung</p></td>
+<td><p>.521</p></td>
+<td><p>1st in OPS/HR/FPCT</p></td>
+<td><p>5th in ERA, Pythagorean gap</p></td>
+</tr>
+<tr class="row-even"><td><p>NC</p></td>
+<td><p>.514</p></td>
+<td><p>Dominant 1st in SB (186)</p></td>
+<td><p>9th in ERA, 9th in WHIP</p></td>
+</tr>
+<tr class="row-odd"><td><p>KT</p></td>
+<td><p>.511</p></td>
+<td><p>1st in QS (74)</p></td>
+<td><p>Lowest SB (48)</p></td>
+</tr>
+<tr class="row-even"><td><p>Lotte</p></td>
+<td><p>.478</p></td>
+<td><p>1st in doubles</p></td>
+<td><p>Lowest HR (75), 8th in ERA</p></td>
+</tr>
+<tr class="row-odd"><td><p>KIA</p></td>
+<td><p>.464</p></td>
+<td><p>2nd in HR (144)</p></td>
+<td><p>Most errors (123)</p></td>
+</tr>
+<tr class="row-even"><td><p>Doosan</p></td>
+<td><p>.442</p></td>
+<td><p>2nd in SB (144)</p></td>
+<td><p>6th in ERA</p></td>
+</tr>
+<tr class="row-odd"><td><p>Kiwoom</p></td>
+<td><p>.336</p></td>
+<td><p>1st in SB% (84.7%)</p></td>
+<td><p>Bottom across all categories, run diff -279</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+<section id="reference-python-code">
+<h2><strong>Reference: Python Code</strong><a class="headerlink" href="#reference-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+
+<span class="c1">## 1. Data loading</span>
+
+<span class="c1"># Read each sheet from Excel file</span>
+<span class="n">xls</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelFile</span><span class="p">(</span><span class="s1">&#39;../Data/2025_KBO_팀기록_데이터세트.xlsx&#39;</span><span class="p">)</span>
+<span class="n">bat1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s1">&#39;타자기록(1)&#39;</span><span class="p">)</span>
+<span class="n">bat2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s1">&#39;타자기록(2)&#39;</span><span class="p">)</span>
+<span class="n">pit1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s1">&#39;투수기록(1)&#39;</span><span class="p">)</span>
+<span class="n">pit2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s1">&#39;투수기록(2)&#39;</span><span class="p">)</span>
+<span class="n">defense</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s1">&#39;수비기록&#39;</span><span class="p">)</span>
+<span class="n">baserun</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="n">xls</span><span class="p">,</span> <span class="s1">&#39;주루기록&#39;</span><span class="p">)</span>
+
+<span class="c1"># Remove total rows</span>
+<span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="p">[</span><span class="n">bat1</span><span class="p">,</span> <span class="n">bat2</span><span class="p">,</span> <span class="n">pit1</span><span class="p">,</span> <span class="n">pit2</span><span class="p">,</span> <span class="n">defense</span><span class="p">,</span> <span class="n">baserun</span><span class="p">]:</span>
+    <span class="n">frame</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="n">frame</span><span class="p">[</span><span class="s1">&#39;순위&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;합계&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Merge batting tables</span>
+<span class="n">batting</span> <span class="o">=</span> <span class="n">bat1</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+    <span class="n">bat2</span><span class="p">[[</span><span class="s1">&#39;팀명&#39;</span><span class="p">,</span><span class="s1">&#39;BB&#39;</span><span class="p">,</span><span class="s1">&#39;IBB&#39;</span><span class="p">,</span><span class="s1">&#39;HBP&#39;</span><span class="p">,</span><span class="s1">&#39;SO&#39;</span><span class="p">,</span><span class="s1">&#39;GDP&#39;</span><span class="p">,</span><span class="s1">&#39;SLG&#39;</span><span class="p">,</span><span class="s1">&#39;OBP&#39;</span><span class="p">,</span><span class="s1">&#39;OPS&#39;</span><span class="p">,</span><span class="s1">&#39;RISP&#39;</span><span class="p">,</span><span class="s1">&#39;PH-BA&#39;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;팀명&#39;</span><span class="p">)</span>
+
+<span class="c1"># Clean pitching tables</span>
+<span class="n">pitching</span> <span class="o">=</span> <span class="n">pit1</span><span class="p">[[</span><span class="s1">&#39;팀명&#39;</span><span class="p">,</span><span class="s1">&#39;ERA&#39;</span><span class="p">,</span><span class="s1">&#39;W&#39;</span><span class="p">,</span><span class="s1">&#39;L&#39;</span><span class="p">,</span><span class="s1">&#39;SV&#39;</span><span class="p">,</span><span class="s1">&#39;HLD&#39;</span><span class="p">,</span><span class="s1">&#39;WPCT&#39;</span><span class="p">,</span><span class="s1">&#39;H&#39;</span><span class="p">,</span><span class="s1">&#39;HR&#39;</span><span class="p">,</span><span class="s1">&#39;BB&#39;</span><span class="p">,</span><span class="s1">&#39;HBP&#39;</span><span class="p">,</span><span class="s1">&#39;SO&#39;</span><span class="p">,</span><span class="s1">&#39;R&#39;</span><span class="p">,</span><span class="s1">&#39;ER&#39;</span><span class="p">,</span><span class="s1">&#39;WHIP&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">pitching</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;팀명&#39;</span><span class="p">,</span><span class="s1">&#39;ERA&#39;</span><span class="p">,</span><span class="s1">&#39;W&#39;</span><span class="p">,</span><span class="s1">&#39;L&#39;</span><span class="p">,</span><span class="s1">&#39;SV&#39;</span><span class="p">,</span><span class="s1">&#39;HLD&#39;</span><span class="p">,</span><span class="s1">&#39;WPCT&#39;</span><span class="p">,</span><span class="s1">&#39;H_a&#39;</span><span class="p">,</span><span class="s1">&#39;HR_a&#39;</span><span class="p">,</span><span class="s1">&#39;BB_p&#39;</span><span class="p">,</span><span class="s1">&#39;HBP_p&#39;</span><span class="p">,</span><span class="s1">&#39;SO_p&#39;</span><span class="p">,</span><span class="s1">&#39;R_a&#39;</span><span class="p">,</span><span class="s1">&#39;ER&#39;</span><span class="p">,</span><span class="s1">&#39;WHIP&#39;</span><span class="p">]</span>
+<span class="n">pit2_sub</span> <span class="o">=</span> <span class="n">pit2</span><span class="p">[[</span><span class="s1">&#39;팀명&#39;</span><span class="p">,</span><span class="s1">&#39;QS&#39;</span><span class="p">,</span><span class="s1">&#39;BSV&#39;</span><span class="p">,</span><span class="s1">&#39;TBF&#39;</span><span class="p">,</span><span class="s1">&#39;NP&#39;</span><span class="p">,</span><span class="s1">&#39;AVG&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">pit2_sub</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;팀명&#39;</span><span class="p">,</span><span class="s1">&#39;QS&#39;</span><span class="p">,</span><span class="s1">&#39;BSV&#39;</span><span class="p">,</span><span class="s1">&#39;TBF&#39;</span><span class="p">,</span><span class="s1">&#39;NP&#39;</span><span class="p">,</span><span class="s1">&#39;oAVG&#39;</span><span class="p">]</span>
+<span class="n">pitching</span> <span class="o">=</span> <span class="n">pitching</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pit2_sub</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;팀명&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create master table</span>
+<span class="n">df</span> <span class="o">=</span> <span class="p">(</span><span class="n">batting</span>
+      <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">pitching</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;팀명&#39;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">defense</span><span class="p">[[</span><span class="s1">&#39;팀명&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">,</span><span class="s1">&#39;FPCT&#39;</span><span class="p">,</span><span class="s1">&#39;DP&#39;</span><span class="p">,</span><span class="s1">&#39;PB&#39;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;팀명&#39;</span><span class="p">)</span>
+      <span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">baserun</span><span class="p">[[</span><span class="s1">&#39;팀명&#39;</span><span class="p">,</span><span class="s1">&#39;SBA&#39;</span><span class="p">,</span><span class="s1">&#39;SB&#39;</span><span class="p">,</span><span class="s1">&#39;CS&#39;</span><span class="p">,</span><span class="s1">&#39;SB%&#39;</span><span class="p">]],</span> <span class="n">on</span><span class="o">=</span><span class="s1">&#39;팀명&#39;</span><span class="p">))</span>
+
+<span class="c1"># Derived variables</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;RS_RA_diff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;R_a&#39;</span><span class="p">]</span>  <span class="c1"># run differential</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Pythagorean&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;R_a&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Pythagorean expected win%</span>
+
+<span class="c1"># English team names for graphs</span>
+<span class="n">TEAM_EN</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;LG&#39;</span><span class="p">:</span><span class="s1">&#39;LG&#39;</span><span class="p">,</span><span class="s1">&#39;삼성&#39;</span><span class="p">:</span><span class="s1">&#39;Samsung&#39;</span><span class="p">,</span><span class="s1">&#39;롯데&#39;</span><span class="p">:</span><span class="s1">&#39;Lotte&#39;</span><span class="p">,</span><span class="s1">&#39;한화&#39;</span><span class="p">:</span><span class="s1">&#39;Hanwha&#39;</span><span class="p">,</span>
+           <span class="s1">&#39;두산&#39;</span><span class="p">:</span><span class="s1">&#39;Doosan&#39;</span><span class="p">,</span><span class="s1">&#39;NC&#39;</span><span class="p">:</span><span class="s1">&#39;NC&#39;</span><span class="p">,</span><span class="s1">&#39;KIA&#39;</span><span class="p">:</span><span class="s1">&#39;KIA&#39;</span><span class="p">,</span><span class="s1">&#39;SSG&#39;</span><span class="p">:</span><span class="s1">&#39;SSG&#39;</span><span class="p">,</span><span class="s1">&#39;KT&#39;</span><span class="p">:</span><span class="s1">&#39;KT&#39;</span><span class="p">,</span><span class="s1">&#39;키움&#39;</span><span class="p">:</span><span class="s1">&#39;Kiwoom&#39;</span><span class="p">}</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;팀명&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">TEAM_EN</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;WPCT&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">## 2. Descriptive statistics</span>
+
+<span class="n">df</span><span class="p">[[</span><span class="s1">&#39;AVG&#39;</span><span class="p">,</span><span class="s1">&#39;OPS&#39;</span><span class="p">,</span><span class="s1">&#39;HR&#39;</span><span class="p">,</span><span class="s1">&#39;R&#39;</span><span class="p">,</span><span class="s1">&#39;ERA&#39;</span><span class="p">,</span><span class="s1">&#39;WHIP&#39;</span><span class="p">,</span><span class="s1">&#39;SO_p&#39;</span><span class="p">,</span><span class="s1">&#39;FPCT&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">,</span><span class="s1">&#39;SB&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+
+<span class="c1">## 3. Team win percentage ranking</span>
+
+<span class="c1"># Team win percentage horizontal bar chart</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;WPCT&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#2ecc71&#39;</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;=</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="s1">&#39;#e74c3c&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;WPCT&#39;</span><span class="p">]]</span>
+
+<span class="n">bars</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;WPCT&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.65</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#888&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+
+<span class="c1"># Value labels</span>
+<span class="k">for</span> <span class="n">bar</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;WPCT&#39;</span><span class="p">]):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.005</span><span class="p">,</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_y</span><span class="p">()</span> <span class="o">+</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;2025 KBO Team Win Percentage Ranking&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Win Percentage (WPCT)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 4. Batting stats comparison (AVG, OPS, HR, R)</span>
+
+<span class="c1"># Batting 4 key stats comparison (2x2 subplots)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;AVG&#39;</span><span class="p">,</span><span class="s1">&#39;Batting Average (AVG)&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;OPS&#39;</span><span class="p">,</span><span class="s1">&#39;OPS&#39;</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;HR&#39;</span><span class="p">,</span><span class="s1">&#39;Home Runs (HR)&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">,</span><span class="s1">&#39;Runs Scored (R)&#39;</span><span class="p">)]</span>
+<span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdYlGn</span>  <span class="c1"># green for better values</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span> <span class="n">metrics</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="p">(</span><span class="n">vals</span> <span class="o">-</span> <span class="n">vals</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">vals</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>  <span class="c1"># normalize</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">norm</span><span class="p">]</span>
+    <span class="n">bars</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.65</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">bar</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="n">col</span><span class="p">]):</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">+</span><span class="p">(</span><span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">*</span><span class="mf">0.008</span><span class="p">),</span>
+                <span class="n">bar</span><span class="o">.</span><span class="n">get_y</span><span class="p">()</span><span class="o">+</span><span class="n">bar</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">fmt</span><span class="p">,</span>
+                <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">9.5</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;2025 KBO Team Batting Stats Comparison&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.01</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 5. Pitching stats - ERA &amp; WHIP</span>
+
+<span class="c1"># ERA &amp; WHIP horizontal bar chart</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">))</span>
+<span class="n">cmap_r</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdYlGn_r</span>  <span class="c1"># reversed colormap since lower is better</span>
+
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="p">[(</span><span class="s1">&#39;ERA&#39;</span><span class="p">,</span><span class="s1">&#39;Earned Run Average (ERA)&#39;</span><span class="p">),</span>
+                                     <span class="p">(</span><span class="s1">&#39;WHIP&#39;</span><span class="p">,</span><span class="s1">&#39;WHIP&#39;</span><span class="p">)]):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="n">norm</span> <span class="o">=</span> <span class="p">(</span><span class="n">vals</span> <span class="o">-</span> <span class="n">vals</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">vals</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">vals</span><span class="o">.</span><span class="n">min</span><span class="p">())</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">cmap_r</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">norm</span><span class="p">]</span>
+    <span class="n">bars</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.65</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span> <span class="o">+</span> <span class="s1">&#39;  (lower is better)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">bar</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="n">col</span><span class="p">]):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">+</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_y</span><span class="p">()</span><span class="o">+</span><span class="n">bar</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;2025 KBO Team Pitching Stats&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 6. Runs scored vs runs allowed</span>
+
+<span class="c1"># Runs scored vs runs allowed bubble chart</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;#2ecc71&#39;</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;RS_RA_diff&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;#e74c3c&#39;</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;R_a&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;WPCT&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">500</span><span class="p">,</span>
+               <span class="n">c</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;R_a&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]),</span>
+                <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># Diagonal (runs scored = runs allowed)</span>
+<span class="n">lims</span> <span class="o">=</span> <span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span>
+        <span class="nb">max</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()[</span><span class="mi">1</span><span class="p">])]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lims</span><span class="p">,</span> <span class="n">lims</span><span class="p">,</span> <span class="s1">&#39;k--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">lims</span><span class="p">,</span> <span class="n">lims</span><span class="p">,</span> <span class="n">lims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">lims</span><span class="p">,</span> <span class="n">lims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lims</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Runs Allowed (RA)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Runs Scored (RS)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;2025 KBO Runs Scored vs Runs Allowed</span><span class="se">\n</span><span class="s1">(bubble size = win pct, green = RS&gt;RA)&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 7. OPS vs ERA - Quadrant analysis</span>
+
+<span class="c1"># OPS vs ERA quadrant scatter plot</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">ops_mean</span><span class="p">,</span> <span class="n">era_mean</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;OPS&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;ERA&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ERA&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;OPS&#39;</span><span class="p">],</span> <span class="n">s</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;WPCT&#39;</span><span class="p">]</span><span class="o">*</span><span class="mi">600</span><span class="p">,</span>
+               <span class="n">c</span><span class="o">=</span><span class="s1">&#39;#3498db&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;ERA&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;OPS&#39;</span><span class="p">]),</span>
+                <span class="n">textcoords</span><span class="o">=</span><span class="s2">&quot;offset points&quot;</span><span class="p">,</span> <span class="n">xytext</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># League average reference lines</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">ops_mean</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">era_mean</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="c1"># Quadrant labels</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">3.3</span><span class="p">,</span> <span class="mf">0.79</span><span class="p">,</span> <span class="s1">&#39;Strong Hitting</span><span class="se">\n</span><span class="s1">+ Strong Pitching&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.2</span><span class="p">,</span> <span class="mf">0.79</span><span class="p">,</span> <span class="s1">&#39;Strong Hitting</span><span class="se">\n</span><span class="s1">+ Weak Pitching&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">3.3</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">,</span> <span class="s1">&#39;Weak Hitting</span><span class="se">\n</span><span class="s1">+ Strong Pitching&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">5.2</span><span class="p">,</span> <span class="mf">0.68</span><span class="p">,</span> <span class="s1">&#39;Weak Hitting</span><span class="se">\n</span><span class="s1">+ Weak Pitching&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;ERA (lower is better)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;OPS (higher is better)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;2025 KBO  OPS vs ERA  Quadrant Analysis</span><span class="se">\n</span><span class="s1">(bubble size = win pct)&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 8. Actual vs Pythagorean expected win%</span>
+
+<span class="c1"># Actual vs Pythagorean expected win%</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;WPCT&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+<span class="n">w</span> <span class="o">=</span> <span class="mf">0.35</span>
+
+<span class="n">bars1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;WPCT&#39;</span><span class="p">],</span> <span class="n">w</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Actual WPCT&#39;</span><span class="p">,</span>
+               <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#3498db&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">bars2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;Pythagorean&#39;</span><span class="p">],</span> <span class="n">w</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Pythagorean WPCT&#39;</span><span class="p">,</span>
+               <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#e67e22&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">bar</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars1</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;WPCT&#39;</span><span class="p">]):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">bar</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span><span class="o">+</span><span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">+</span><span class="mf">0.005</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">8.5</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">bar</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars2</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;Pythagorean&#39;</span><span class="p">]):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">bar</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span><span class="o">+</span><span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">+</span><span class="mf">0.005</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mf">8.5</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Win Percentage&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;2025 KBO  Actual vs Pythagorean Win Percentage&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.72</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 9. Batting stats correlation heatmap</span>
+
+<span class="c1"># Batting stats correlation heatmap</span>
+<span class="n">corr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AVG&#39;</span><span class="p">,</span><span class="s1">&#39;OBP&#39;</span><span class="p">,</span><span class="s1">&#39;SLG&#39;</span><span class="p">,</span><span class="s1">&#39;OPS&#39;</span><span class="p">,</span><span class="s1">&#39;HR&#39;</span><span class="p">,</span><span class="s1">&#39;BB&#39;</span><span class="p">,</span><span class="s1">&#39;SO&#39;</span><span class="p">,</span><span class="s1">&#39;R&#39;</span><span class="p">]</span>
+<span class="n">corr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">corr_cols</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">))</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">corr</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">corr_cols</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">corr_cols</span><span class="p">)))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">corr_cols</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span><span class="n">corr_cols</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># Display correlation coefficients in cells</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">corr_cols</span><span class="p">)):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">corr_cols</span><span class="p">)):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">corr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.5</span> <span class="k">else</span> <span class="s1">&#39;black&#39;</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Correlation&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;2025 KBO Batting Stats Correlation Heatmap&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 10. Win percentage determinants</span>
+
+<span class="c1"># 승률과 각 지표의 상관계수</span>
+<span class="n">corr_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AVG&#39;</span><span class="p">,</span><span class="s1">&#39;OPS&#39;</span><span class="p">,</span><span class="s1">&#39;HR&#39;</span><span class="p">,</span><span class="s1">&#39;R&#39;</span><span class="p">,</span><span class="s1">&#39;BB&#39;</span><span class="p">,</span><span class="s1">&#39;SO&#39;</span><span class="p">,</span><span class="s1">&#39;ERA&#39;</span><span class="p">,</span><span class="s1">&#39;WHIP&#39;</span><span class="p">,</span><span class="s1">&#39;SO_p&#39;</span><span class="p">,</span><span class="s1">&#39;FPCT&#39;</span><span class="p">,</span><span class="s1">&#39;E&#39;</span><span class="p">,</span><span class="s1">&#39;SB&#39;</span><span class="p">,</span><span class="s1">&#39;RS_RA_diff&#39;</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AVG&#39;</span><span class="p">,</span><span class="s1">&#39;OPS&#39;</span><span class="p">,</span><span class="s1">&#39;HR&#39;</span><span class="p">,</span><span class="s1">&#39;Runs&#39;</span><span class="p">,</span><span class="s1">&#39;BB&#39;</span><span class="p">,</span><span class="s1">&#39;SO(bat)&#39;</span><span class="p">,</span><span class="s1">&#39;ERA&#39;</span><span class="p">,</span><span class="s1">&#39;WHIP&#39;</span><span class="p">,</span><span class="s1">&#39;SO(pit)&#39;</span><span class="p">,</span><span class="s1">&#39;FPCT&#39;</span><span class="p">,</span><span class="s1">&#39;Errors&#39;</span><span class="p">,</span><span class="s1">&#39;SB&#39;</span><span class="p">,</span><span class="s1">&#39;Run Diff&#39;</span><span class="p">]</span>
+<span class="n">win_corr</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">corr_cols</span><span class="p">]</span><span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;WPCT&#39;</span><span class="p">])</span>
+
+<span class="c1"># 정렬</span>
+<span class="n">sorted_idx</span> <span class="o">=</span> <span class="n">win_corr</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+<span class="n">sorted_corr</span> <span class="o">=</span> <span class="n">win_corr</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">sorted_idx</span><span class="p">]</span>
+<span class="n">sorted_labels</span> <span class="o">=</span> <span class="p">[</span><span class="n">labels</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">sorted_idx</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#e74c3c&#39;</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;#2ecc71&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">sorted_corr</span><span class="p">]</span>
+<span class="n">bars</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">sorted_labels</span><span class="p">,</span> <span class="n">sorted_corr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#333&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">bar</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars</span><span class="p">,</span> <span class="n">sorted_corr</span><span class="p">):</span>
+    <span class="n">x_pos</span> <span class="o">=</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">+</span> <span class="mf">0.02</span> <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.06</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_pos</span><span class="p">,</span> <span class="n">bar</span><span class="o">.</span><span class="n">get_y</span><span class="p">()</span><span class="o">+</span><span class="n">bar</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">val</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Correlation of Each Stat with Win Percentage (WPCT)&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Pearson Correlation Coefficient&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 11. Team capability radar chart</span>
+
+<span class="c1"># 팀 역량 레이더 차트</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">normalize</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">mn</span><span class="p">,</span> <span class="n">mx</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">series</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">mx</span> <span class="o">==</span> <span class="n">mn</span><span class="p">:</span> <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">0.5</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">series</span><span class="p">))</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">series</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mx</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">n</span> <span class="k">if</span> <span class="n">invert</span> <span class="k">else</span> <span class="n">n</span>
+
+<span class="n">radar_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;team_en&#39;</span><span class="p">:</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;AVG&#39;</span><span class="p">:</span> <span class="n">normalize</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;AVG&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;OPS&#39;</span><span class="p">:</span> <span class="n">normalize</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;OPS&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;ERA_inv&#39;</span><span class="p">:</span> <span class="n">normalize</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;ERA&#39;</span><span class="p">],</span> <span class="n">invert</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>   <span class="c1"># ERA 역수</span>
+    <span class="s1">&#39;WHIP_inv&#39;</span><span class="p">:</span> <span class="n">normalize</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;WHIP&#39;</span><span class="p">],</span> <span class="n">invert</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="c1"># WHIP 역수</span>
+    <span class="s1">&#39;FPCT&#39;</span><span class="p">:</span> <span class="n">normalize</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;FPCT&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;SB&#39;</span><span class="p">:</span> <span class="n">normalize</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;SB&#39;</span><span class="p">]),</span>
+<span class="p">})</span>
+
+<span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AVG&#39;</span><span class="p">,</span><span class="s1">&#39;OPS&#39;</span><span class="p">,</span><span class="s1">&#39;1/ERA&#39;</span><span class="p">,</span><span class="s1">&#39;1/WHIP&#39;</span><span class="p">,</span><span class="s1">&#39;FPCT&#39;</span><span class="p">,</span><span class="s1">&#39;SB&#39;</span><span class="p">]</span>
+<span class="n">cat_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AVG&#39;</span><span class="p">,</span><span class="s1">&#39;OPS&#39;</span><span class="p">,</span><span class="s1">&#39;ERA_inv&#39;</span><span class="p">,</span><span class="s1">&#39;WHIP_inv&#39;</span><span class="p">,</span><span class="s1">&#39;FPCT&#39;</span><span class="p">,</span><span class="s1">&#39;SB&#39;</span><span class="p">]</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span>
+<span class="n">angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">angles</span> <span class="o">+=</span> <span class="n">angles</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># 닫힌 다각형</span>
+
+<span class="n">compare</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;LG&#39;</span><span class="p">,</span><span class="s1">&#39;Hanwha&#39;</span><span class="p">,</span><span class="s1">&#39;SSG&#39;</span><span class="p">,</span><span class="s1">&#39;Kiwoom&#39;</span><span class="p">]</span>
+<span class="n">colors_r</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#e8416f&#39;</span><span class="p">,</span><span class="s1">&#39;#ff8533&#39;</span><span class="p">,</span><span class="s1">&#39;#e84455&#39;</span><span class="p">,</span><span class="s1">&#39;#8b1a2e&#39;</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">polar</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">team</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">compare</span><span class="p">,</span> <span class="n">colors_r</span><span class="p">):</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="n">radar_df</span><span class="p">[</span><span class="n">radar_df</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">team</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">cat_keys</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="n">row</span><span class="p">[</span><span class="n">cat_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]]]</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="s1">&#39;o-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">team</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">vals</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">angles</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">categories</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="s1">&#39;25&#39;</span><span class="p">,</span><span class="s1">&#39;50&#39;</span><span class="p">,</span><span class="s1">&#39;75&#39;</span><span class="p">,</span><span class="s1">&#39;100&#39;</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;2025 KBO Team Capability Radar</span><span class="se">\n</span><span class="s1">(normalized 0~100)&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 12. Fielding &amp; baserunning stats</span>
+
+<span class="c1"># 수비/주루 4지표 (2x2 서브플롯)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># (a) 실책</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdYlGn_r</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">)))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.65</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Errors (E) -- lower is better&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()):</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">]</span><span class="o">+</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;E&#39;</span><span class="p">])),</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># (b) 수비율</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;FPCT&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">colors2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">RdYlGn</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s2</span><span class="p">)))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">s2</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="n">s2</span><span class="p">[</span><span class="s1">&#39;FPCT&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors2</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.65</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Fielding Percentage (FPCT)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mf">0.975</span><span class="p">,</span> <span class="mf">0.986</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s2</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()):</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;FPCT&#39;</span><span class="p">]</span><span class="o">+</span><span class="mf">0.0001</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;FPCT&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># (c) 도루</span>
+<span class="n">s3</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;SB&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">colors3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">YlGnBu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s3</span><span class="p">)))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">s3</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="n">s3</span><span class="p">[</span><span class="s1">&#39;SB&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors3</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.65</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Stolen Bases (SB)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s3</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()):</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;SB&#39;</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;SB&#39;</span><span class="p">])),</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># (d) 도루 성공률</span>
+<span class="n">s4</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;SB%&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">colors4</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">YlGnBu</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">s4</span><span class="p">)))</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">barh</span><span class="p">(</span><span class="n">s4</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="n">s4</span><span class="p">[</span><span class="s1">&#39;SB%&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors4</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">0.65</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Stolen Base Success Rate (SB%)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">s4</span><span class="o">.</span><span class="n">iterrows</span><span class="p">()):</span>
+    <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s1">&#39;SB%&#39;</span><span class="p">]</span><span class="o">+</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;SB%&quot;</span><span class="p">]</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;2025 KBO Defense &amp; Baserunning Stats&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.01</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1">## 13. Run differential</span>
+
+<span class="c1"># 득실차 바 차트</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;RS_RA_diff&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#2ecc71&#39;</span> <span class="k">if</span> <span class="n">v</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;#e74c3c&#39;</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;RS_RA_diff&#39;</span><span class="p">]]</span>
+
+<span class="n">bars</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;team_en&#39;</span><span class="p">],</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;RS_RA_diff&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.65</span><span class="p">,</span>
+              <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;#333&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">bar</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">bars</span><span class="p">,</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;RS_RA_diff&#39;</span><span class="p">]):</span>
+    <span class="n">y_pos</span> <span class="o">=</span> <span class="n">val</span> <span class="o">+</span> <span class="mi">5</span> <span class="k">if</span> <span class="n">val</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">val</span> <span class="o">-</span> <span class="mi">15</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">bar</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span><span class="o">+</span><span class="n">bar</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">y_pos</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="si">:</span><span class="s1">+d</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;2025 KBO Run Differential (RS - RA)&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Run Differential&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span><span class="s1">&#39;right&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/796fa1e487a0a33bf319bd9b2af52d51e008d8ebe5a134ebfa7908ef7c2fbb1a.png" src="../_images/796fa1e487a0a33bf319bd9b2af52d51e008d8ebe5a134ebfa7908ef7c2fbb1a.png" />
+<img alt="../_images/bceffab0dff1cce27f0e5c70ccfca395c9903b77f1c87ea9f6927300e81b64bf.png" src="../_images/bceffab0dff1cce27f0e5c70ccfca395c9903b77f1c87ea9f6927300e81b64bf.png" />
+<img alt="../_images/f02bbfd4e0fb7f8d19397eb03f86b27a7b09ffe14c099297d2f2d572e14f6517.png" src="../_images/f02bbfd4e0fb7f8d19397eb03f86b27a7b09ffe14c099297d2f2d572e14f6517.png" />
+<img alt="../_images/517f6396b03c35b3b7e49262c1146ee3bb5b0f604ead5bc033fba90c8475b288.png" src="../_images/517f6396b03c35b3b7e49262c1146ee3bb5b0f604ead5bc033fba90c8475b288.png" />
+<img alt="../_images/b21b556485eb334104270448ce3f9c411fb799264df256becb8613962a9f6e8d.png" src="../_images/b21b556485eb334104270448ce3f9c411fb799264df256becb8613962a9f6e8d.png" />
+<img alt="../_images/735b53afebff182c42ed20e8bee19741a1e952a84df1282ad8f9ab4d907b5c76.png" src="../_images/735b53afebff182c42ed20e8bee19741a1e952a84df1282ad8f9ab4d907b5c76.png" />
+<img alt="../_images/359b2bd61889cbb611ef6fe12566370626ff2d28465d48352705d83c9f57e43a.png" src="../_images/359b2bd61889cbb611ef6fe12566370626ff2d28465d48352705d83c9f57e43a.png" />
+<img alt="../_images/59a32aefc71e2d80b2d804cd9b9d384d2d2bb95943acb323298788b5d59b0c49.png" src="../_images/59a32aefc71e2d80b2d804cd9b9d384d2d2bb95943acb323298788b5d59b0c49.png" />
+<img alt="../_images/4475045f7f267a3a52e58b85b88420b88468c9ed439b624c8b6357596931371b.png" src="../_images/4475045f7f267a3a52e58b85b88420b88468c9ed439b624c8b6357596931371b.png" />
+<img alt="../_images/0f3e06a7698b983ba1442f24d8728697fe5d10e704adb1ececf95d4ec8ef3579.png" src="../_images/0f3e06a7698b983ba1442f24d8728697fe5d10e704adb1ececf95d4ec8ef3579.png" />
+<img alt="../_images/912d5f51ec9ce7284d90c060ce5fbfc7d2fdb285859924bd47b8659d07d3e11f.png" src="../_images/912d5f51ec9ce7284d90c060ce5fbfc7d2fdb285859924bd47b8659d07d3e11f.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="02_Presidential_Approval_Rating_Analysis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 2. Presidential Approval Rating Analysis</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="04_PPP_Graph_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 4. PPP Graph Analysis</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#input-2025-kbo-regular-season-team-records"><span style="color: blue;"><strong>1. Input 2025 KBO Regular Season Team Records</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-dataset-construction-excel-file"><strong>Claude Dataset Construction: Excel File</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploratory-data-analysis"><span style="color: blue;"><strong>2. Exploratory Data Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-dashboard"><strong>Claude Dashboard</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploratory-data-analysis-python-analysis"><span style="color: blue;"><strong>3. Exploratory Data Analysis: Python Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-analysis"><strong>Claude Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-loading">1. Data Loading</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-statistics">2. Descriptive Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#team-win-percentage-ranking">3. Team Win Percentage Ranking</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batting-stats-comparison-avg-ops-hr-r">4. Batting Stats Comparison (AVG, OPS, HR, R)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pitching-stats-era-whip">5. Pitching Stats — ERA &amp; WHIP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runs-scored-vs-runs-allowed">6. Runs Scored vs Runs Allowed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ops-vs-era-quadrant-analysis">7. OPS vs ERA — Quadrant Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#actual-vs-pythagorean-expected-win-percentage">8. Actual vs Pythagorean Expected Win Percentage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#batting-stats-correlation-heatmap">9. Batting Stats Correlation Heatmap</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#win-percentage-determinants">10. Win Percentage Determinants</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#team-capability-radar-chart">11. Team Capability Radar Chart</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fielding-baserunning-stats">12. Fielding &amp; Baserunning Stats</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-differential">13. Run Differential</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">14. Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-findings">Key Findings</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#team-profiles">Team Profiles</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

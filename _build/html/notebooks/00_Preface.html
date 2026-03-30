@@ -1,0 +1,539 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Preface &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/00_Preface';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 1. Exam Score Analysis" href="01_Exam_Score_Analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/00_Preface.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/00_Preface.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Preface</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="preface">
+<h1><strong>Preface</strong><a class="headerlink" href="#preface" title="Link to this heading">#</a></h1>
+<p>Whether it’s a school assignment or a work task, we now live in a world where people instinctively ask AI first before starting anything. Today’s AI delivers excellent answers quickly and reliably. Data analysis may well be the ultimate showcase for this capability. Just a year or two ago, AI was limited to answering questions about analysis ideas, coding, and statistical knowledge. Now, you simply feed it data, and AI autonomously produces expert-level reports and even interactive dashboards. There are no restrictions on the type of data either. Beyond structured data in spreadsheet format, AI can now handle text, images, and video — the horizon of data analysis has expanded beyond comparison. This book aims to demonstrate AI’s current data analysis capabilities through illustrative examples. We hope readers will be able to gauge the current level of AI-powered data analysis and find inspiration for applying it to their own tasks.</p>
+<p>We asked generative AI to perform the following data analysis tasks as illustrative examples.</p>
+<ul class="simple">
+<li><p>Exam score analysis for a university class</p></li>
+<li><p>Presidential approval rating changes by age and region</p></li>
+<li><p>2025 KBO regular season team performance analysis</p></li>
+<li><p>PPP theory graph analysis and update</p></li>
+<li><p>Collection and analysis of major countries’ GDP growth rates before and after COVID-19</p></li>
+<li><p>Building a stock price prediction system using order book and candlestick charts</p></li>
+<li><p>Comment analysis on a news article about the rush toward medical schools</p></li>
+<li><p>Detection analysis of daily apartment listing changes in Seoul</p></li>
+<li><p>Airline passenger satisfaction survey analysis</p></li>
+<li><p>Regression analysis of Boston housing prices</p></li>
+<li><p>Evaluating media reports on the empirical relationship between comprehensive property tax and rent</p></li>
+<li><p>Empirical analysis methodology for the decline of hypermarkets</p></li>
+<li><p>Evaluating media reports on the empirical relationship between newborn special loans and birth rate</p></li>
+<li><p>Logistic regression analysis of bank telemarketing data</p></li>
+<li><p>Tree model-based Titanic passenger survival classification</p></li>
+<li><p>Deep learning-based handwritten digit classification</p></li>
+<li><p>Panel data analysis of wage determination models</p></li>
+<li><p>2018 World Cup final match data analysis</p></li>
+<li><p>Estimating shock propagation patterns from the Iran bombing</p></li>
+<li><p>Global cosmetics trade trend analysis</p></li>
+<li><p>Texas special education status and open data survey</p></li>
+</ul>
+<p>We provided Claude, ChatGPT, and Gemini with various types of data related to the above topics and asked them to analyze and explain the results on their own. The key point of this book is that we did not ask AI about statistical knowledge or programming code — we had AI perform the analysis “directly.”</p>
+<p>The data we provided (uploaded) to AI included structured data such as Excel, CSV, and JSON files, but also frequently included unstructured data such as text, images, and video. The power of multimodal AI models truly shines in unstructured data analysis.</p>
+<p>In some cases, we did not provide any data to analyze and instead asked AI to find and analyze the data on its own. Examples include the collection and analysis of major countries’ GDP growth rates before and after COVID-19, global cosmetics trade trend analysis, and the Texas special education status and open data survey.</p>
+<p>Our analysis requests (prompts) were also diverse. In some cases, we provided very specific directions for the analysis, while in others, we simply asked “analyze this.” We also asked AI to evaluate empirical analyses that others had already conducted. The evaluation of media reports on the relationship between comprehensive property tax and rent, and between newborn special loans and birth rate, fall into this category.</p>
+<p>You can see the remarkable analytical capabilities AI demonstrates across these diverse scenarios in the 26 chapters of this book. Even with vague requests, AI produces expert-level reports in just one or two minutes. It is also highly impressive how AI presents analysis and research results intuitively using interactive dashboards.</p>
+<p>While AI possesses outstanding capabilities, we also witnessed it making mistakes and sometimes presenting incorrect results. One must be wary of so-called hallucinations, where AI provides plausible-sounding explanations for things that are not true. Furthermore, AI generates responses that reflect the user’s questioning style and context. Ultimately, what matters is not only the ability to use AI effectively, but also the researcher’s competence to critically examine and filter the results.</p>
+<p>At the end of each chapter, we have included the Python code used for the analysis. AI sometimes provides the code along with the analysis results, but when it does not, you can simply request it separately. AI’s Python execution environment (sandbox) is restricted to pre-installed libraries such as <code class="docutils literal notranslate"><span class="pre">pandas</span></code>, <code class="docutils literal notranslate"><span class="pre">numpy</span></code>, <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code>, and <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> for security and stability. Therefore, for packages that are not pre-installed (e.g., <code class="docutils literal notranslate"><span class="pre">linearmodels</span></code> in Chapter 20), AI cannot install them and can only provide us with the code. In such cases, the user must run the code in their local environment and feed the results back to AI.</p>
+<p>The analyses in this book were conducted using (as of the time of writing) Claude Opus 4.6, GPT-5.2, and Gemini 3 Pro. They are the co-workers of this book.</p>
+<br>
+<center> March 2026 </center>
+<br>
+<center> Won Gyoung Kim ⋅ Pilsun Choi </center>
+<br>
+<br>
+<p>Online edition: <a class="reference external" href="http://eduwon.github.io/AIDAe/">eduwon.github.io/AIDAe/</a></p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="01_Exam_Score_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 1. Exam Score Analysis</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

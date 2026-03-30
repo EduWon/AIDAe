@@ -1,0 +1,1866 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 9. Survey Analysis &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/09_Survey_Analysis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 10. Exploratory Factor Analysis" href="10_Exploratory_Factor_Analysis.html" />
+    <link rel="prev" title="Ch 8. Analysis of Seoul Apartment Listing Changes" href="08_Seoul_Apartment_Listing_Analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/09_Survey_Analysis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/09_Survey_Analysis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 9. Survey Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-explanation"><strong>Gemini’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">1. Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-descriptions">2. Variable Descriptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passenger-demographics">Passenger Demographics</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flight-information">Flight Information</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#service-satisfaction-ratings">Service Satisfaction Ratings</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#delay-information">Delay Information</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-notes">3. Data Notes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#satisfaction-analysis"><span style="color: blue;"><strong>2. Satisfaction Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-analysis"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-satisfaction-overview">1. Overall Satisfaction Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-of-key-influencing-factors">2. Analysis of Key Influencing Factors</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seat-class">Seat Class:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#type-of-travel">Type of Travel:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#customer-type">Customer Type:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#service-item-correlation-analysis">3. Service Item Correlation Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-and-recommendations">4. Conclusions and Recommendations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-analysis-by-survey-item"><span style="color: blue;"><strong>3. Descriptive Analysis by Survey Item</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-variable-analysis-demographics-flight-info">1. Categorical Variable Analysis (Demographics &amp; Flight Info)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-variable-analysis-age-distance-delays">2. Numerical Variable Analysis (Age, Distance, Delays)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#service-satisfaction-item-analysis-05-scale">3. Service Satisfaction Item Analysis (0–5 Scale)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#high-average-ratings-3-5">High average ratings (3.5+):</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#low-average-ratings-below-3-0">Low average ratings (below 3.0):</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#notable-findings-zero-score-frequency">Notable findings (zero-score frequency):</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-depth-survey-analysis-i"><span style="color: blue;"><strong>4. In-Depth Survey Analysis I</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#service-gap-analysis-using-radar-charts">1. Service Gap Analysis (Using Radar Charts)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-results">Analysis Results:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operational-efficiency-and-customer-sensitivity-analysis-delay-impact">2. Operational Efficiency and Customer Sensitivity Analysis (Delay Impact)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Analysis Results:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customer-segmentation-and-targeting-strategy">3. Customer Segmentation and Targeting Strategy</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-results-satisfaction-rate">Analysis Results (Satisfaction Rate):</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#predictive-modeling">4. Predictive Modeling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#persona-analysis">5. Persona Analysis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-depth-survey-analysis-ii"><span style="color: blue;"><strong>5. In-Depth Survey Analysis II</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#priority-action-matrix-ipa-importance-performance-analysis">1. Priority Action Matrix (IPA: Importance-Performance Analysis)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#implications">Implications:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demographic-segmentation">2. Demographic Segmentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#by-age-group">By Age Group:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#by-seat-class">By Seat Class:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#context-based-service-analysis">3. Context-Based Service Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-by-flight-distance">Sensitivity by Flight Distance:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#delay-sensitivity">Delay Sensitivity:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customer-loyalty-analysis">4. Customer Loyalty Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#machine-learning-based-predictive-modeling">5. Machine Learning-Based Predictive Modeling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-mining-if-text-columns-are-available">6. Text Mining — <em>If Text Columns Are Available</em></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-9-survey-analysis">
+<h1><strong>Ch 9. Survey Analysis</strong><a class="headerlink" href="#ch-9-survey-analysis" title="Link to this heading">#</a></h1>
+<section id="data-input">
+<h2><span style="color: blue;"><strong>1. Data Input</strong></span><a class="headerlink" href="#data-input" title="Link to this heading">#</a></h2>
+<p><img alt="Survey1" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-1.png" /></p>
+<p>Source: <a class="reference external" href="https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction">Kaggle: Airline Passenger Satisfaction</a></p>
+</section>
+<section id="gemini-s-explanation">
+<h2><strong>Gemini’s Explanation</strong><a class="headerlink" href="#gemini-s-explanation" title="Link to this heading">#</a></h2>
+<p>This dataset contains airline passenger satisfaction survey data. It includes each passenger’s demographic information, flight details, and satisfaction ratings for various services, and can be used for a classification problem to predict whether a passenger was satisfied.</p>
+<hr class="docutils" />
+<p>The key characteristics of the data are as follows.</p>
+<section id="data-structure">
+<h3>1. Data Structure<a class="headerlink" href="#data-structure" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Total observations:</strong> 103,904</p></li>
+<li><p><strong>Number of variables (columns):</strong> 25</p></li>
+<li><p><strong>Target variable:</strong> <code class="docutils literal notranslate"><span class="pre">satisfaction</span></code> (binary classification: ‘neutral or dissatisfied’ or ‘satisfied’)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="variable-descriptions">
+<h3>2. Variable Descriptions<a class="headerlink" href="#variable-descriptions" title="Link to this heading">#</a></h3>
+<section id="passenger-demographics">
+<h4>Passenger Demographics<a class="headerlink" href="#passenger-demographics" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Gender</span></code>: Gender (Male, Female)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Customer</span> <span class="pre">Type</span></code>: Customer type (Loyal Customer, disloyal Customer)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Age</span></code>: Passenger age (ranges from 7 to 85)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="flight-information">
+<h4>Flight Information<a class="headerlink" href="#flight-information" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Type</span> <span class="pre">of</span> <span class="pre">Travel</span></code>: Travel purpose (Business travel, Personal Travel)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Class</span></code>: Seat class (Business, Eco, Eco Plus)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Flight</span> <span class="pre">Distance</span></code>: Flight distance</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="service-satisfaction-ratings">
+<h4>Service Satisfaction Ratings<a class="headerlink" href="#service-satisfaction-ratings" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>14 service items rated on a 0–5 scale.</p></li>
+<li><p>Includes <code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">wifi</span> <span class="pre">service</span></code>, <code class="docutils literal notranslate"><span class="pre">Food</span> <span class="pre">and</span> <span class="pre">drink</span></code>, <code class="docutils literal notranslate"><span class="pre">Seat</span> <span class="pre">comfort</span></code>, <code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">entertainment</span></code>, <code class="docutils literal notranslate"><span class="pre">On-board</span> <span class="pre">service</span></code>, <code class="docutils literal notranslate"><span class="pre">Leg</span> <span class="pre">room</span> <span class="pre">service</span></code>, <code class="docutils literal notranslate"><span class="pre">Cleanliness</span></code>, etc.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="delay-information">
+<h4>Delay Information<a class="headerlink" href="#delay-information" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Departure</span> <span class="pre">Delay</span> <span class="pre">in</span> <span class="pre">Minutes</span></code>: Departure delay (minutes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Arrival</span> <span class="pre">Delay</span> <span class="pre">in</span> <span class="pre">Minutes</span></code>: Arrival delay (minutes)</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="data-notes">
+<h3>3. Data Notes<a class="headerlink" href="#data-notes" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Arrival</span> <span class="pre">Delay</span> <span class="pre">in</span> <span class="pre">Minutes</span></code> variable contains 310 missing values (NaN). Preprocessing such as removal or imputation (mean/median) may be needed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">Unnamed:</span> <span class="pre">0</span></code> are simple identifiers and are generally excluded from modeling.</p></li>
+<li><p>A score of 0 among service satisfaction ratings likely indicates ‘not rated’ or ‘service not used’ and requires verification.</p></li>
+</ul>
+</section>
+</section>
+<section id="satisfaction-analysis">
+<h2><span style="color: blue;"><strong>2. Satisfaction Analysis</strong></span><a class="headerlink" href="#satisfaction-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="gemini-s-analysis">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#gemini-s-analysis" title="Link to this heading">#</a></h2>
+<p>The satisfaction analysis results are as follows.</p>
+<section id="overall-satisfaction-overview">
+<h3>1. Overall Satisfaction Overview<a class="headerlink" href="#overall-satisfaction-overview" title="Link to this heading">#</a></h3>
+<p>The proportion of satisfied vs. dissatisfied (or neutral) passengers is roughly balanced, though the dissatisfied proportion tends to be slightly higher.</p>
+<p><img alt="Survey2" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-2.png" /></p>
+</section>
+<hr class="docutils" />
+<section id="analysis-of-key-influencing-factors">
+<h3>2. Analysis of Key Influencing Factors<a class="headerlink" href="#analysis-of-key-influencing-factors" title="Link to this heading">#</a></h3>
+<section id="seat-class">
+<h4>Seat Class:<a class="headerlink" href="#seat-class" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Business:</strong> Very high satisfaction; the proportion of satisfied passengers far exceeds that of dissatisfied ones.</p></li>
+<li><p><strong>Eco / Eco Plus:</strong> The dissatisfied proportion is overwhelmingly high. Improving the experience of economy class passengers is a critical task for overall satisfaction improvement.</p></li>
+</ul>
+<p><img alt="Survey3" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-3.png" /></p>
+</section>
+<section id="type-of-travel">
+<h4>Type of Travel:<a class="headerlink" href="#type-of-travel" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Business travel:</strong> Business travelers show relatively higher satisfaction.</p></li>
+<li><p><strong>Personal Travel:</strong> Personal travelers have a very high dissatisfaction rate. This may be because personal travelers are more price-sensitive or primarily use economy class.</p></li>
+</ul>
+<p><img alt="Survey4" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-4.png" /></p>
+</section>
+<section id="customer-type">
+<h4>Customer Type:<a class="headerlink" href="#customer-type" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Loyal Customer:</strong> The satisfaction rate of loyal customers (approximately 47.7%) is more than twice that of disloyal customers (approximately 23.7%). This suggests that the loyalty program is working effectively, or that satisfied customers remain as loyal customers in a virtuous cycle.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="service-item-correlation-analysis">
+<h3>3. Service Item Correlation Analysis<a class="headerlink" href="#service-item-correlation-analysis" title="Link to this heading">#</a></h3>
+<p>The service items showing the strongest positive correlation with satisfaction are as follows (by correlation coefficient):</p>
+<p><img alt="Survey5" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-5.png" /></p>
+<ol class="arabic simple">
+<li><p><strong>Online boarding (0.50):</strong> Convenience of online boarding procedures has the greatest impact on satisfaction. This suggests the importance of app and website UI/UX improvements.</p></li>
+<li><p><strong>Inflight entertainment (0.40):</strong> The quality of the in-flight entertainment system is directly linked to satisfaction.</p></li>
+<li><p><strong>Seat comfort (0.35):</strong> Seat comfort is a significant factor, especially on long-haul flights.</p></li>
+<li><p><strong>On-board service (0.32):</strong> Crew service attitude and quality is also a key factor.</p></li>
+<li><p><strong>Leg room service (0.31):</strong> Legroom also affects satisfaction.</p></li>
+</ol>
+<p>In contrast, <code class="docutils literal notranslate"><span class="pre">Departure/Arrival</span> <span class="pre">time</span> <span class="pre">convenient</span></code> and <code class="docutils literal notranslate"><span class="pre">Gate</span> <span class="pre">location</span></code> showed relatively low correlations with satisfaction. This may be because these factors are beyond the airline’s control or passengers accept them as given.</p>
+</section>
+<hr class="docutils" />
+<section id="conclusions-and-recommendations">
+<h3>4. Conclusions and Recommendations<a class="headerlink" href="#conclusions-and-recommendations" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Improve economy class services:</strong> The dissatisfaction rate among Eco and Eco Plus passengers is very high, so improving services (especially seat comfort, meals) for these passengers is urgent.</p></li>
+<li><p><strong>Enhance digital experience:</strong> Since <code class="docutils literal notranslate"><span class="pre">Online</span> <span class="pre">boarding</span></code> shows the highest correlation with satisfaction, making the mobile app and website check-in process simpler and more intuitive could be a low-cost, high-impact satisfaction improvement strategy.</p></li>
+<li><p><strong>Retain loyal customers and convert disloyal ones:</strong> To improve the low satisfaction of disloyal customers, benefits or service differentiation for first-time users should be considered.</p></li>
+</ul>
+</section>
+</section>
+<section id="descriptive-analysis-by-survey-item">
+<h2><span style="color: blue;"><strong>3. Descriptive Analysis by Survey Item</strong></span><a class="headerlink" href="#descriptive-analysis-by-survey-item" title="Link to this heading">#</a></h2>
+</section>
+<section id="id1">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>The following are the descriptive analysis results for all survey items.</p>
+<p><img alt="Survey6" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-6.png" /></p>
+<section id="categorical-variable-analysis-demographics-flight-info">
+<h3>1. Categorical Variable Analysis (Demographics &amp; Flight Info)<a class="headerlink" href="#categorical-variable-analysis-demographics-flight-info" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Mode (Top)</p></th>
+<th class="head"><p>Frequency (Freq)</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Gender</strong></p></td>
+<td><p>Female</p></td>
+<td><p>52,727 (50.7%)</p></td>
+<td><p>The gender ratio is nearly equal.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Customer Type</strong></p></td>
+<td><p>Loyal Customer</p></td>
+<td><p>84,923 (81.7%)</p></td>
+<td><p>Loyal customers account for an overwhelmingly large share.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Type of Travel</strong></p></td>
+<td><p>Business travel</p></td>
+<td><p>71,655 (69.0%)</p></td>
+<td><p>Business travelers outnumber personal travelers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Class</strong></p></td>
+<td><p>Business</p></td>
+<td><p>49,665 (47.8%)</p></td>
+<td><p>Business class passengers are most numerous, followed by Eco (44.2%) and Eco Plus (7.2%).</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Satisfaction</strong></p></td>
+<td><p>Neutral/Dissatisfied</p></td>
+<td><p>58,879 (56.7%)</p></td>
+<td><p>Dissatisfied (or neutral) passengers slightly outnumber satisfied ones.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="numerical-variable-analysis-age-distance-delays">
+<h3>2. Numerical Variable Analysis (Age, Distance, Delays)<a class="headerlink" href="#numerical-variable-analysis-age-distance-delays" title="Link to this heading">#</a></h3>
+<p><img alt="Survey7" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-7.png" /></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Mean</p></th>
+<th class="head"><p>Median</p></th>
+<th class="head"><p>Max</p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Age</strong></p></td>
+<td><p>39.4</p></td>
+<td><p>40.0</p></td>
+<td><p>85.0</p></td>
+<td><p>Passenger ages are roughly evenly distributed, similar to a normal distribution.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Flight Distance</strong></p></td>
+<td><p>1,189</p></td>
+<td><p>843</p></td>
+<td><p>4,983</p></td>
+<td><p>Short-haul flights are more frequent (right-skewed distribution).</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Departure Delay</strong></p></td>
+<td><p>14.8 min</p></td>
+<td><p>0.0 min</p></td>
+<td><p>1,592 min</p></td>
+<td><p>Most flights have no delay (0 min), but some extreme delay cases exist.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Arrival Delay</strong></p></td>
+<td><p>15.2 min</p></td>
+<td><p>0.0 min</p></td>
+<td><p>1,584 min</p></td>
+<td><p>Shows a similar distribution to departure delays.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="service-satisfaction-item-analysis-05-scale">
+<h3>3. Service Satisfaction Item Analysis (0–5 Scale)<a class="headerlink" href="#service-satisfaction-item-analysis-05-scale" title="Link to this heading">#</a></h3>
+<p>The rating distributions for each service item are as follows. A score of 0 likely indicates ‘service not provided’ or ‘not used.’</p>
+<p><img alt="Survey8" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-8.png" /></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>count</p></th>
+<th class="head"><p>mean</p></th>
+<th class="head"><p>std</p></th>
+<th class="head"><p>min</p></th>
+<th class="head"><p>25%</p></th>
+<th class="head"><p>50%</p></th>
+<th class="head"><p>75%</p></th>
+<th class="head"><p>max</p></th>
+<th class="head"><p>Zero count</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Inflight wifi service</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>2.73</p></td>
+<td><p>1.33</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>3,103</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Dept/Arrival time convenient</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.06</p></td>
+<td><p>1.53</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>5,300</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Ease of Online booking</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>2.76</p></td>
+<td><p>1.40</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>4,487</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Gate location</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>2.98</p></td>
+<td><p>1.28</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Food and drink</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.20</p></td>
+<td><p>1.33</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>107</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Online boarding</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.25</p></td>
+<td><p>1.35</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>2,428</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Seat comfort</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.44</p></td>
+<td><p>1.32</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>5.0</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Inflight entertainment</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.36</p></td>
+<td><p>1.33</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>4.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>14</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>On-board service</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.38</p></td>
+<td><p>1.29</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>4.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Leg room service</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.35</p></td>
+<td><p>1.32</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>4.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>472</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Baggage handling</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.63</p></td>
+<td><p>1.18</p></td>
+<td><p>1.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>5.0</p></td>
+<td><p>0</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Checkin service</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.30</p></td>
+<td><p>1.27</p></td>
+<td><p>0.0</p></td>
+<td><p>3.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Inflight service</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.64</p></td>
+<td><p>1.18</p></td>
+<td><p>0.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>5.0</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Cleanliness</strong></p></td>
+<td><p>103,904</p></td>
+<td><p>3.29</p></td>
+<td><p>1.31</p></td>
+<td><p>0.0</p></td>
+<td><p>2.0</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+<td><p>12</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="high-average-ratings-3-5">
+<h4>High average ratings (3.5+):<a class="headerlink" href="#high-average-ratings-3-5" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">service</span></code> (3.64): High satisfaction with overall in-flight service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Baggage</span> <span class="pre">handling</span></code> (3.63): Positive evaluations of baggage handling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Seat</span> <span class="pre">comfort</span></code> (3.44): Seat comfort also received relatively good ratings.</p></li>
+</ul>
+</section>
+<section id="low-average-ratings-below-3-0">
+<h4>Low average ratings (below 3.0):<a class="headerlink" href="#low-average-ratings-below-3-0" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">wifi</span> <span class="pre">service</span></code> (2.73): Greatest dissatisfaction with wifi, or many passengers did not use it (3,103 zero scores).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ease</span> <span class="pre">of</span> <span class="pre">Online</span> <span class="pre">booking</span></code> (2.76): Online booking convenience needs improvement.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Gate</span> <span class="pre">location</span></code> (2.98): Gate location satisfaction is below average.</p></li>
+</ul>
+</section>
+<section id="notable-findings-zero-score-frequency">
+<h4>Notable findings (zero-score frequency):<a class="headerlink" href="#notable-findings-zero-score-frequency" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Departure/Arrival</span> <span class="pre">time</span> <span class="pre">convenient</span></code> (5,300), <code class="docutils literal notranslate"><span class="pre">Ease</span> <span class="pre">of</span> <span class="pre">Online</span> <span class="pre">booking</span></code> (4,487), and <code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">wifi</span> <span class="pre">service</span></code> (3,103) had many zero-score responses, suggesting a significant number of passengers did not use or declined to rate these services.</p></li>
+<li><p>In contrast, <code class="docutils literal notranslate"><span class="pre">Baggage</span> <span class="pre">handling</span></code> had zero instances of a zero score, meaning all passengers provided a rating.</p></li>
+</ul>
+</section>
+<section id="summary">
+<h4>Summary:<a class="headerlink" href="#summary" title="Link to this heading">#</a></h4>
+<p>Overall, human-delivered services such as cabin crew service and baggage handling received positive evaluations, while <strong>technical/system-based conveniences such as wifi and booking systems</strong> received relatively lower ratings. Therefore, improving digital service quality could be the key driver for overall satisfaction improvement.</p>
+</section>
+</section>
+</section>
+<section id="in-depth-survey-analysis-i">
+<h2><span style="color: blue;"><strong>4. In-Depth Survey Analysis I</strong></span><a class="headerlink" href="#in-depth-survey-analysis-i" title="Link to this heading">#</a></h2>
+</section>
+<section id="id2">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>This dataset includes multidimensional factors affecting customer satisfaction (demographics, service quality, operational performance, etc.), enabling <strong>in-depth analysis for strategic decision-making</strong> beyond simple descriptive statistics.</p>
+<p>Specific analyses and insight examples are as follows.</p>
+<section id="service-gap-analysis-using-radar-charts">
+<h3>1. Service Gap Analysis (Using Radar Charts)<a class="headerlink" href="#service-gap-analysis-using-radar-charts" title="Link to this heading">#</a></h3>
+<p>By comparing service rating differences between satisfied and dissatisfied customers, we can identify <strong>which services are critical pain points</strong>.</p>
+<p><img alt="Survey9" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-9.png" /></p>
+<section id="analysis-results">
+<h4>Analysis Results:<a class="headerlink" href="#analysis-results" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Inflight wifi service</strong>, <strong>Online boarding</strong>, and <strong>Inflight entertainment</strong> — digital and convenience service items — show very large score gaps between the satisfied and dissatisfied groups.</p></li>
+<li><p>In contrast, <strong>Gate location</strong> and <strong>Departure/Arrival time convenient</strong> show relatively small differences between groups.</p></li>
+<li><p><strong>Conclusion:</strong> Improving <strong>digital experiences and in-flight amenities</strong> is far more effective for satisfaction improvement than improving physical operations (gates, schedules).</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="operational-efficiency-and-customer-sensitivity-analysis-delay-impact">
+<h3>2. Operational Efficiency and Customer Sensitivity Analysis (Delay Impact)<a class="headerlink" href="#operational-efficiency-and-customer-sensitivity-analysis-delay-impact" title="Link to this heading">#</a></h3>
+<p>By analyzing how satisfaction changes as flight delays increase, we can identify <strong>the threshold of ‘tolerable delay time.’</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Delay Group</p></th>
+<th class="head"><p>Satisfaction Rate</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>0 min</strong></p></td>
+<td><p>0.4725</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>1-15 min</strong></p></td>
+<td><p>0.4130</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>16-30 min</strong></p></td>
+<td><p>0.3527</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>31-60 min</strong></p></td>
+<td><p>0.3564</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>1-2 hr</strong></p></td>
+<td><p>0.3524</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>2-3 hr</strong></p></td>
+<td><p>0.3659</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>&gt;3 hr</strong></p></td>
+<td><p>0.3654</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="id3">
+<h4>Analysis Results:<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>With no delay (0 min), the satisfaction rate is approximately 47.2%.</p></li>
+<li><p>At <strong>1–15 minutes of delay</strong>, satisfaction drops sharply to 41.3%, and at <strong>16–30 minutes</strong> it falls to 35.3%.</p></li>
+<li><p>Interestingly, after 30 minutes, satisfaction does not drop much further even with longer delays, staying at the 35–36% level (floor effect).</p></li>
+<li><p><strong>Conclusion:</strong> <strong>Preventing delays within the initial 15 minutes</strong> is most critical for defending satisfaction. Once the 30-minute mark is passed, a strategy of compensating through other services rather than additional delay compensation may be needed.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="customer-segmentation-and-targeting-strategy">
+<h3>3. Customer Segmentation and Targeting Strategy<a class="headerlink" href="#customer-segmentation-and-targeting-strategy" title="Link to this heading">#</a></h3>
+<p>By combining Customer Type, Type of Travel, and Class, segment-level satisfaction is analyzed.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Business Travel</p></th>
+<th class="head"><p>Personal Travel</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Business</strong></p></td>
+<td><p>0.7202</p></td>
+<td><p>0.1224</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Eco</strong></p></td>
+<td><p>0.2962</p></td>
+<td><p>0.1020</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Eco Plus</strong></p></td>
+<td><p>0.3933</p></td>
+<td><p>0.0871</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="analysis-results-satisfaction-rate">
+<h4>Analysis Results (Satisfaction Rate):<a class="headerlink" href="#analysis-results-satisfaction-rate" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Business Class + Business Travel:</strong> 72.0% satisfaction (core satisfied group)</p></li>
+<li><p><strong>Eco Class + Business Travel:</strong> 29.6% satisfaction (potentially dissatisfied group)</p></li>
+<li><p><strong>Eco Class + Personal Travel:</strong> 10.2% satisfaction (vulnerable group)</p></li>
+<li><p><strong>Conclusion:</strong> Business class business travelers already have high satisfaction and require a retention strategy, but <strong>personal travelers in economy class</strong> have extremely low satisfaction, making it urgent to introduce low-cost, high-impact services (e.g., streamlined mobile check-in, improved in-flight wifi) for this segment.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="predictive-modeling">
+<h3>4. Predictive Modeling<a class="headerlink" href="#predictive-modeling" title="Link to this heading">#</a></h3>
+<p>Since this data has a target variable (<code class="docutils literal notranslate"><span class="pre">satisfaction</span></code>), the following predictions can be made using machine learning models.</p>
+<ul class="simple">
+<li><p><strong>Churn prediction:</strong> Given a specific passenger’s service rating pattern, predict satisfaction/dissatisfaction.</p></li>
+<li><p><strong>Feature importance extraction:</strong> Using Random Forest or XGBoost, quantitatively determine which variables contribute most to satisfaction prediction (more sophisticated than correlation analysis).</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="persona-analysis">
+<h3>5. Persona Analysis<a class="headerlink" href="#persona-analysis" title="Link to this heading">#</a></h3>
+<p>Based on data characteristics, virtual customer profiles can be created to develop tailored strategies.</p>
+<ul class="simple">
+<li><p><em>Example: “Budget-conscious traveler” (Eco Class, Personal Travel, Price Sensitive)</em> → These passengers may be more sensitive to <strong>seat comfort</strong> and <strong>entertainment</strong> than in-flight meals.</p></li>
+</ul>
+<p>As such, this dataset can be utilized beyond simple status assessment as an analytical tool for <strong>service investment prioritization, target marketing, and operational KPI setting</strong> to create business impact.</p>
+</section>
+</section>
+<section id="in-depth-survey-analysis-ii">
+<h2><span style="color: blue;"><strong>5. In-Depth Survey Analysis II</strong></span><a class="headerlink" href="#in-depth-survey-analysis-ii" title="Link to this heading">#</a></h2>
+</section>
+<section id="id4">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p><strong>Importance-Performance Analysis (IPA)</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Item</p></th>
+<th class="head text-left"><p>Importance</p></th>
+<th class="head text-left"><p>Performance</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>Online boarding</p></td>
+<td class="text-left"><p>0.503557</p></td>
+<td class="text-left"><p>3.250375</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Inflight entertainment</p></td>
+<td class="text-left"><p>0.398059</p></td>
+<td class="text-left"><p>3.358158</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Seat comfort</p></td>
+<td class="text-left"><p>0.349459</p></td>
+<td class="text-left"><p>3.439396</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>On-board service</p></td>
+<td class="text-left"><p>0.322383</p></td>
+<td class="text-left"><p>3.382363</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Leg room service</p></td>
+<td class="text-left"><p>0.313131</p></td>
+<td class="text-left"><p>3.351055</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This survey data enables multifaceted analyses beyond simple satisfaction assessment, including <strong>service strategy formulation, customer segmentation, and future satisfaction prediction</strong>.</p>
+<p>The main analyses are summarized as follows.</p>
+<section id="priority-action-matrix-ipa-importance-performance-analysis">
+<h3>1. Priority Action Matrix (IPA: Importance-Performance Analysis)<a class="headerlink" href="#priority-action-matrix-ipa-importance-performance-analysis" title="Link to this heading">#</a></h3>
+<p>Each service item’s <strong>importance (correlation with satisfaction)</strong> and <strong>performance (average score)</strong> are mapped on a 2D plane to derive strategic priorities.</p>
+<ul class="simple">
+<li><p><strong>Method:</strong> Set the X-axis as Performance and Y-axis as Importance to perform quadrant analysis.</p></li>
+</ul>
+<p><img alt="Survey10" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-10.png" /></p>
+<section id="implications">
+<h4>Implications:<a class="headerlink" href="#implications" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Concentrate Here (High Importance, Low Performance):</strong> <code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">wifi</span> <span class="pre">service</span></code> and <code class="docutils literal notranslate"><span class="pre">Ease</span> <span class="pre">of</span> <span class="pre">Online</span> <span class="pre">booking</span></code> likely fall here. These have a large impact on satisfaction but currently receive low ratings, making them the top improvement priorities.</p></li>
+<li><p><strong>Keep Up the Good Work (High Importance, High Performance):</strong> <code class="docutils literal notranslate"><span class="pre">Seat</span> <span class="pre">comfort</span></code> and <code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">entertainment</span></code> are already performing well and should be maintained as core strengths.</p></li>
+<li><p><strong>Possible Overkill (Low Importance, High Performance):</strong> Items with low importance but high scores — resources can be reallocated to address other weaknesses.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="demographic-segmentation">
+<h3>2. Demographic Segmentation<a class="headerlink" href="#demographic-segmentation" title="Link to this heading">#</a></h3>
+<p>Analyze how satisfaction varies by passenger age, gender, and travel purpose to develop targeted marketing strategies.</p>
+<p><img alt="Survey11" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-11.png" /></p>
+<section id="by-age-group">
+<h4>By Age Group:<a class="headerlink" href="#by-age-group" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Gen Z / Millennials:</strong> May be sensitive to digital services (wifi, app convenience).</p></li>
+<li><p><strong>Middle-aged / Seniors:</strong> May place more emphasis on seat comfort and human service (crew attitude).</p></li>
+</ul>
+</section>
+<section id="by-seat-class">
+<h4>By Seat Class:<a class="headerlink" href="#by-seat-class" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Business class:</strong> High expectations commensurate with the high price paid; particularly sensitive to privacy and food/drink quality.</p></li>
+<li><p><strong>Economy class:</strong> Value for money and basic comfort (legroom) are most important.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="context-based-service-analysis">
+<h3>3. Context-Based Service Analysis<a class="headerlink" href="#context-based-service-analysis" title="Link to this heading">#</a></h3>
+<p>Analyze how environmental factors such as flight distance and delays affect satisfaction.</p>
+<section id="sensitivity-by-flight-distance">
+<h4>Sensitivity by Flight Distance:<a class="headerlink" href="#sensitivity-by-flight-distance" title="Link to this heading">#</a></h4>
+<p><img alt="Survey12" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-12.png" /></p>
+<ul class="simple">
+<li><p>On short-haul flights, seat comfort may be less important, but on long-haul flights, <strong>Seat Comfort</strong> and <strong>Inflight Entertainment</strong> become decisive factors for satisfaction.</p></li>
+</ul>
+</section>
+<section id="delay-sensitivity">
+<h4>Delay Sensitivity:<a class="headerlink" href="#delay-sensitivity" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>By analyzing how sharply satisfaction drops at each 15-minute, 30-minute, and 1-hour delay increment, a <strong>“golden time”</strong> threshold can be established.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="customer-loyalty-analysis">
+<h3>4. Customer Loyalty Analysis<a class="headerlink" href="#customer-loyalty-analysis" title="Link to this heading">#</a></h3>
+<p>Analyze behavioral pattern differences between Loyal Customers and Disloyal Customers.</p>
+<p><img alt="Survey13" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/9-13.png" /></p>
+<ul class="simple">
+<li><p><strong>Churn risk detection:</strong> Identify pain points that especially dissatisfy disloyal customers to develop strategies for converting them to loyal customers.</p></li>
+<li><p><strong>Loyal customer reinforcement:</strong> Strengthen factors that keep loyal customers consistently satisfied to turn them into brand advocates.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="machine-learning-based-predictive-modeling">
+<h3>5. Machine Learning-Based Predictive Modeling<a class="headerlink" href="#machine-learning-based-predictive-modeling" title="Link to this heading">#</a></h3>
+<p>Train on the data to predict future satisfaction or identify key drivers.</p>
+<ul class="simple">
+<li><p><strong>Satisfaction prediction:</strong> Input a passenger’s characteristics and flight information to predict the probability of satisfaction. This enables pre-boarding identification of ‘at-risk dissatisfied passengers’ for proactive care (upgrades, coupons, etc.).</p></li>
+<li><p><strong>Feature Importance:</strong> Using algorithms such as Random Forest or XGBoost, rank the variables by their impact on satisfaction. This provides more sophisticated insights than correlation analysis.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="text-mining-if-text-columns-are-available">
+<h3>6. Text Mining — <em>If Text Columns Are Available</em><a class="headerlink" href="#text-mining-if-text-columns-are-available" title="Link to this heading">#</a></h3>
+<p>If open-ended response data is included, NLP-based sentiment analysis or topic modeling can be performed to uncover specific complaints (e.g., “the crew was unfriendly,” “the in-flight meal was too salty”) that cannot be captured by numerical data alone. (Not present in the current dataset but useful if collected additionally.)</p>
+</section>
+</section>
+<section id="reference-python-code">
+<h2><strong>Reference: Python Code</strong><a class="headerlink" href="#reference-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Data loading</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># Load dataframe</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../Data/train.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Inspect data</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data info:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data info:
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 103904 entries, 0 to 103903
+Data columns (total 25 columns):
+ #   Column                             Non-Null Count   Dtype  
+---  ------                             --------------   -----  
+ 0   Unnamed: 0                         103904 non-null  int64  
+ 1   id                                 103904 non-null  int64  
+ 2   Gender                             103904 non-null  object 
+ 3   Customer Type                      103904 non-null  object 
+ 4   Age                                103904 non-null  int64  
+ 5   Type of Travel                     103904 non-null  object 
+ 6   Class                              103904 non-null  object 
+ 7   Flight Distance                    103904 non-null  int64  
+ 8   Inflight wifi service              103904 non-null  int64  
+ 9   Departure/Arrival time convenient  103904 non-null  int64  
+ 10  Ease of Online booking             103904 non-null  int64  
+ 11  Gate location                      103904 non-null  int64  
+ 12  Food and drink                     103904 non-null  int64  
+ 13  Online boarding                    103904 non-null  int64  
+ 14  Seat comfort                       103904 non-null  int64  
+ 15  Inflight entertainment             103904 non-null  int64  
+ 16  On-board service                   103904 non-null  int64  
+ 17  Leg room service                   103904 non-null  int64  
+ 18  Baggage handling                   103904 non-null  int64  
+ 19  Checkin service                    103904 non-null  int64  
+ 20  Inflight service                   103904 non-null  int64  
+ 21  Cleanliness                        103904 non-null  int64  
+ 22  Departure Delay in Minutes         103904 non-null  int64  
+ 23  Arrival Delay in Minutes           103594 non-null  float64
+ 24  satisfaction                       103904 non-null  object 
+dtypes: float64(1), int64(19), object(5)
+memory usage: 19.8+ MB
+None
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Satisfaction analysis</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="c1"># Convert satisfaction (target) to binary numeric</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;satisfaction&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">&#39;satisfied&#39;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># --- 1. Overall satisfaction proportion (Pie Chart) ---</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">satisfaction_counts</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;satisfaction&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">satisfaction_counts</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">satisfaction_counts</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.1f%%</span><span class="s1">&#39;</span><span class="p">,</span> 
+        <span class="n">startangle</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;#ff9999&#39;</span><span class="p">,</span><span class="s1">&#39;#66b3ff&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Overall Satisfaction Distribution&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># --- 2. Satisfaction by seat class (Countplot) ---</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;satisfaction&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">,</span> 
+              <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Eco&#39;</span><span class="p">,</span> <span class="s1">&#39;Eco Plus&#39;</span><span class="p">,</span> <span class="s1">&#39;Business&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Satisfaction by Class&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Class&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Count&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># --- 3. Satisfaction by type of travel (Countplot) ---</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Type of Travel&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;satisfaction&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Satisfaction by Type of Travel&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Type of Travel&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Count&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># --- 4. Correlation between each service item and satisfaction (Bar Chart) ---</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># Calculate correlations</span>
+<span class="n">numeric_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select_dtypes</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;int64&#39;</span><span class="p">,</span> <span class="s1">&#39;float64&#39;</span><span class="p">])</span>
+<span class="n">correlations</span> <span class="o">=</span> <span class="n">numeric_df</span><span class="o">.</span><span class="n">corr</span><span class="p">()[</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">)</span>
+
+<span class="c1"># Filter service-related variables only</span>
+<span class="n">service_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Inflight wifi service&#39;</span><span class="p">,</span> <span class="s1">&#39;Departure/Arrival time convenient&#39;</span><span class="p">,</span> <span class="s1">&#39;Ease of Online booking&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;Gate location&#39;</span><span class="p">,</span> <span class="s1">&#39;Food and drink&#39;</span><span class="p">,</span> <span class="s1">&#39;Online boarding&#39;</span><span class="p">,</span> <span class="s1">&#39;Seat comfort&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;Inflight entertainment&#39;</span><span class="p">,</span> <span class="s1">&#39;On-board service&#39;</span><span class="p">,</span> <span class="s1">&#39;Leg room service&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;Baggage handling&#39;</span><span class="p">,</span> <span class="s1">&#39;Checkin service&#39;</span><span class="p">,</span> <span class="s1">&#39;Inflight service&#39;</span><span class="p">,</span> <span class="s1">&#39;Cleanliness&#39;</span><span class="p">]</span>
+
+<span class="n">service_corr</span> <span class="o">=</span> <span class="n">correlations</span><span class="p">[</span><span class="n">service_cols</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">service_corr</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">service_corr</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="n">service_corr</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Correlation between Services and Satisfaction&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Correlation Coefficient&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># --- Print statistics ---</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Top 5 Correlated Features with Satisfaction:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">correlations</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Mean Satisfaction Rate by Customer Type:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Customer Type&#39;</span><span class="p">)[</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b1d7a4180358f5c5f76dbdc136b3f817af4e0acc761be7f6b5a0b3ceaf7d8630.png" src="../_images/b1d7a4180358f5c5f76dbdc136b3f817af4e0acc761be7f6b5a0b3ceaf7d8630.png" />
+<img alt="../_images/137ea5897a71ab4ce5b25eb189c7de0ce7f317cc6e22adc282b820e895aa9882.png" src="../_images/137ea5897a71ab4ce5b25eb189c7de0ce7f317cc6e22adc282b820e895aa9882.png" />
+<img alt="../_images/e98ae1c35267c9c7e6e4153461ee82af7ec37793af587204c7b8120eaf5328ad.png" src="../_images/e98ae1c35267c9c7e6e4153461ee82af7ec37793af587204c7b8120eaf5328ad.png" />
+<img alt="../_images/9557330dfc65979832382db1c88cfa2a6728730017b13033546124e811f36c09.png" src="../_images/9557330dfc65979832382db1c88cfa2a6728730017b13033546124e811f36c09.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Top 5 Correlated Features with Satisfaction:
+Online boarding           0.503557
+Inflight entertainment    0.398059
+Seat comfort              0.349459
+On-board service          0.322383
+Leg room service          0.313131
+Name: satisfaction_binary, dtype: float64
+
+Mean Satisfaction Rate by Customer Type:
+Customer Type
+Loyal Customer       0.477291
+disloyal Customer    0.236658
+Name: satisfaction_binary, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3. Descriptive analysis by survey item</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># Define column groups for analysis (categorical, numerical, survey items)</span>
+<span class="n">categorical_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Gender&#39;</span><span class="p">,</span> <span class="s1">&#39;Customer Type&#39;</span><span class="p">,</span> <span class="s1">&#39;Type of Travel&#39;</span><span class="p">,</span> <span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="s1">&#39;satisfaction&#39;</span><span class="p">]</span>
+<span class="n">numerical_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Flight Distance&#39;</span><span class="p">,</span> <span class="s1">&#39;Departure Delay in Minutes&#39;</span><span class="p">,</span> <span class="s1">&#39;Arrival Delay in Minutes&#39;</span><span class="p">]</span>
+<span class="n">survey_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Inflight wifi service&#39;</span><span class="p">,</span> <span class="s1">&#39;Departure/Arrival time convenient&#39;</span><span class="p">,</span> <span class="s1">&#39;Ease of Online booking&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;Gate location&#39;</span><span class="p">,</span> <span class="s1">&#39;Food and drink&#39;</span><span class="p">,</span> <span class="s1">&#39;Online boarding&#39;</span><span class="p">,</span> <span class="s1">&#39;Seat comfort&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;Inflight entertainment&#39;</span><span class="p">,</span> <span class="s1">&#39;On-board service&#39;</span><span class="p">,</span> <span class="s1">&#39;Leg room service&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;Baggage handling&#39;</span><span class="p">,</span> <span class="s1">&#39;Checkin service&#39;</span><span class="p">,</span> <span class="s1">&#39;Inflight service&#39;</span><span class="p">,</span> <span class="s1">&#39;Cleanliness&#39;</span><span class="p">]</span>
+
+<span class="c1"># 1. Categorical data visualization</span>
+<span class="n">fig1</span><span class="p">,</span> <span class="n">axes1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">fig1</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Distribution of Categorical Variables&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">axes1</span> <span class="o">=</span> <span class="n">axes1</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">categorical_cols</span><span class="p">):</span>
+    <span class="c1"># Set hue to x-axis variable and legend=False to suppress warnings</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes1</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="n">axes1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+    <span class="c1"># Display count labels on top of bars</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">axes1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">patches</span><span class="p">:</span>
+        <span class="n">axes1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">p</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">get_height</span><span class="p">()),</span> 
+                          <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span><span class="o">=</span><span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+
+<span class="c1"># Remove empty subplot (6 slots, only 5 used)</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">categorical_cols</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">6</span><span class="p">:</span>
+    <span class="n">fig1</span><span class="o">.</span><span class="n">delaxes</span><span class="p">(</span><span class="n">axes1</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># 2. Numerical data visualization (histograms)</span>
+<span class="n">fig2</span><span class="p">,</span> <span class="n">axes2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Distribution of Numerical Variables&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">axes2</span> <span class="o">=</span> <span class="n">axes2</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">numerical_cols</span><span class="p">):</span>
+    <span class="c1"># Drop NaN and plot histogram with KDE</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes2</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;skyblue&#39;</span><span class="p">)</span>
+    <span class="n">axes2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># 3. Survey item visualization (0-5 scale bar charts)</span>
+<span class="n">fig3</span><span class="p">,</span> <span class="n">axes3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">fig3</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Distribution of Survey Ratings (0-5)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">axes3</span> <span class="o">=</span> <span class="n">axes3</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">survey_cols</span><span class="p">):</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">countplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes3</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hue</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="n">axes3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+    <span class="n">axes3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># Remove y-axis label (save space)</span>
+    <span class="n">axes3</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>  <span class="c1"># Remove x-axis label</span>
+
+<span class="c1"># Remove remaining empty subplots (16 slots, not all used)</span>
+<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">survey_cols</span><span class="p">),</span> <span class="mi">16</span><span class="p">):</span>
+    <span class="n">fig3</span><span class="o">.</span><span class="n">delaxes</span><span class="p">(</span><span class="n">axes3</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Summary statistics tables (Describe)</span>
+<span class="n">desc_cat</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">categorical_cols</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">desc_num</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">numerical_cols</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+<span class="n">desc_survey</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">survey_cols</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Categorical Summary:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">desc_cat</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Numerical Summary:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">desc_num</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Survey Items Summary:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">desc_survey</span><span class="p">)</span>
+
+<span class="c1"># Count zero scores for each survey item (0 likely means &#39;N/A&#39;)</span>
+<span class="n">zero_counts</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">survey_cols</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Zero-score counts per service item (possibly N/A):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">zero_counts</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/5710aff3da1c343daf4c8ab85d06c31da2fa6f507968d0908c75daf29502b177.png" src="../_images/5710aff3da1c343daf4c8ab85d06c31da2fa6f507968d0908c75daf29502b177.png" />
+<img alt="../_images/1f7c5bd2b69e4352b50b13003812481495d47eb36bcc440187167ab8bbfdbe59.png" src="../_images/1f7c5bd2b69e4352b50b13003812481495d47eb36bcc440187167ab8bbfdbe59.png" />
+<img alt="../_images/699f27a2b95b963ca25507e05bc254d03325a9962b40c6ddc5b63601d10a563c.png" src="../_images/699f27a2b95b963ca25507e05bc254d03325a9962b40c6ddc5b63601d10a563c.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Categorical Summary:
+                 count unique                      top   freq
+Gender          103904      2                   Female  52727
+Customer Type   103904      2           Loyal Customer  84923
+Type of Travel  103904      2          Business travel  71655
+Class           103904      3                 Business  49665
+satisfaction    103904      2  neutral or dissatisfied  58879
+
+Numerical Summary:
+                               count         mean         std   min    25%  \
+Age                         103904.0    39.379706   15.114964   7.0   27.0   
+Flight Distance             103904.0  1189.448375  997.147281  31.0  414.0   
+Departure Delay in Minutes  103904.0    14.815618   38.230901   0.0    0.0   
+Arrival Delay in Minutes    103594.0    15.178678   38.698682   0.0    0.0   
+
+                              50%     75%     max  
+Age                          40.0    51.0    85.0  
+Flight Distance             843.0  1743.0  4983.0  
+Departure Delay in Minutes    0.0    12.0  1592.0  
+Arrival Delay in Minutes      0.0    13.0  1584.0  
+
+Survey Items Summary:
+                                      count      mean       std  min  25%  \
+Inflight wifi service              103904.0  2.729683  1.327829  0.0  2.0   
+Departure/Arrival time convenient  103904.0  3.060296  1.525075  0.0  2.0   
+Ease of Online booking             103904.0  2.756901  1.398929  0.0  2.0   
+Gate location                      103904.0  2.976883  1.277621  0.0  2.0   
+Food and drink                     103904.0  3.202129  1.329533  0.0  2.0   
+Online boarding                    103904.0  3.250375  1.349509  0.0  2.0   
+Seat comfort                       103904.0  3.439396  1.319088  0.0  2.0   
+Inflight entertainment             103904.0  3.358158  1.332991  0.0  2.0   
+On-board service                   103904.0  3.382363  1.288354  0.0  2.0   
+Leg room service                   103904.0  3.351055  1.315605  0.0  2.0   
+Baggage handling                   103904.0  3.631833  1.180903  1.0  3.0   
+Checkin service                    103904.0  3.304290  1.265396  0.0  3.0   
+Inflight service                   103904.0  3.640428  1.175663  0.0  3.0   
+Cleanliness                        103904.0  3.286351  1.312273  0.0  2.0   
+
+                                   50%  75%  max  
+Inflight wifi service              3.0  4.0  5.0  
+Departure/Arrival time convenient  3.0  4.0  5.0  
+Ease of Online booking             3.0  4.0  5.0  
+Gate location                      3.0  4.0  5.0  
+Food and drink                     3.0  4.0  5.0  
+Online boarding                    3.0  4.0  5.0  
+Seat comfort                       4.0  5.0  5.0  
+Inflight entertainment             4.0  4.0  5.0  
+On-board service                   4.0  4.0  5.0  
+Leg room service                   4.0  4.0  5.0  
+Baggage handling                   4.0  5.0  5.0  
+Checkin service                    3.0  4.0  5.0  
+Inflight service                   4.0  5.0  5.0  
+Cleanliness                        3.0  4.0  5.0  
+
+Zero-score counts per service item (possibly N/A):
+Inflight wifi service                3103
+Departure/Arrival time convenient    5300
+Ease of Online booking               4487
+Gate location                           1
+Food and drink                        107
+Online boarding                      2428
+Seat comfort                            1
+Inflight entertainment                 14
+On-board service                        3
+Leg room service                      472
+Baggage handling                        0
+Checkin service                         1
+Inflight service                        3
+Cleanliness                            12
+dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 4. In-depth analysis I</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">pi</span>
+
+<span class="c1"># --- Preprocessing ---</span>
+<span class="c1"># Convert satisfaction to binary (satisfied=1, otherwise=0)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;satisfaction&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">&#39;satisfied&#39;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Fill arrival delay NaN with 0 (minimal impact on this overview analysis)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Arrival Delay in Minutes&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Arrival Delay in Minutes&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># --- Analysis 1: Service gap analysis (Radar Chart) ---</span>
+<span class="c1"># Select service-related columns</span>
+<span class="n">service_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Inflight wifi service&#39;</span><span class="p">,</span> <span class="s1">&#39;Departure/Arrival time convenient&#39;</span><span class="p">,</span> <span class="s1">&#39;Ease of Online booking&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;Gate location&#39;</span><span class="p">,</span> <span class="s1">&#39;Food and drink&#39;</span><span class="p">,</span> <span class="s1">&#39;Online boarding&#39;</span><span class="p">,</span> <span class="s1">&#39;Seat comfort&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;Inflight entertainment&#39;</span><span class="p">,</span> <span class="s1">&#39;On-board service&#39;</span><span class="p">,</span> <span class="s1">&#39;Leg room service&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;Baggage handling&#39;</span><span class="p">,</span> <span class="s1">&#39;Checkin service&#39;</span><span class="p">,</span> <span class="s1">&#39;Inflight service&#39;</span><span class="p">,</span> <span class="s1">&#39;Cleanliness&#39;</span><span class="p">]</span>
+
+<span class="c1"># Calculate mean scores for satisfied vs. dissatisfied groups</span>
+<span class="n">means</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;satisfaction&#39;</span><span class="p">)[</span><span class="n">service_cols</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+<span class="c1"># Prepare data for radar chart</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">means</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+<span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">categories</span><span class="p">)</span>
+
+<span class="c1"># Calculate angle for each axis</span>
+<span class="n">angles</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+<span class="n">angles</span> <span class="o">+=</span> <span class="p">[</span><span class="n">angles</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>  <span class="c1"># Close the chart by adding the starting point</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># Create radar chart</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">polar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_theta_offset</span><span class="p">(</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_theta_direction</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Set x-axis labels</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">angles</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">categories</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_rlabel_position</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">,</span> <span class="s2">&quot;3&quot;</span><span class="p">,</span> <span class="s2">&quot;4&quot;</span><span class="p">,</span> <span class="s2">&quot;5&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Plot &#39;Neutral or Dissatisfied&#39; data</span>
+<span class="n">values_dis</span> <span class="o">=</span> <span class="n">means</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">means</span><span class="p">[</span><span class="s1">&#39;satisfaction&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;neutral or dissatisfied&#39;</span><span class="p">,</span> <span class="n">categories</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">values_dis</span> <span class="o">+=</span> <span class="p">[</span><span class="n">values_dis</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">values_dis</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Neutral or Dissatisfied&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">values_dis</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="c1"># Plot &#39;Satisfied&#39; data</span>
+<span class="n">values_sat</span> <span class="o">=</span> <span class="n">means</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">means</span><span class="p">[</span><span class="s1">&#39;satisfaction&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;satisfied&#39;</span><span class="p">,</span> <span class="n">categories</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">values_sat</span> <span class="o">+=</span> <span class="p">[</span><span class="n">values_sat</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">values_sat</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;solid&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Satisfied&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">values_sat</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Service Rating Gap: Satisfied vs. Dissatisfied&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.08</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># --- Analysis 2: Impact of delay on satisfaction ---</span>
+<span class="c1"># Bin delay times</span>
+<span class="n">bins</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;0 min&#39;</span><span class="p">,</span> <span class="s1">&#39;1-15 min&#39;</span><span class="p">,</span> <span class="s1">&#39;16-30 min&#39;</span><span class="p">,</span> <span class="s1">&#39;31-60 min&#39;</span><span class="p">,</span> <span class="s1">&#39;1-2 hr&#39;</span><span class="p">,</span> <span class="s1">&#39;2-3 hr&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;3 hr&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Delay_Group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Arrival Delay in Minutes&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+
+<span class="c1"># Calculate satisfaction rate by delay group</span>
+<span class="n">delay_satisfaction</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Delay_Group&#39;</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Delay impact data:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">delay_satisfaction</span><span class="p">)</span>
+
+<span class="c1"># --- Analysis 3: Customer segmentation heatmap ---</span>
+<span class="c1"># Satisfaction rate pivot table by Class and Type of Travel</span>
+<span class="n">segment_pivot</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Type of Travel&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Satisfaction rate by segment (Class x Type of Travel):&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">segment_pivot</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ea56926aa661b576718149f3b47e773c956a7fcdde87ae18357c64b5c6b25fdd.png" src="../_images/ea56926aa661b576718149f3b47e773c956a7fcdde87ae18357c64b5c6b25fdd.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Delay impact data:
+Delay_Group
+0 min        0.472473
+1-15 min     0.413028
+16-30 min    0.352725
+31-60 min    0.356374
+1-2 hr       0.352442
+2-3 hr       0.365885
+&gt;3 hr        0.365402
+Name: satisfaction_binary, dtype: float64
+
+Satisfaction rate by segment (Class x Type of Travel):
+Type of Travel  Business travel  Personal Travel
+Class                                           
+Business               0.720216         0.122392
+Eco                    0.296194         0.101971
+Eco Plus               0.393316         0.087125
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 5. In-depth analysis II</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="c1"># --- Preprocessing ---</span>
+<span class="c1"># Convert satisfaction to binary (satisfied=1, otherwise=0)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;satisfaction&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="s1">&#39;satisfied&#39;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">service_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Inflight wifi service&#39;</span><span class="p">,</span> <span class="s1">&#39;Departure/Arrival time convenient&#39;</span><span class="p">,</span> <span class="s1">&#39;Ease of Online booking&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;Gate location&#39;</span><span class="p">,</span> <span class="s1">&#39;Food and drink&#39;</span><span class="p">,</span> <span class="s1">&#39;Online boarding&#39;</span><span class="p">,</span> <span class="s1">&#39;Seat comfort&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;Inflight entertainment&#39;</span><span class="p">,</span> <span class="s1">&#39;On-board service&#39;</span><span class="p">,</span> <span class="s1">&#39;Leg room service&#39;</span><span class="p">,</span> 
+                <span class="s1">&#39;Baggage handling&#39;</span><span class="p">,</span> <span class="s1">&#39;Checkin service&#39;</span><span class="p">,</span> <span class="s1">&#39;Inflight service&#39;</span><span class="p">,</span> <span class="s1">&#39;Cleanliness&#39;</span><span class="p">]</span>
+
+<span class="c1"># --- Analysis 1: Importance-Performance Analysis (IPA) Matrix ---</span>
+<span class="c1"># Importance: Correlation with satisfaction</span>
+<span class="c1"># Performance: Average rating</span>
+<span class="n">correlations</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">service_cols</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">corr</span><span class="p">()[</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">)</span>
+<span class="n">means</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">service_cols</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">ipa_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Importance&#39;</span><span class="p">:</span> <span class="n">correlations</span><span class="p">,</span> <span class="s1">&#39;Performance&#39;</span><span class="p">:</span> <span class="n">means</span><span class="p">})</span>
+
+<span class="c1"># Chart 1</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Performance&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Importance&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">ipa_df</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add labels</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ipa_df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">ipa_df</span><span class="p">[</span><span class="s1">&#39;Performance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mf">0.02</span><span class="p">,</span> 
+             <span class="n">ipa_df</span><span class="p">[</span><span class="s1">&#39;Importance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> 
+             <span class="n">ipa_df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+
+<span class="c1"># Add quadrant reference lines (set at mean values)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">ipa_df</span><span class="p">[</span><span class="s1">&#39;Performance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">ipa_df</span><span class="p">[</span><span class="s1">&#39;Importance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Priority Action Matrix (Importance vs. Performance)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Performance (Avg Rating)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Importance (Correlation with Satisfaction)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># --- Analysis 2: Demographics — satisfaction by age group and class ---</span>
+<span class="c1"># Bin ages</span>
+<span class="n">age_bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+<span class="n">age_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Gen Z (&lt;18)&#39;</span><span class="p">,</span> <span class="s1">&#39;Young Adult (18-30)&#39;</span><span class="p">,</span> <span class="s1">&#39;Adult (30-45)&#39;</span><span class="p">,</span> <span class="s1">&#39;Middle Age (45-60)&#39;</span><span class="p">,</span> <span class="s1">&#39;Senior (&gt;60)&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age_Group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">age_bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">age_labels</span><span class="p">)</span>
+
+<span class="n">pivot_age_class</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;Age_Group&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Class&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="n">observed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Chart 2</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">pivot_age_class</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdYlGn&#39;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;.1%&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Satisfaction Rate by Age Group and Class&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># --- Analysis 3: Context — importance of seat comfort by flight distance ---</span>
+<span class="c1"># Does seat comfort matter more on longer flights?</span>
+<span class="c1"># Bin distances</span>
+<span class="n">dist_bins</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">]</span>
+<span class="n">dist_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Short (&lt;500)&#39;</span><span class="p">,</span> <span class="s1">&#39;Medium (500-1500)&#39;</span><span class="p">,</span> <span class="s1">&#39;Long (1500-3000)&#39;</span><span class="p">,</span> <span class="s1">&#39;Ultra Long (&gt;3000)&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Dist_Group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Flight Distance&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="n">dist_bins</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">dist_labels</span><span class="p">)</span>
+
+<span class="c1"># Calculate correlation between seat comfort and satisfaction for each distance group</span>
+<span class="n">comfort_corrs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">dist_labels</span><span class="p">:</span>
+    <span class="n">sub_df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Dist_Group&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">group</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sub_df</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="n">sub_df</span><span class="p">[</span><span class="s1">&#39;Seat comfort&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="n">sub_df</span><span class="p">[</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">])</span>
+        <span class="n">comfort_corrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">corr</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">comfort_corrs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Chart 3</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">dist_labels</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">comfort_corrs</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="n">dist_labels</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Blues_d&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Importance of &quot;Seat Comfort&quot; by Flight Distance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Correlation with Satisfaction&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># --- Analysis 4: Customer loyalty segmentation ---</span>
+<span class="c1"># Satisfaction comparison of loyal vs. disloyal customers by travel type</span>
+<span class="c1"># Chart 4</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Customer Type&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;satisfaction_binary&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Type of Travel&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;Set2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Satisfaction: Loyalty vs. Travel Purpose&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Satisfaction Rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/bef60d6783763ac59def9d4bda4f574a1d509ae5a2cafeda487921806b1fba76.png" src="../_images/bef60d6783763ac59def9d4bda4f574a1d509ae5a2cafeda487921806b1fba76.png" />
+<img alt="../_images/c9e359d1222514ba28f0e511b2a95836ad3cd61a56e94f234228812837ea8e84.png" src="../_images/c9e359d1222514ba28f0e511b2a95836ad3cd61a56e94f234228812837ea8e84.png" />
+<img alt="../_images/f14e76bdd2bf8d57b5986b46207be9017b5afff0e0319c4ebd5871acd3f5abf2.png" src="../_images/f14e76bdd2bf8d57b5986b46207be9017b5afff0e0319c4ebd5871acd3f5abf2.png" />
+<img alt="../_images/34fd4fe47548be447440f995c46f6668d17bad2b031c8a363857927bbd5798fa.png" src="../_images/34fd4fe47548be447440f995c46f6668d17bad2b031c8a363857927bbd5798fa.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="08_Seoul_Apartment_Listing_Analysis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="10_Exploratory_Factor_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 10. Exploratory Factor Analysis</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-explanation"><strong>Gemini’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">1. Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-descriptions">2. Variable Descriptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passenger-demographics">Passenger Demographics</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flight-information">Flight Information</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#service-satisfaction-ratings">Service Satisfaction Ratings</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#delay-information">Delay Information</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-notes">3. Data Notes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#satisfaction-analysis"><span style="color: blue;"><strong>2. Satisfaction Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-analysis"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-satisfaction-overview">1. Overall Satisfaction Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-of-key-influencing-factors">2. Analysis of Key Influencing Factors</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#seat-class">Seat Class:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#type-of-travel">Type of Travel:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#customer-type">Customer Type:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#service-item-correlation-analysis">3. Service Item Correlation Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-and-recommendations">4. Conclusions and Recommendations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-analysis-by-survey-item"><span style="color: blue;"><strong>3. Descriptive Analysis by Survey Item</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-variable-analysis-demographics-flight-info">1. Categorical Variable Analysis (Demographics &amp; Flight Info)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-variable-analysis-age-distance-delays">2. Numerical Variable Analysis (Age, Distance, Delays)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#service-satisfaction-item-analysis-05-scale">3. Service Satisfaction Item Analysis (0–5 Scale)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#high-average-ratings-3-5">High average ratings (3.5+):</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#low-average-ratings-below-3-0">Low average ratings (below 3.0):</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#notable-findings-zero-score-frequency">Notable findings (zero-score frequency):</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-depth-survey-analysis-i"><span style="color: blue;"><strong>4. In-Depth Survey Analysis I</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#service-gap-analysis-using-radar-charts">1. Service Gap Analysis (Using Radar Charts)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-results">Analysis Results:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operational-efficiency-and-customer-sensitivity-analysis-delay-impact">2. Operational Efficiency and Customer Sensitivity Analysis (Delay Impact)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Analysis Results:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customer-segmentation-and-targeting-strategy">3. Customer Segmentation and Targeting Strategy</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-results-satisfaction-rate">Analysis Results (Satisfaction Rate):</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#predictive-modeling">4. Predictive Modeling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#persona-analysis">5. Persona Analysis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-depth-survey-analysis-ii"><span style="color: blue;"><strong>5. In-Depth Survey Analysis II</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#priority-action-matrix-ipa-importance-performance-analysis">1. Priority Action Matrix (IPA: Importance-Performance Analysis)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#implications">Implications:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#demographic-segmentation">2. Demographic Segmentation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#by-age-group">By Age Group:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#by-seat-class">By Seat Class:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#context-based-service-analysis">3. Context-Based Service Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sensitivity-by-flight-distance">Sensitivity by Flight Distance:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#delay-sensitivity">Delay Sensitivity:</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#customer-loyalty-analysis">4. Customer Loyalty Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#machine-learning-based-predictive-modeling">5. Machine Learning-Based Predictive Modeling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-mining-if-text-columns-are-available">6. Text Mining — <em>If Text Columns Are Available</em></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

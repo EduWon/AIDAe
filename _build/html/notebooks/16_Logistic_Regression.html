@@ -1,0 +1,1595 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 16. Logistic Regression &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/16_Logistic_Regression';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 17. Decision Tree Model" href="17_Decision_Tree_Model.html" />
+    <link rel="prev" title="Ch 15. Ridge and Lasso Regression" href="15_Ridge_and_Lasso_Regression.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/16_Logistic_Regression.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/16_Logistic_Regression.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 16. Logistic Regression</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-upload"><span style="color: blue;"><strong>1. Data Upload</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-explanation"><strong>Gemini Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">1. Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-feature-composition">2. Variable (Feature) Composition</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-and-subscription-rate-structure"><span style="color: blue;"><strong>2. Summary Statistics and Subscription Rate Structure</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-analysis"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-variable-summary-statistics">1. Numerical Variable Summary Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-variable-summary-statistics">2. Categorical Variable Summary Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-subscription-rate-y-structure">3. Overall Subscription Rate (y) Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-subscription-rate-by-job">4. Visualization (Subscription Rate by Job)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logistic-regression"><span style="color: blue;"><strong>3. Logistic Regression</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-logistic-regression">1. What Is Logistic Regression?</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-use-logistic-regression-instead-of-ordinary-linear-regression">Why Use Logistic Regression Instead of Ordinary Linear Regression?</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-data-and-model-setup">2. Analysis Data and Model Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#logistic-regression-estimation-results">3. Logistic Regression Estimation Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-of-estimation-results">4. Interpretation of Estimation Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#client-attributes-job-education">1. Client Attributes (Job &amp; Education)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#previous-marketing-campaign-performance-poutcome">2. Previous Marketing Campaign Performance (Poutcome)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#current-campaign-information-campaign-contact">3. Current Campaign Information (Campaign &amp; Contact)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#social-and-macroeconomic-indicators">4. Social and Macroeconomic Indicators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediction-performance-analysis"><span style="color: blue;"><strong>4. Prediction Performance Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classification-report">1. Classification Report</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-metric-interpretation">Performance Metric Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confusion-matrix">2. Confusion Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#roc-curve-and-auc-area-under-the-curve">3. ROC Curve and AUC (Area Under the Curve)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-and-improvement-directions">Conclusion and Improvement Directions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><span style="color: blue;"><strong>5. Confusion Matrix</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><strong>Gemini Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#four-components-of-the-confusion-matrix">Four Components of the Confusion Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-metrics-derived-from-the-confusion-matrix">Evaluation Metrics Derived from the Confusion Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#roc-curve-and-auc"><span style="color: blue;"><strong>6. ROC Curve and AUC</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><strong>Gemini Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#roc-curve">ROC Curve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auc">AUC</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-16-logistic-regression">
+<h1><strong>Ch 16. Logistic Regression</strong><a class="headerlink" href="#ch-16-logistic-regression" title="Link to this heading">#</a></h1>
+<section id="data-upload">
+<h2><span style="color: blue;"><strong>1. Data Upload</strong></span><a class="headerlink" href="#data-upload" title="Link to this heading">#</a></h2>
+<p><img alt="Logit1" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/16-1.png" /></p>
+<p>Source: UCI Machine Learning Repository, <a class="reference external" href="https://archive.ics.uci.edu/dataset/222/bank+marketing">Bank Marketing Data Set</a></p>
+</section>
+<section id="gemini-explanation">
+<h2><strong>Gemini Explanation</strong><a class="headerlink" href="#gemini-explanation" title="Link to this heading">#</a></h2>
+<p>The provided dataset (<code class="docutils literal notranslate"><span class="pre">bank-additional-full.csv</span></code>) contains data related to a bank’s telemarketing campaign. It is a classic bank marketing dataset primarily used to predict whether a customer will subscribe to a term deposit.</p>
+<p>The key characteristics of the data are as follows.</p>
+<section id="data-structure">
+<h3>1. Data Structure<a class="headerlink" href="#data-structure" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Rows:</strong> 41,188</p></li>
+<li><p><strong>Columns:</strong> 21</p></li>
+<li><p>No missing values are present.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="variable-feature-composition">
+<h3>2. Variable (Feature) Composition<a class="headerlink" href="#variable-feature-composition" title="Link to this heading">#</a></h3>
+<p>The data can be broadly divided into five categories.</p>
+<ul class="simple">
+<li><p><strong>Client Data</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">age</span></code>: Age</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">job</span></code>: Occupation (admin, blue-collar, student, etc.)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">marital</span></code>: Marital status</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">education</span></code>: Education level</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">default</span></code>: Whether the client has credit in default</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">housing</span></code>: Whether the client has a housing loan</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">loan</span></code>: Whether the client has a personal loan</p></li>
+</ul>
+</li>
+<li><p><strong>Last Contact Data of the Current Campaign</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">contact</span></code>: Contact communication type (cellular, telephone)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">month</span></code>: Last contact month</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">day_of_week</span></code>: Last contact day of the week</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">duration</span></code>: Last contact duration in seconds</p></li>
+</ul>
+</li>
+<li><p><strong>Other Campaign-Related Attributes</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">campaign</span></code>: Number of contacts performed during this campaign for this client</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pdays</span></code>: Number of days since the client was last contacted from a previous campaign</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">previous</span></code>: Number of contacts performed before this campaign for this client</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">poutcome</span></code>: Outcome of the previous marketing campaign (success, failure, etc.)</p></li>
+</ul>
+</li>
+<li><p><strong>Socio-Economic Context Attributes</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">emp.var.rate</span></code>: Employment variation rate</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cons.price.idx</span></code>: Consumer price index</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cons.conf.idx</span></code>: Consumer confidence index</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">euribor3m</span></code>: Euribor 3-month rate (Euro interbank offered rate)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nr.employed</span></code>: Number of employees</p></li>
+</ul>
+</li>
+<li><p><strong>Target Variable</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code>: Whether the client subscribed to a term deposit (‘yes’ or ‘no’)</p></li>
+</ul>
+</li>
+</ul>
+<p>Overall, this dataset contains a mix of numerical and categorical variables, and also includes economic indicators, making it suitable for analyzing marketing success probabilities and building predictive models. If you need distribution analysis or additional analysis of specific variables, you can specify the direction.</p>
+</section>
+</section>
+<section id="summary-statistics-and-subscription-rate-structure">
+<h2><span style="color: blue;"><strong>2. Summary Statistics and Subscription Rate Structure</strong></span><a class="headerlink" href="#summary-statistics-and-subscription-rate-structure" title="Link to this heading">#</a></h2>
+</section>
+<section id="gemini-analysis">
+<h2><strong>Gemini Analysis</strong><a class="headerlink" href="#gemini-analysis" title="Link to this heading">#</a></h2>
+<p>The summary statistics and subscription rate structure analysis results for the requested data are as follows.</p>
+<section id="numerical-variable-summary-statistics">
+<h3>1. Numerical Variable Summary Statistics<a class="headerlink" href="#numerical-variable-summary-statistics" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>count</p></th>
+<th class="head"><p>mean</p></th>
+<th class="head"><p>std</p></th>
+<th class="head"><p>min</p></th>
+<th class="head"><p>25%</p></th>
+<th class="head"><p>50%</p></th>
+<th class="head"><p>75%</p></th>
+<th class="head"><p>max</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>age</strong></p></td>
+<td><p>41188</p></td>
+<td><p>40.02</p></td>
+<td><p>10.42</p></td>
+<td><p>17</p></td>
+<td><p>32</p></td>
+<td><p>38</p></td>
+<td><p>47</p></td>
+<td><p>98</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>duration</strong></p></td>
+<td><p>41188</p></td>
+<td><p>258.29</p></td>
+<td><p>259.28</p></td>
+<td><p>0</p></td>
+<td><p>102</p></td>
+<td><p>180</p></td>
+<td><p>319</p></td>
+<td><p>4918</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>campaign</strong></p></td>
+<td><p>41188</p></td>
+<td><p>2.57</p></td>
+<td><p>2.77</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td><p>3</p></td>
+<td><p>56</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>pdays</strong></p></td>
+<td><p>41188</p></td>
+<td><p>962.48</p></td>
+<td><p>186.91</p></td>
+<td><p>0</p></td>
+<td><p>999</p></td>
+<td><p>999</p></td>
+<td><p>999</p></td>
+<td><p>999</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>previous</strong></p></td>
+<td><p>41188</p></td>
+<td><p>0.17</p></td>
+<td><p>0.49</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>emp.var.rate</strong></p></td>
+<td><p>41188</p></td>
+<td><p>0.08</p></td>
+<td><p>1.57</p></td>
+<td><p>-3.4</p></td>
+<td><p>-1.8</p></td>
+<td><p>1.1</p></td>
+<td><p>1.4</p></td>
+<td><p>1.4</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>cons.price.idx</strong></p></td>
+<td><p>41188</p></td>
+<td><p>93.58</p></td>
+<td><p>0.58</p></td>
+<td><p>92.2</p></td>
+<td><p>93.08</p></td>
+<td><p>93.75</p></td>
+<td><p>93.99</p></td>
+<td><p>94.77</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>cons.conf.idx</strong></p></td>
+<td><p>41188</p></td>
+<td><p>-40.50</p></td>
+<td><p>4.63</p></td>
+<td><p>-50.8</p></td>
+<td><p>-42.7</p></td>
+<td><p>-41.8</p></td>
+<td><p>-36.4</p></td>
+<td><p>-26.9</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>euribor3m</strong></p></td>
+<td><p>41188</p></td>
+<td><p>3.62</p></td>
+<td><p>1.73</p></td>
+<td><p>0.63</p></td>
+<td><p>1.34</p></td>
+<td><p>4.86</p></td>
+<td><p>4.96</p></td>
+<td><p>5.04</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>nr.employed</strong></p></td>
+<td><p>41188</p></td>
+<td><p>5167.04</p></td>
+<td><p>72.25</p></td>
+<td><p>4963.6</p></td>
+<td><p>5099.1</p></td>
+<td><p>5191</p></td>
+<td><p>5228.1</p></td>
+<td><p>5228.1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>For <code class="docutils literal notranslate"><span class="pre">pdays</span></code>, the mean is high because the majority of values are 999 (not contacted in a previous campaign).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">duration</span></code> (contact duration) has very large variance and may cause target leakage, so caution is needed.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="categorical-variable-summary-statistics">
+<h3>2. Categorical Variable Summary Statistics<a class="headerlink" href="#categorical-variable-summary-statistics" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>count</p></th>
+<th class="head"><p>unique</p></th>
+<th class="head"><p>top (mode)</p></th>
+<th class="head"><p>freq (frequency)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>job</strong></p></td>
+<td><p>41188</p></td>
+<td><p>12</p></td>
+<td><p>admin.</p></td>
+<td><p>10422</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>marital</strong></p></td>
+<td><p>41188</p></td>
+<td><p>4</p></td>
+<td><p>married</p></td>
+<td><p>24928</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>education</strong></p></td>
+<td><p>41188</p></td>
+<td><p>8</p></td>
+<td><p>university.degree</p></td>
+<td><p>12168</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>default</strong></p></td>
+<td><p>41188</p></td>
+<td><p>3</p></td>
+<td><p>no</p></td>
+<td><p>32588</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>housing</strong></p></td>
+<td><p>41188</p></td>
+<td><p>3</p></td>
+<td><p>yes</p></td>
+<td><p>21576</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>loan</strong></p></td>
+<td><p>41188</p></td>
+<td><p>3</p></td>
+<td><p>no</p></td>
+<td><p>33950</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>contact</strong></p></td>
+<td><p>41188</p></td>
+<td><p>2</p></td>
+<td><p>cellular</p></td>
+<td><p>26144</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>month</strong></p></td>
+<td><p>41188</p></td>
+<td><p>10</p></td>
+<td><p>may</p></td>
+<td><p>13769</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>day_of_week</strong></p></td>
+<td><p>41188</p></td>
+<td><p>5</p></td>
+<td><p>thu</p></td>
+<td><p>8623</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>poutcome</strong></p></td>
+<td><p>41188</p></td>
+<td><p>3</p></td>
+<td><p>nonexistent</p></td>
+<td><p>35563</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>y</strong> (target)</p></td>
+<td><p>41188</p></td>
+<td><p>2</p></td>
+<td><p>no</p></td>
+<td><p>36548</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="overall-subscription-rate-y-structure">
+<h3>3. Overall Subscription Rate (y) Structure<a class="headerlink" href="#overall-subscription-rate-y-structure" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Term Deposit Subscription (y)</p></th>
+<th class="head"><p>Count</p></th>
+<th class="head"><p>Rate (%)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>no (not subscribed)</strong></p></td>
+<td><p>36548</p></td>
+<td><p>88.73</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>yes (subscribed)</strong></p></td>
+<td><p>4640</p></td>
+<td><p>11.27</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>Only about 11.27% of all customers subscribed to the term deposit campaign. This shows a typical class imbalance phenomenon, which must be considered during predictive modeling.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="visualization-subscription-rate-by-job">
+<h3>4. Visualization (Subscription Rate by Job)<a class="headerlink" href="#visualization-subscription-rate-by-job" title="Link to this heading">#</a></h3>
+<p><img alt="Logit2" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/16-2.png" /></p>
+<p>The chart shows that the term deposit subscription rates for <strong>students</strong> and <strong>retirees</strong> are overwhelmingly higher than other job categories, at approximately 25–30%. In contrast, blue-collar and services workers show relatively low subscription rates below 10%.</p>
+</section>
+</section>
+<section id="logistic-regression">
+<h2><span style="color: blue;"><strong>3. Logistic Regression</strong></span><a class="headerlink" href="#logistic-regression" title="Link to this heading">#</a></h2>
+</section>
+<section id="id1">
+<h2><strong>Gemini Analysis</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<section id="what-is-logistic-regression">
+<h3>1. What Is Logistic Regression?<a class="headerlink" href="#what-is-logistic-regression" title="Link to this heading">#</a></h3>
+<p>Despite having ‘Regression’ in its name, logistic regression is actually a <strong>classification</strong> algorithm that predicts the probability that data belongs to a specific class. It is widely used for binary classification problems where the outcome is divided into two categories (e.g., success/failure, subscribed/not subscribed, 0 or 1).</p>
+<section id="why-use-logistic-regression-instead-of-ordinary-linear-regression">
+<h4>Why Use Logistic Regression Instead of Ordinary Linear Regression?<a class="headerlink" href="#why-use-logistic-regression-instead-of-ordinary-linear-regression" title="Link to this heading">#</a></h4>
+<p>An ordinary linear regression model can produce predicted values that extend infinitely from negative (<span class="math notranslate nohighlight">\(-\infty\)</span>) to positive (<span class="math notranslate nohighlight">\(+\infty\)</span>) depending on the independent variable values. However, since what we want to know is a ‘probability,’ the result must always be between 0 and 1.</p>
+<p>To solve this problem, logistic regression introduces the <strong>sigmoid function</strong> (or logistic function). The sigmoid function transforms any input value into a value between 0 and 1, following an S-shaped curve.</p>
+<p>Logistic regression constructs a linear equation using the <strong>log-odds (logit)</strong> as the dependent variable — the natural logarithm of the odds (the ratio of the probability of success to the probability of failure, <span class="math notranslate nohighlight">\(\frac{p}{1-p}\)</span>).
+Expressed as a formula:</p>
+<div class="math notranslate nohighlight">
+\[\ln \left( \frac{p}{1-p} \right) = \beta_0 + \beta_1 X_1 + \beta_2 X_2 + \dots + \beta_n X_n\]</div>
+<p>Parameter (<span class="math notranslate nohighlight">\(\beta\)</span>) estimation is performed using the <strong>maximum likelihood</strong> method instead of ordinary least squares (OLS).</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="analysis-data-and-model-setup">
+<h3>2. Analysis Data and Model Setup<a class="headerlink" href="#analysis-data-and-model-setup" title="Link to this heading">#</a></h3>
+<p>Using the provided <code class="docutils literal notranslate"><span class="pre">bank-additional-full.csv</span></code> data, a logistic regression model was constructed to predict the probability that a customer subscribes to the term deposit campaign (<code class="docutils literal notranslate"><span class="pre">y=1</span></code>).</p>
+<ul class="simple">
+<li><p><strong>Target variable:</strong> <code class="docutils literal notranslate"><span class="pre">y</span></code> (yes=1, no=0)</p></li>
+<li><p><strong>Contact duration (<code class="docutils literal notranslate"><span class="pre">duration</span></code>):</strong> Although it appears to have a strong correlation with subscription, in reality this is largely a consequential variable — “calls are longer because customers with subscription intent talk longer.” Since this variable cannot be known before the call, it causes serious target leakage in predictive modeling. Therefore, it was excluded from the analysis.</p></li>
+<li><p><strong>Key independent variables used:</strong> Client information (<code class="docutils literal notranslate"><span class="pre">age</span></code>, <code class="docutils literal notranslate"><span class="pre">job</span></code>, <code class="docutils literal notranslate"><span class="pre">marital</span></code>, <code class="docutils literal notranslate"><span class="pre">education</span></code>), economic indicators (<code class="docutils literal notranslate"><span class="pre">emp.var.rate</span></code>, <code class="docutils literal notranslate"><span class="pre">cons.price.idx</span></code>, <code class="docutils literal notranslate"><span class="pre">cons.conf.idx</span></code>, <code class="docutils literal notranslate"><span class="pre">euribor3m</span></code>, <code class="docutils literal notranslate"><span class="pre">nr.employed</span></code>), past campaign history (<code class="docutils literal notranslate"><span class="pre">campaign</span></code>, <code class="docutils literal notranslate"><span class="pre">previous</span></code>, <code class="docutils literal notranslate"><span class="pre">poutcome</span></code>), contact method (<code class="docutils literal notranslate"><span class="pre">contact</span></code>), etc.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="logistic-regression-estimation-results">
+<h3>3. Logistic Regression Estimation Results<a class="headerlink" href="#logistic-regression-estimation-results" title="Link to this heading">#</a></h3>
+<p>For categorical variables, one category was set as the reference and dummy variables were created for the remaining categories. Maximum likelihood estimation was then performed.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Variable</p></th>
+<th class="head text-right"><p>Coef.</p></th>
+<th class="head text-right"><p>Std. Error</p></th>
+<th class="head text-right"><p>z-value</p></th>
+<th class="head text-right"><p>p-value</p></th>
+<th class="head text-right"><p>Odds Ratio</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>const</strong> (intercept)</p></td>
+<td class="text-right"><p>-109.501</p></td>
+<td class="text-right"><p>14.54</p></td>
+<td class="text-right"><p>-7.531</p></td>
+<td class="text-right"><p>0.000</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>age</strong></p></td>
+<td class="text-right"><p>0.0008</p></td>
+<td class="text-right"><p>0.002</p></td>
+<td class="text-right"><p>0.389</p></td>
+<td class="text-right"><p>0.697</p></td>
+<td class="text-right"><p>1.0008</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>campaign</strong> (number of contacts)</p></td>
+<td class="text-right"><p>-0.0445</p></td>
+<td class="text-right"><p>0.009</p></td>
+<td class="text-right"><p>-4.787</p></td>
+<td class="text-right"><p>0.000</p></td>
+<td class="text-right"><p>0.9565</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>previous</strong> (previous contacts)</p></td>
+<td class="text-right"><p>0.0461</p></td>
+<td class="text-right"><p>0.053</p></td>
+<td class="text-right"><p>0.869</p></td>
+<td class="text-right"><p>0.385</p></td>
+<td class="text-right"><p>1.0472</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>emp.var.rate</strong> (employment variation rate)</p></td>
+<td class="text-right"><p>-0.7346</p></td>
+<td class="text-right"><p>0.059</p></td>
+<td class="text-right"><p>-12.385</p></td>
+<td class="text-right"><p>0.000</p></td>
+<td class="text-right"><p>0.4797</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>cons.price.idx</strong> (consumer price index)</p></td>
+<td class="text-right"><p>1.1935</p></td>
+<td class="text-right"><p>0.095</p></td>
+<td class="text-right"><p>12.601</p></td>
+<td class="text-right"><p>0.000</p></td>
+<td class="text-right"><p>3.2985</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>cons.conf.idx</strong> (consumer confidence index)</p></td>
+<td class="text-right"><p>0.0443</p></td>
+<td class="text-right"><p>0.005</p></td>
+<td class="text-right"><p>8.091</p></td>
+<td class="text-right"><p>0.000</p></td>
+<td class="text-right"><p>1.0453</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>euribor3m</strong> (3-month Euribor)</p></td>
+<td class="text-right"><p>0.0156</p></td>
+<td class="text-right"><p>0.075</p></td>
+<td class="text-right"><p>0.207</p></td>
+<td class="text-right"><p>0.836</p></td>
+<td class="text-right"><p>1.0157</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>nr.employed</strong> (number of employees)</p></td>
+<td class="text-right"><p>-0.0006</p></td>
+<td class="text-right"><p>0.001</p></td>
+<td class="text-right"><p>-0.445</p></td>
+<td class="text-right"><p>0.656</p></td>
+<td class="text-right"><p>0.9994</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>job_blue-collar</strong></p></td>
+<td class="text-right"><p>-0.2339</p></td>
+<td class="text-right"><p>0.068</p></td>
+<td class="text-right"><p>-3.452</p></td>
+<td class="text-right"><p>0.001</p></td>
+<td class="text-right"><p>0.7915</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>job_retired</strong></p></td>
+<td class="text-right"><p>0.3209</p></td>
+<td class="text-right"><p>0.093</p></td>
+<td class="text-right"><p>3.453</p></td>
+<td class="text-right"><p>0.001</p></td>
+<td class="text-right"><p>1.3783</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>job_services</strong></p></td>
+<td class="text-right"><p>-0.1841</p></td>
+<td class="text-right"><p>0.074</p></td>
+<td class="text-right"><p>-2.486</p></td>
+<td class="text-right"><p>0.013</p></td>
+<td class="text-right"><p>0.8318</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>job_student</strong></p></td>
+<td class="text-right"><p>0.2749</p></td>
+<td class="text-right"><p>0.099</p></td>
+<td class="text-right"><p>2.775</p></td>
+<td class="text-right"><p>0.006</p></td>
+<td class="text-right"><p>1.3165</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>education_university.degree</strong></p></td>
+<td class="text-right"><p>0.1628</p></td>
+<td class="text-right"><p>0.079</p></td>
+<td class="text-right"><p>2.062</p></td>
+<td class="text-right"><p>0.039</p></td>
+<td class="text-right"><p>1.1768</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>contact_telephone</strong></p></td>
+<td class="text-right"><p>-0.9113</p></td>
+<td class="text-right"><p>0.055</p></td>
+<td class="text-right"><p>-16.482</p></td>
+<td class="text-right"><p>0.000</p></td>
+<td class="text-right"><p>0.4020</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>poutcome_nonexistent</strong> (prev. outcome: nonexistent)</p></td>
+<td class="text-right"><p>0.5635</p></td>
+<td class="text-right"><p>0.085</p></td>
+<td class="text-right"><p>6.613</p></td>
+<td class="text-right"><p>0.000</p></td>
+<td class="text-right"><p>1.7568</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>poutcome_success</strong> (prev. outcome: success)</p></td>
+<td class="text-right"><p>1.7790</p></td>
+<td class="text-right"><p>0.078</p></td>
+<td class="text-right"><p>22.879</p></td>
+<td class="text-right"><p>0.000</p></td>
+<td class="text-right"><p>5.9239</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><em>(Note: For ease of interpretation, only statistically significant key variables and some reference variables are summarized.)</em></p>
+</section>
+<hr class="docutils" />
+<section id="interpretation-of-estimation-results">
+<h3>4. Interpretation of Estimation Results<a class="headerlink" href="#interpretation-of-estimation-results" title="Link to this heading">#</a></h3>
+<p>The most important elements in interpreting logistic regression are the <strong>odds ratio (<span class="math notranslate nohighlight">\(e^\beta\)</span>)</strong> and <strong>p-value</strong>.</p>
+<ul class="simple">
+<li><p>If the p-value is less than 0.05, the variable is interpreted as having a statistically significant influence on term deposit subscription.</p></li>
+<li><p>An odds ratio greater than 1 indicates a factor that increases subscription probability, while one less than 1 indicates a factor that decreases it.</p></li>
+</ul>
+<section id="client-attributes-job-education">
+<h4>1. Client Attributes (Job &amp; Education)<a class="headerlink" href="#client-attributes-job-education" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Using admin. as the reference, the regression coefficients for <strong>retirees</strong> and <strong>students</strong> are positive (+), with odds ratios of 1.37 and 1.31 times, respectively. That is, retirees and students have approximately 30% or higher odds of subscribing to term deposits compared to other job categories.</p></li>
+<li><p>Conversely, <strong>blue-collar</strong> and <strong>services</strong> workers have odds ratios below 1, indicating statistically significantly lower subscription probabilities.</p></li>
+<li><p>For education level, having a university degree (university.degree) yields approximately 1.17 times higher subscription odds than the reference category (basic education).</p></li>
+<li><p>The p-value for <code class="docutils literal notranslate"><span class="pre">age</span></code> itself is 0.697 (not significant), because the job variable (retired, student, etc.) already absorbs and explains age-related characteristics.</p></li>
+</ul>
+</section>
+<section id="previous-marketing-campaign-performance-poutcome">
+<h4>2. Previous Marketing Campaign Performance (Poutcome)<a class="headerlink" href="#previous-marketing-campaign-performance-poutcome" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Using previous campaign failure as the reference, customers who had <strong>succeeded</strong> in the previous campaign have a regression coefficient of 1.779 and an odds ratio of <strong>5.92 times</strong>. This shows that loyal customers who subscribed to products in the past have an overwhelmingly higher probability of subscribing in the current campaign.</p></li>
+</ul>
+</section>
+<section id="current-campaign-information-campaign-contact">
+<h4>3. Current Campaign Information (Campaign &amp; Contact)<a class="headerlink" href="#current-campaign-information-campaign-contact" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Number of contacts (<code class="docutils literal notranslate"><span class="pre">campaign</span></code>):</strong> As the number of calls to a customer during the campaign increases, the regression coefficient is negative (−0.044) with an odds ratio of 0.95. That is, each additional contact reduces the subscription odds by 5%. This implies that excessive telemarketing actually triggers customer aversion.</p></li>
+<li><p><strong>Contact method (<code class="docutils literal notranslate"><span class="pre">contact_telephone</span></code>):</strong> Using cellular contact as the reference, the odds ratio for telephone contact is only 0.4 times. Customers contacted by landline have much lower subscription probability than those contacted by mobile phone.</p></li>
+</ul>
+</section>
+<section id="social-and-macroeconomic-indicators">
+<h4>4. Social and Macroeconomic Indicators<a class="headerlink" href="#social-and-macroeconomic-indicators" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Consumer price index (<code class="docutils literal notranslate"><span class="pre">cons.price.idx</span></code>)</strong> and <strong>consumer confidence index (<code class="docutils literal notranslate"><span class="pre">cons.conf.idx</span></code>)</strong> have positive coefficients, meaning subscription probability increases when prices or consumer confidence are high.</p></li>
+<li><p>Conversely, when the <strong>employment variation rate (<code class="docutils literal notranslate"><span class="pre">emp.var.rate</span></code>)</strong> is high (economic overheating or employment expansion), term deposit subscription probability drops substantially (odds ratio of 0.47). This can be inferred as people preferring other investments over the safe asset of term deposits during boom periods.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="prediction-performance-analysis">
+<h2><span style="color: blue;"><strong>4. Prediction Performance Analysis</strong></span><a class="headerlink" href="#prediction-performance-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="id2">
+<h2><strong>Gemini Analysis</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>To evaluate the prediction performance of the previously estimated logistic regression model, we derived the confusion matrix, classification report, and ROC AUC score. (The prediction threshold was set at 0.5.)</p>
+<section id="classification-report">
+<h3>1. Classification Report<a class="headerlink" href="#classification-report" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Class</p></th>
+<th class="head"><p>Precision</p></th>
+<th class="head"><p>Recall</p></th>
+<th class="head"><p>F1-Score</p></th>
+<th class="head"><p>Support</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>0 (not subscribed)</strong></p></td>
+<td><p>0.9076</p></td>
+<td><p>0.9866</p></td>
+<td><p>0.9455</p></td>
+<td><p>36,548</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>1 (subscribed)</strong></p></td>
+<td><p>0.6651</p></td>
+<td><p>0.2093</p></td>
+<td><p>0.3184</p></td>
+<td><p>4,640</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Accuracy</strong></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p><strong>0.8990</strong></p></td>
+<td><p>41,188</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ROC AUC Score</strong></p></td>
+<td><p></p></td>
+<td><p></p></td>
+<td><p><strong>0.7828</strong></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="performance-metric-interpretation">
+<h4>Performance Metric Interpretation<a class="headerlink" href="#performance-metric-interpretation" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Accuracy: 89.9%</strong> This is the proportion of correct predictions across all data. While the accuracy figure appears quite high, one must consider that the actual subscription rate is only about 11%, representing extreme class imbalance. Even predicting ‘not subscribed (0)’ for everyone would yield 89% accuracy, so this metric alone should not be used to evaluate performance.</p></li>
+<li><p><strong>Precision: 0.6651 (for the subscribed class)</strong>
+This is the proportion of customers who actually subscribed among those the model predicted as ‘will subscribe (1).’ At approximately 66.5%, this is reasonably good.</p></li>
+<li><p><strong>Recall: 0.2093 (for the subscribed class)</strong>
+This is the proportion of customers the model correctly identified among those who actually subscribed (1). The recall is <strong>very low at approximately 20.9%</strong>. This means the model is missing a substantial number of potential subscribers.</p></li>
+<li><p><strong>F1-Score: 0.3184</strong>
+This is the harmonic mean of precision and recall. The low F1-Score for the subscribed class demonstrates a typical class imbalance problem.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="confusion-matrix">
+<h3>2. Confusion Matrix<a class="headerlink" href="#confusion-matrix" title="Link to this heading">#</a></h3>
+<p><img alt="Logit3" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/16-3.png" /></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Predicted: No (0)</p></th>
+<th class="head"><p>Predicted: Yes (1)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Actual: No (0)</strong></p></td>
+<td><p><strong>36,059</strong> (True Negative)</p></td>
+<td><p><strong>489</strong> (False Positive)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Actual: Yes (1)</strong></p></td>
+<td><p><strong>3,669</strong> (False Negative)</p></td>
+<td><p><strong>971</strong> (True Positive)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>The model correctly classified only 971 out of 4,640 actual subscribers as ‘subscribed’ (True Positive), while incorrectly predicting the remaining 3,669 as ‘will not subscribe’ (False Negative).</p></li>
+<li><p>Because the contact duration (<code class="docutils literal notranslate"><span class="pre">duration</span></code>) was removed from the model, predictions became conservative, resulting in a substantial drop in recall.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="roc-curve-and-auc-area-under-the-curve">
+<h3>3. ROC Curve and AUC (Area Under the Curve)<a class="headerlink" href="#roc-curve-and-auc-area-under-the-curve" title="Link to this heading">#</a></h3>
+<p><img alt="Logit4" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/16-4.png" /></p>
+<ul class="simple">
+<li><p><strong>ROC AUC Score: 0.7828</strong></p></li>
+<li><p>Compared to a random prediction model (AUC = 0.5), the model’s ability to separate the two classes is reasonably good (approximately 0.78).</p></li>
+<li><p>Although the binary classification performance (recall) using a 0.5 (50%) threshold is somewhat low, this shows that the model’s ability to rank ‘subscription probability values’ (AUC) is functioning meaningfully.</p></li>
+</ul>
+<section id="conclusion-and-improvement-directions">
+<h4>Conclusion and Improvement Directions<a class="headerlink" href="#conclusion-and-improvement-directions" title="Link to this heading">#</a></h4>
+<p>The current model has the limitation of missing many actual subscribers (low recall). To address this, one could consider oversampling to handle target imbalance (e.g., SMOTE), lowering the decision threshold, or adopting nonlinear models with better predictive performance (e.g., Random Forest).</p>
+</section>
+</section>
+</section>
+<section id="id3">
+<h2><span style="color: blue;"><strong>5. Confusion Matrix</strong></span><a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+</section>
+<section id="id4">
+<h2><strong>Gemini Explanation</strong><a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>A confusion matrix is a cross-tabulation that summarizes how predicted and actual values match and diverge when a machine learning classification model performs predictions. Through this matrix, one can intuitively grasp what types of errors the model is producing.</p>
+<p>The structure of a 2×2 confusion matrix for binary classification is as follows.</p>
+<p><img alt="Logit5" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/16-5.png" /></p>
+<section id="four-components-of-the-confusion-matrix">
+<h3>Four Components of the Confusion Matrix<a class="headerlink" href="#four-components-of-the-confusion-matrix" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>True Positive (TP):</strong> The number of actual positives correctly predicted as positive. (Correct)</p></li>
+<li><p><strong>True Negative (TN):</strong> The number of actual negatives correctly predicted as negative. (Correct)</p></li>
+<li><p><strong>False Positive (FP):</strong> The number of actual negatives incorrectly predicted as positive. (Type I error)</p></li>
+<li><p><strong>False Negative (FN):</strong> The number of actual positives incorrectly predicted as negative. (Type II error)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="evaluation-metrics-derived-from-the-confusion-matrix">
+<h3>Evaluation Metrics Derived from the Confusion Matrix<a class="headerlink" href="#evaluation-metrics-derived-from-the-confusion-matrix" title="Link to this heading">#</a></h3>
+<p>These four values are combined to calculate various metrics for evaluating classification model performance from multiple angles.</p>
+<p><strong>1. Accuracy</strong>
+The proportion of correct predictions (TP, TN) among all predictions. Useful when class proportions are similar, but can distort model performance evaluation with imbalanced data.</p>
+<p><strong>2. Precision</strong>
+The proportion of actual positives <strong>among those predicted as ‘positive.’</strong> This is the key metric when reducing FP (false positives) is important. (Example: spam email filtering)</p>
+<p><strong>3. Recall / Sensitivity</strong>
+The proportion correctly identified as positive by the model <strong>among actual positives.</strong> This is the key metric when reducing FN (false negatives) is important. (Example: cancer diagnosis)</p>
+<p><strong>4. F1 Score</strong>
+The harmonic mean of precision and recall. Since precision and recall often have a trade-off relationship, a high F1 score is achieved when both metrics are balanced rather than skewed to one side. Particularly useful for accurately evaluating model performance with imbalanced class data.</p>
+<p><strong>5. Specificity</strong>
+The proportion correctly predicted as negative by the model among actual negatives.</p>
+</section>
+</section>
+<section id="roc-curve-and-auc">
+<h2><span style="color: blue;"><strong>6. ROC Curve and AUC</strong></span><a class="headerlink" href="#roc-curve-and-auc" title="Link to this heading">#</a></h2>
+</section>
+<section id="id5">
+<h2><strong>Gemini Explanation</strong><a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p><img alt="Logit6" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/16-6.png" /></p>
+<p>The ROC curve (Receiver Operating Characteristic Curve) and AUC (Area Under the Curve) are the most widely used visualization and quantitative metrics for comprehensively evaluating binary classification model performance. They are calculated based on the confusion matrix values described earlier.</p>
+<section id="roc-curve">
+<h3>ROC Curve<a class="headerlink" href="#roc-curve" title="Link to this heading">#</a></h3>
+<p>A classification model typically outputs probability values between 0 and 1, then divides predictions into positive and negative based on a specific <strong>threshold</strong> (e.g., positive if ≥ 0.5). The ROC curve is a graph that visually shows how the model’s prediction performance changes as this threshold is continuously varied from 0 to 1.</p>
+<ul class="simple">
+<li><p><strong>Y-axis: True Positive Rate (TPR)</strong>
+This is the same concept as recall or sensitivity described earlier. It represents the proportion of actual positives that the model correctly predicted as positive.</p></li>
+<li><p><strong>X-axis: False Positive Rate (FPR)</strong>
+The proportion of actual negatives that the model incorrectly predicted as positive. This equals <span class="math notranslate nohighlight">\(1 - \text{Specificity}\)</span>.</p></li>
+</ul>
+<p>Lowering the threshold causes the model to make more positive predictions, increasing both TPR (correct) and FPR (incorrect). Conversely, raising the threshold makes predictions more conservative, lowering both. The trajectory of this change plotted on a 2D plane is the ROC curve.</p>
+<ul class="simple">
+<li><p><strong>Perfect model:</strong> The curve touches the upper-left corner (FPR=0, TPR=1). This means finding all correct answers without any errors.</p></li>
+<li><p><strong>Random prediction model:</strong> The diagonal dashed line through the center. This represents performance no better than flipping a coin.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="auc">
+<h3>AUC<a class="headerlink" href="#auc" title="Link to this heading">#</a></h3>
+<p>When the shape of the ROC curve alone is insufficient for clearly comparing multiple models’ performance, AUC quantifies it as a single scalar value.</p>
+<ul class="simple">
+<li><p><strong>Meaning:</strong> As the name suggests, it is the calculated area under the ROC curve in 2D space.</p></li>
+<li><p><strong>Range and interpretation:</strong> Values range from a minimum of 0.5 to a maximum of 1.0.</p>
+<ul>
+<li><p><strong>AUC = 1.0:</strong> The best model that perfectly separates classes.</p></li>
+<li><p><strong>AUC = 0.5:</strong> Performance equivalent to random prediction (area under the diagonal).</p></li>
+<li><p><strong>General benchmarks:</strong> Typically, ≥ 0.7 is considered good, ≥ 0.8 excellent, and ≥ 0.9 outstanding.</p></li>
+</ul>
+</li>
+<li><p><strong>Advantage:</strong> It enables comprehensive evaluation of model prediction performance without depending on a single specific threshold. Additionally, it shows performance with relatively little distortion even in datasets with imbalanced class proportions.</p></li>
+</ul>
+<p>Shall we apply these concepts to specifically interpret the ROC curve graph and AUC score from the bank marketing data analyzed with Python code earlier?</p>
+</section>
+</section>
+<section id="appendix-python-code">
+<h2><strong>Appendix: Python Code</strong><a class="headerlink" href="#appendix-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="c1"># Load data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../Data/bank-additional-full.csv&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+
+<span class="c1"># Convert target variable (&#39;y&#39;) to 0 and 1 for computation</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># 1. Generate numerical variable summary statistics</span>
+<span class="n">num_summary</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;### Numerical Variable Summary Statistics&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">num_summary</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+<span class="c1"># 2. Generate categorical variable summary statistics</span>
+<span class="n">cat_summary</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">(</span><span class="n">include</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;O&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Categorical Variable Summary Statistics&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">cat_summary</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+<span class="c1"># 3. Calculate overall subscription rate</span>
+<span class="n">y_counts</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+<span class="n">y_rates</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="n">y_summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Count&#39;</span><span class="p">:</span> <span class="n">y_counts</span><span class="p">,</span> <span class="s1">&#39;Rate (%)&#39;</span><span class="p">:</span> <span class="n">y_rates</span><span class="p">})</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Overall Subscription Rate Structure&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_summary</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+<span class="c1"># 4. Visualize subscription rate by job</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="c1"># Calculate and sort subscription rate by job</span>
+<span class="n">job_rates</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;job&#39;</span><span class="p">)[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+
+<span class="c1"># Draw bar chart</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">job_rates</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">job_rates</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="n">job_rates</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Subscription Rate by Job&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Subscription Rate (%)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Job&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>### Numerical Variable Summary Statistics
+|       |      age |   duration |   campaign |    pdays |   previous |   emp.var.rate |   cons.price.idx |   cons.conf.idx |   euribor3m |   nr.employed |
+|:------|---------:|-----------:|-----------:|---------:|-----------:|---------------:|-----------------:|----------------:|------------:|--------------:|
+| count | 41188    |   41188    |   41188    | 41188    |   41188    |       41188    |         41188    |        41188    |    41188    |      41188    |
+| mean  |    40.02 |     258.29 |       2.57 |   962.48 |       0.17 |           0.08 |            93.58 |          -40.5  |        3.62 |       5167.04 |
+| std   |    10.42 |     259.28 |       2.77 |   186.91 |       0.49 |           1.57 |             0.58 |            4.63 |        1.73 |         72.25 |
+| min   |    17    |       0    |       1    |     0    |       0    |          -3.4  |            92.2  |          -50.8  |        0.63 |       4963.6  |
+| 25%   |    32    |     102    |       1    |   999    |       0    |          -1.8  |            93.08 |          -42.7  |        1.34 |       5099.1  |
+| 50%   |    38    |     180    |       2    |   999    |       0    |           1.1  |            93.75 |          -41.8  |        4.86 |       5191    |
+| 75%   |    47    |     319    |       3    |   999    |       0    |           1.4  |            93.99 |          -36.4  |        4.96 |       5228.1  |
+| max   |    98    |    4918    |      56    |   999    |       7    |           1.4  |            94.77 |          -26.9  |        5.04 |       5228.1  |
+
+### Categorical Variable Summary Statistics
+|        | job    | marital   | education         | default   | housing   | loan   | contact   | month   | day_of_week   | poutcome    | y     |
+|:-------|:-------|:----------|:------------------|:----------|:----------|:-------|:----------|:--------|:--------------|:------------|:------|
+| count  | 41188  | 41188     | 41188             | 41188     | 41188     | 41188  | 41188     | 41188   | 41188         | 41188       | 41188 |
+| unique | 12     | 4         | 8                 | 3         | 3         | 3      | 2         | 10      | 5             | 3           | 2     |
+| top    | admin. | married   | university.degree | no        | yes       | no     | cellular  | may     | thu           | nonexistent | no    |
+| freq   | 10422  | 24928     | 12168             | 32588     | 21576     | 33950  | 26144     | 13769   | 8623          | 35563       | 36548 |
+
+### Overall Subscription Rate Structure
+| y   |   Count |   Rate (%) |
+|:----|--------:|-----------:|
+| no  |   36548 |      88.73 |
+| yes |    4640 |      11.27 |
+</pre></div>
+</div>
+<img alt="../_images/5626075f093727518931db19b07d7325064afcd02c5a7459e57808fbfeec1a77.png" src="../_images/5626075f093727518931db19b07d7325064afcd02c5a7459e57808fbfeec1a77.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="c1"># 1. Load data</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../Data/bank-additional-full.csv&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+
+<span class="c1"># 2. Preprocess target variable (&#39;yes&#39; -&gt; 1, &#39;no&#39; -&gt; 0)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># 3. Select independent variables (features) for the model</span>
+<span class="c1"># duration is excluded as it is a post-call variable that can cause target leakage and act as a nuisance parameter</span>
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;campaign&#39;</span><span class="p">,</span> <span class="s1">&#39;previous&#39;</span><span class="p">,</span> <span class="s1">&#39;emp.var.rate&#39;</span><span class="p">,</span> <span class="s1">&#39;cons.price.idx&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;cons.conf.idx&#39;</span><span class="p">,</span> <span class="s1">&#39;euribor3m&#39;</span><span class="p">,</span> <span class="s1">&#39;nr.employed&#39;</span><span class="p">,</span> <span class="s1">&#39;job&#39;</span><span class="p">,</span> <span class="s1">&#39;marital&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;contact&#39;</span><span class="p">,</span> <span class="s1">&#39;poutcome&#39;</span><span class="p">]</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
+<span class="c1"># Convert categorical variables to dummy variables (drop first category to prevent multicollinearity)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">drop_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+
+<span class="c1"># Add constant term</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># 4. Fit logistic regression model (maximum likelihood estimation)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">Logit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">maxiter</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># 5. Extract estimation results summary table</span>
+<span class="n">summary_html</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span><span class="o">.</span><span class="n">tables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">as_html</span><span class="p">()</span>
+
+<span class="c1"># Wrap string with io.StringIO for read_html</span>
+<span class="n">summary_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_html</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">summary_html</span><span class="p">),</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># 6. Calculate and append odds ratios</span>
+<span class="n">summary_df</span><span class="p">[</span><span class="s1">&#39;Odds Ratio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+<span class="n">summary_df</span> <span class="o">=</span> <span class="n">summary_df</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># Display results</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">summary_df</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimization terminated successfully.
+         Current function value: 0.281825
+         Iterations 8
+|                               |      coef |   std err |       z |   P&gt;|z| |   [0.025 |   0.975] |   Odds Ratio |
+|:------------------------------|----------:|----------:|--------:|--------:|---------:|---------:|-------------:|
+| const                         | -109.501  |    14.54  |  -7.531 |   0     | -137.999 |  -81.002 |       0      |
+| age                           |    0.0008 |     0.002 |   0.389 |   0.697 |   -0.003 |    0.005 |       1.0008 |
+| campaign                      |   -0.0445 |     0.009 |  -4.787 |   0     |   -0.063 |   -0.026 |       0.9565 |
+| previous                      |    0.0461 |     0.053 |   0.869 |   0.385 |   -0.058 |    0.15  |       1.0472 |
+| emp.var.rate                  |   -0.7346 |     0.059 | -12.385 |   0     |   -0.851 |   -0.618 |       0.4797 |
+| cons.price.idx                |    1.1935 |     0.095 |  12.601 |   0     |    1.008 |    1.379 |       3.2985 |
+| cons.conf.idx                 |    0.0443 |     0.005 |   8.091 |   0     |    0.034 |    0.055 |       1.0453 |
+| euribor3m                     |    0.0156 |     0.075 |   0.207 |   0.836 |   -0.132 |    0.163 |       1.0157 |
+| nr.employed                   |   -0.0006 |     0.001 |  -0.445 |   0.656 |   -0.003 |    0.002 |       0.9994 |
+| job_blue-collar               |   -0.2339 |     0.068 |  -3.452 |   0.001 |   -0.367 |   -0.101 |       0.7915 |
+| job_entrepreneur              |   -0.1381 |     0.106 |  -1.302 |   0.193 |   -0.346 |    0.07  |       0.871  |
+| job_housemaid                 |   -0.0991 |     0.127 |  -0.781 |   0.435 |   -0.348 |    0.149 |       0.9056 |
+| job_management                |   -0.1018 |     0.074 |  -1.37  |   0.171 |   -0.247 |    0.044 |       0.9032 |
+| job_retired                   |    0.3209 |     0.093 |   3.453 |   0.001 |    0.139 |    0.503 |       1.3783 |
+| job_self-employed             |   -0.0823 |     0.1   |  -0.819 |   0.413 |   -0.279 |    0.115 |       0.921  |
+| job_services                  |   -0.1841 |     0.074 |  -2.486 |   0.013 |   -0.329 |   -0.039 |       0.8318 |
+| job_student                   |    0.2749 |     0.099 |   2.775 |   0.006 |    0.081 |    0.469 |       1.3165 |
+| job_technician                |   -0.0185 |     0.061 |  -0.302 |   0.763 |   -0.139 |    0.102 |       0.9816 |
+| job_unemployed                |   -0.0206 |     0.11  |  -0.188 |   0.851 |   -0.236 |    0.195 |       0.9796 |
+| job_unknown                   |   -0.2187 |     0.209 |  -1.046 |   0.296 |   -0.628 |    0.191 |       0.8036 |
+| marital_married               |    0.0318 |     0.059 |   0.536 |   0.592 |   -0.084 |    0.148 |       1.0323 |
+| marital_single                |    0.1104 |     0.067 |   1.637 |   0.102 |   -0.022 |    0.243 |       1.1167 |
+| marital_unknown               |    0.3191 |     0.358 |   0.892 |   0.372 |   -0.382 |    1.02  |       1.3759 |
+| education_basic.6y            |    0.092  |     0.103 |   0.897 |   0.37  |   -0.109 |    0.293 |       1.0964 |
+| education_basic.9y            |   -0.0276 |     0.081 |  -0.34  |   0.734 |   -0.187 |    0.132 |       0.9727 |
+| education_high.school         |    0.0377 |     0.079 |   0.477 |   0.633 |   -0.117 |    0.193 |       1.0384 |
+| education_illiterate          |    1.0141 |     0.635 |   1.597 |   0.11  |   -0.23  |    2.259 |       2.7569 |
+| education_professional.course |    0.0847 |     0.087 |   0.971 |   0.332 |   -0.086 |    0.256 |       1.0884 |
+| education_university.degree   |    0.1628 |     0.079 |   2.062 |   0.039 |    0.008 |    0.318 |       1.1768 |
+| education_unknown             |    0.154  |     0.104 |   1.484 |   0.138 |   -0.049 |    0.357 |       1.1665 |
+| contact_telephone             |   -0.9113 |     0.055 | -16.482 |   0     |   -1.02  |   -0.803 |       0.402  |
+| poutcome_nonexistent          |    0.5635 |     0.085 |   6.613 |   0     |    0.396 |    0.731 |       1.7568 |
+| poutcome_success              |    1.779  |     0.078 |  22.879 |   0     |    1.627 |    1.931 |       5.9239 |
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">roc_curve</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../Data/bank-additional-full.csv&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yes&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;campaign&#39;</span><span class="p">,</span> <span class="s1">&#39;previous&#39;</span><span class="p">,</span> <span class="s1">&#39;emp.var.rate&#39;</span><span class="p">,</span> <span class="s1">&#39;cons.price.idx&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;cons.conf.idx&#39;</span><span class="p">,</span> <span class="s1">&#39;euribor3m&#39;</span><span class="p">,</span> <span class="s1">&#39;nr.employed&#39;</span><span class="p">,</span> <span class="s1">&#39;job&#39;</span><span class="p">,</span> <span class="s1">&#39;marital&#39;</span><span class="p">,</span> 
+            <span class="s1">&#39;education&#39;</span><span class="p">,</span> <span class="s1">&#39;contact&#39;</span><span class="p">,</span> <span class="s1">&#39;poutcome&#39;</span><span class="p">]</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">drop_first</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;target&#39;</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># Fit model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">Logit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">disp</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Predict (threshold = 0.5)</span>
+<span class="n">y_pred_prob</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_pred_prob</span> <span class="o">&gt;=</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># Calculate evaluation metrics</span>
+<span class="n">conf_matrix</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">class_report</span> <span class="o">=</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">output_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred_prob</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;### Confusion Matrix&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;True: No (0)&#39;</span><span class="p">,</span> <span class="s1">&#39;True: Yes (1)&#39;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Pred: No (0)&#39;</span><span class="p">,</span> <span class="s1">&#39;Pred: Yes (1)&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Classification Report&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">class_report</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### ROC AUC Score: </span><span class="si">{</span><span class="n">roc_auc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visualization 1: Confusion matrix heatmap</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">conf_matrix</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+            <span class="n">xticklabels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;No (0)&#39;</span><span class="p">,</span> <span class="s1">&#39;Yes (1)&#39;</span><span class="p">],</span> <span class="n">yticklabels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;No (0)&#39;</span><span class="p">,</span> <span class="s1">&#39;Yes (1)&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Confusion Matrix&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Predicted Label&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Label&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Visualization 2: ROC curve</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">y_pred_prob</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;ROC curve (AUC = </span><span class="si">{</span><span class="n">roc_auc</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Receiver Operating Characteristic (ROC)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>### Confusion Matrix
+|               |   Pred: No (0) |   Pred: Yes (1) |
+|:--------------|---------------:|----------------:|
+| True: No (0)  |          36059 |             489 |
+| True: Yes (1) |           3669 |             971 |
+
+### Classification Report
+|              |   precision |   recall |   f1-score |   support |
+|:-------------|------------:|---------:|-----------:|----------:|
+| 0            |      0.9076 |   0.9866 |     0.9455 | 36548     |
+| 1            |      0.6651 |   0.2093 |     0.3184 |  4640     |
+| accuracy     |      0.899  |   0.899  |     0.899  |     0.899 |
+| macro avg    |      0.7864 |   0.5979 |     0.6319 | 41188     |
+| weighted avg |      0.8803 |   0.899  |     0.8748 | 41188     |
+
+### ROC AUC Score: 0.7828
+</pre></div>
+</div>
+<img alt="../_images/f6dbfbf543a5cf3bce6f71d52a61cfb37c968162bcf34030067b1329e8d92857.png" src="../_images/f6dbfbf543a5cf3bce6f71d52a61cfb37c968162bcf34030067b1329e8d92857.png" />
+<img alt="../_images/ddd49280a10616a547f8672448b63c1c31784dfcb19421cdddab322857c33f3a.png" src="../_images/ddd49280a10616a547f8672448b63c1c31784dfcb19421cdddab322857c33f3a.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="15_Ridge_and_Lasso_Regression.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 15. Ridge and Lasso Regression</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="17_Decision_Tree_Model.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 17. Decision Tree Model</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-upload"><span style="color: blue;"><strong>1. Data Upload</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-explanation"><strong>Gemini Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">1. Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-feature-composition">2. Variable (Feature) Composition</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-and-subscription-rate-structure"><span style="color: blue;"><strong>2. Summary Statistics and Subscription Rate Structure</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-analysis"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-variable-summary-statistics">1. Numerical Variable Summary Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#categorical-variable-summary-statistics">2. Categorical Variable Summary Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-subscription-rate-y-structure">3. Overall Subscription Rate (y) Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualization-subscription-rate-by-job">4. Visualization (Subscription Rate by Job)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logistic-regression"><span style="color: blue;"><strong>3. Logistic Regression</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-logistic-regression">1. What Is Logistic Regression?</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-use-logistic-regression-instead-of-ordinary-linear-regression">Why Use Logistic Regression Instead of Ordinary Linear Regression?</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-data-and-model-setup">2. Analysis Data and Model Setup</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#logistic-regression-estimation-results">3. Logistic Regression Estimation Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-of-estimation-results">4. Interpretation of Estimation Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#client-attributes-job-education">1. Client Attributes (Job &amp; Education)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#previous-marketing-campaign-performance-poutcome">2. Previous Marketing Campaign Performance (Poutcome)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#current-campaign-information-campaign-contact">3. Current Campaign Information (Campaign &amp; Contact)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#social-and-macroeconomic-indicators">4. Social and Macroeconomic Indicators</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prediction-performance-analysis"><span style="color: blue;"><strong>4. Prediction Performance Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classification-report">1. Classification Report</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-metric-interpretation">Performance Metric Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confusion-matrix">2. Confusion Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#roc-curve-and-auc-area-under-the-curve">3. ROC Curve and AUC (Area Under the Curve)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-and-improvement-directions">Conclusion and Improvement Directions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><span style="color: blue;"><strong>5. Confusion Matrix</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><strong>Gemini Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#four-components-of-the-confusion-matrix">Four Components of the Confusion Matrix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-metrics-derived-from-the-confusion-matrix">Evaluation Metrics Derived from the Confusion Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#roc-curve-and-auc"><span style="color: blue;"><strong>6. ROC Curve and AUC</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><strong>Gemini Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#roc-curve">ROC Curve</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auc">AUC</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

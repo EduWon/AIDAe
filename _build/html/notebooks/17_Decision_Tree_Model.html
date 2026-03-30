@@ -1,0 +1,1548 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 17. Decision Tree Model &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/17_Decision_Tree_Model';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 18. Tree-Based Models" href="18_Tree_Based_Models.html" />
+    <link rel="prev" title="Ch 16. Logistic Regression" href="16_Logistic_Regression.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/17_Decision_Tree_Model.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/17_Decision_Tree_Model.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 17. Decision Tree Model</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-explanation"><strong>Gemini Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-descriptions">Variable Descriptions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-characteristics">Dataset Characteristics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-statistics-describe">Descriptive Statistics (<code class="docutils literal notranslate"><span class="pre">describe</span></code>)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#survival-classification-using-a-tree-model"><span style="color: blue;"><strong>2. Survival Classification Using a Tree Model</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-analysis"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-the-decision-tree-model">Introduction to the Decision Tree Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#titanic-survival-prediction-modeling">Titanic Survival Prediction Modeling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-of-estimation-results-tree-diagram-explanation">1. Interpretation of Estimation Results (Tree Diagram Explanation)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#root-node-most-important-question">1.1 Root Node (Most Important Question)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#left-branch-male-group">1.2 Left Branch (Male Group)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#right-branch-female-group">1.3 Right Branch (Female Group)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-importance">2. Feature Importance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">3. Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classification-performance"><span style="color: blue;"><strong>3. Classification Performance</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confusion-matrix-analysis">1. Confusion Matrix Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-performance-metrics">2. Key Performance Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#roc-curve-and-auc-area-under-curve">3. ROC Curve and AUC (Area Under Curve)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-assessment">Overall Assessment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pruning"><span style="color: blue;"><strong>4. Pruning</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-pruning">What Is Pruning?</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-pruning">Types of Pruning</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#titanic-data-example-post-pruning-applied">Titanic Data Example (Post-Pruning Applied)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#overfitted-model-full-tree">1. Overfitted Model (Full Tree)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pruning-process-alpha-value-adjustment">2. Pruning Process (Alpha Value Adjustment)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimal-pruned-model-pruned-tree">3. Optimal Pruned Model (Pruned Tree)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#visualized-tree-pruned-decision-tree">4. Visualized Tree (Pruned Decision Tree)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-importance-analysis"><span style="color: blue;"><strong>5. Feature Importance Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#methodology">1. Methodology</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#titanic-data-analysis-results">2. Titanic Data Analysis Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">3. Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-17-decision-tree-model">
+<h1><strong>Ch 17. Decision Tree Model</strong><a class="headerlink" href="#ch-17-decision-tree-model" title="Link to this heading">#</a></h1>
+<section id="data-input">
+<h2><span style="color: blue;"><strong>1. Data Input</strong></span><a class="headerlink" href="#data-input" title="Link to this heading">#</a></h2>
+<p><img alt="Tree1" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/17-1.png" /></p>
+<p>Source: The dataset is from the Kaggle machine learning competition “<a class="reference external" href="https://www.kaggle.com/competitions/titanic/overview">Titanic - Machine Learning from Disaster</a>.”</p>
+</section>
+<section id="gemini-explanation">
+<h2><strong>Gemini Explanation</strong><a class="headerlink" href="#gemini-explanation" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">titanic_train.csv</span></code> file consists of information on 891 passengers with 12 columns.</p>
+<section id="variable-descriptions">
+<h3>Variable Descriptions<a class="headerlink" href="#variable-descriptions" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Data Type</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PassengerId</span></code></p></td>
+<td><p>Unique passenger ID</p></td>
+<td><p>Integer</p></td>
+<td><p>Simple identifier</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Survived</span></code></p></td>
+<td><p>Survival status</p></td>
+<td><p>Integer</p></td>
+<td><p>0 = Died, 1 = Survived (target variable)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Pclass</span></code></p></td>
+<td><p>Ticket class</p></td>
+<td><p>Integer</p></td>
+<td><p>1 = 1st, 2 = 2nd, 3 = 3rd</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Name</span></code></p></td>
+<td><p>Passenger name</p></td>
+<td><p>String</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sex</span></code></p></td>
+<td><p>Sex</p></td>
+<td><p>String</p></td>
+<td><p>male, female</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Age</span></code></p></td>
+<td><p>Age</p></td>
+<td><p>Float</p></td>
+<td><p>177 missing values</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SibSp</span></code></p></td>
+<td><p>Number of siblings/spouses aboard</p></td>
+<td><p>Integer</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Parch</span></code></p></td>
+<td><p>Number of parents/children aboard</p></td>
+<td><p>Integer</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Ticket</span></code></p></td>
+<td><p>Ticket number</p></td>
+<td><p>String</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Fare</span></code></p></td>
+<td><p>Passenger fare</p></td>
+<td><p>Float</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Cabin</span></code></p></td>
+<td><p>Cabin number</p></td>
+<td><p>String</p></td>
+<td><p>687 missing values (approximately 77% of data is missing)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Embarked</span></code></p></td>
+<td><p>Port of embarkation</p></td>
+<td><p>String</p></td>
+<td><p>C = Cherbourg, Q = Queenstown, S = Southampton (2 missing values)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="dataset-characteristics">
+<h3>Dataset Characteristics<a class="headerlink" href="#dataset-characteristics" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Missing Values</strong>:</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Cabin</span></code> variable has 687 missing values, meaning most of the data is empty.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Age</span></code> variable has 177 missing values, and handling these is important for the analysis.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Embarked</span></code> variable has 2 missing values.</p></li>
+</ul>
+</li>
+<li><p><strong>Data Types</strong>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Age</span></code> and <code class="docutils literal notranslate"><span class="pre">Fare</span></code> are float types.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Name</span></code>, <code class="docutils literal notranslate"><span class="pre">Sex</span></code>, <code class="docutils literal notranslate"><span class="pre">Ticket</span></code>, <code class="docutils literal notranslate"><span class="pre">Cabin</span></code>, <code class="docutils literal notranslate"><span class="pre">Embarked</span></code> are string (Object) data.</p></li>
+<li><p>The rest are integer types.</p></li>
+</ul>
+</li>
+<li><p><strong>Survival Rate</strong>:</p>
+<ul>
+<li><p>Approximately 38.4% of the 891 passengers survived (<code class="docutils literal notranslate"><span class="pre">Survived</span></code>=1).</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="descriptive-statistics-describe">
+<h3>Descriptive Statistics (<code class="docutils literal notranslate"><span class="pre">describe</span></code>)<a class="headerlink" href="#descriptive-statistics-describe" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">PassengerId</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Survived</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Pclass</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Age</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">SibSp</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Parch</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">Fare</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>count</strong></p></td>
+<td><p>891.000000</p></td>
+<td><p>891.000000</p></td>
+<td><p>891.000000</p></td>
+<td><p>714.000000</p></td>
+<td><p>891.000000</p></td>
+<td><p>891.000000</p></td>
+<td><p>891.000000</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>mean</strong></p></td>
+<td><p>446.000000</p></td>
+<td><p>0.383838</p></td>
+<td><p>2.308642</p></td>
+<td><p>29.699118</p></td>
+<td><p>0.523008</p></td>
+<td><p>0.381594</p></td>
+<td><p>32.204208</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>std</strong></p></td>
+<td><p>257.353842</p></td>
+<td><p>0.486592</p></td>
+<td><p>0.836071</p></td>
+<td><p>14.526497</p></td>
+<td><p>1.102743</p></td>
+<td><p>0.806057</p></td>
+<td><p>49.693429</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>min</strong></p></td>
+<td><p>1.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>1.000000</p></td>
+<td><p>0.420000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.000000</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>25%</strong></p></td>
+<td><p>223.500000</p></td>
+<td><p>0.000000</p></td>
+<td><p>2.000000</p></td>
+<td><p>20.125000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>7.910400</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>50%</strong></p></td>
+<td><p>446.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>3.000000</p></td>
+<td><p>28.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>14.454200</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>75%</strong></p></td>
+<td><p>668.500000</p></td>
+<td><p>1.000000</p></td>
+<td><p>3.000000</p></td>
+<td><p>38.000000</p></td>
+<td><p>1.000000</p></td>
+<td><p>0.000000</p></td>
+<td><p>31.000000</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>max</strong></p></td>
+<td><p>891.000000</p></td>
+<td><p>1.000000</p></td>
+<td><p>3.000000</p></td>
+<td><p>80.000000</p></td>
+<td><p>8.000000</p></td>
+<td><p>6.000000</p></td>
+<td><p>512.329200</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="survival-classification-using-a-tree-model">
+<h2><span style="color: blue;"><strong>2. Survival Classification Using a Tree Model</strong></span><a class="headerlink" href="#survival-classification-using-a-tree-model" title="Link to this heading">#</a></h2>
+</section>
+<section id="gemini-analysis">
+<h2><strong>Gemini Analysis</strong><a class="headerlink" href="#gemini-analysis" title="Link to this heading">#</a></h2>
+<section id="introduction-to-the-decision-tree-model">
+<h3>Introduction to the Decision Tree Model<a class="headerlink" href="#introduction-to-the-decision-tree-model" title="Link to this heading">#</a></h3>
+<p><img alt="Tree2" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/17-2.png" /></p>
+<p>A decision tree is a model that finds the answer (target) by asking a series of yes/no questions based on data features — much like playing the game of Twenty Questions. It is widely used because it is intuitive and easy to interpret.</p>
+<section id="key-concepts">
+<h4>Key Concepts<a class="headerlink" href="#key-concepts" title="Link to this heading">#</a></h4>
+<p>This model creates tree-shaped rules by finding the questions that best separate the data.</p>
+<ul class="simple">
+<li><p><strong>Node</strong>: A box containing a question or result.</p>
+<ul>
+<li><p><strong>Root Node</strong>: The first question at the very top. The most important variable is placed here.</p></li>
+<li><p><strong>Internal Node</strong>: Questions located in the middle.</p></li>
+<li><p><strong>Leaf Node</strong>: The terminal part where no more questions are asked and a final decision is made.</p></li>
+</ul>
+</li>
+<li><p><strong>Edge</strong>: A line connecting nodes. It branches according to the answer to a question (True/False).</p></li>
+<li><p><strong>Impurity</strong>: A measure of how mixed correct and incorrect answers are when a question is asked (typically using the Gini coefficient or Entropy). The model creates questions in the direction that reduces impurity (increases purity).</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="titanic-survival-prediction-modeling">
+<h3>Titanic Survival Prediction Modeling<a class="headerlink" href="#titanic-survival-prediction-modeling" title="Link to this heading">#</a></h3>
+<p>A decision tree is constructed to classify survivors (<code class="docutils literal notranslate"><span class="pre">Survived</span></code>) using the Titanic data. For interpretability, the tree depth (<code class="docutils literal notranslate"><span class="pre">max_depth</span></code>) is limited to 3.</p>
+<p><strong>Preprocessing:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Sex</span></code>: Converted from string to numeric (male=0, female=1).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Age</span></code>: Missing values filled with the median.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Embarked</span></code>: Excluded for analysis simplicity (could be converted to numeric, but here we focus on key variables).</p></li>
+<li><p>Variables used: <code class="docutils literal notranslate"><span class="pre">Pclass</span></code>, <code class="docutils literal notranslate"><span class="pre">Sex</span></code>, <code class="docutils literal notranslate"><span class="pre">Age</span></code>, <code class="docutils literal notranslate"><span class="pre">SibSp</span></code>, <code class="docutils literal notranslate"><span class="pre">Parch</span></code>, <code class="docutils literal notranslate"><span class="pre">Fare</span></code>.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="interpretation-of-estimation-results-tree-diagram-explanation">
+<h3>1. Interpretation of Estimation Results (Tree Diagram Explanation)<a class="headerlink" href="#interpretation-of-estimation-results-tree-diagram-explanation" title="Link to this heading">#</a></h3>
+<p><img alt="Tree3" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/17-3.png" /></p>
+<p>The decision tree diagram above visually shows how the model predicts whether a Titanic passenger survived. Each box (node) contains the following information:</p>
+<ul class="simple">
+<li><p><strong>Condition at the top</strong>: The criterion question for splitting the data (e.g., <code class="docutils literal notranslate"><span class="pre">Sex</span> <span class="pre">&lt;=</span> <span class="pre">0.5</span></code>).</p></li>
+<li><p><strong>gini</strong>: Impurity (0 means perfectly classified, close to 0.5 means mixed).</p></li>
+<li><p><strong>samples</strong>: Number of passengers reaching that node.</p></li>
+<li><p><strong>value</strong>: [number of deaths, number of survivors].</p></li>
+<li><p><strong>class</strong>: Predicted result (Dead or Survived).</p></li>
+</ul>
+<hr class="docutils" />
+<section id="root-node-most-important-question">
+<h4>1.1 Root Node (Most Important Question)<a class="headerlink" href="#root-node-most-important-question" title="Link to this heading">#</a></h4>
+<p>The question at the very top is <code class="docutils literal notranslate"><span class="pre">Sex</span> <span class="pre">&lt;=</span> <span class="pre">0.5</span></code>.</p>
+<ul class="simple">
+<li><p><strong>Interpretation</strong>: The <code class="docutils literal notranslate"><span class="pre">Sex</span></code> variable is encoded as 0 (male) and 1 (female).</p>
+<ul>
+<li><p>≤ 0.5 represents male, &gt; 0.5 represents female.</p></li>
+<li><p>That is, the variable with the greatest influence on survival is <strong>sex (<code class="docutils literal notranslate"><span class="pre">Sex</span></code>)</strong>.</p></li>
+</ul>
+</li>
+<li><p><strong>Result</strong>: Males go to the left branch (edge), females go to the right branch.</p></li>
+</ul>
+</section>
+<section id="left-branch-male-group">
+<h4>1.2 Left Branch (Male Group)<a class="headerlink" href="#left-branch-male-group" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>First split</strong>: Among males, the question asks whether <code class="docutils literal notranslate"><span class="pre">Age</span> <span class="pre">&lt;=</span> <span class="pre">6.5</span></code> (a young child aged 6.5 or below).</p>
+<ul>
+<li><p><strong>Yes (child)</strong>: Survival probability increases (right branch).</p></li>
+<li><p><strong>No (adult)</strong>: <code class="docutils literal notranslate"><span class="pre">Pclass</span></code> (ticket class) or <code class="docutils literal notranslate"><span class="pre">Fare</span></code> is examined, but overall the probability of death is high.</p></li>
+</ul>
+</li>
+<li><p><strong>Notable point</strong>: Even among males, very young children show higher survival probability, reflecting the “women and children first” principle.</p></li>
+</ul>
+</section>
+<section id="right-branch-female-group">
+<h4>1.3 Right Branch (Female Group)<a class="headerlink" href="#right-branch-female-group" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>First split</strong>: Among females, the question asks whether <code class="docutils literal notranslate"><span class="pre">Pclass</span> <span class="pre">&lt;=</span> <span class="pre">2.5</span></code> (1st or 2nd class vs. 3rd class).</p>
+<ul>
+<li><p><strong>Yes (1st, 2nd class)</strong>: Very high survival probability. (Most survived).</p></li>
+<li><p><strong>No (3rd class)</strong>: Survival rates vary depending on <code class="docutils literal notranslate"><span class="pre">Fare</span></code> or <code class="docutils literal notranslate"><span class="pre">Age</span></code>.</p></li>
+</ul>
+</li>
+<li><p><strong>Notable point</strong>: Females have high survival rates by default, but 3rd-class females have relatively lower survival rates.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="feature-importance">
+<h3>2. Feature Importance<a class="headerlink" href="#feature-importance" title="Link to this heading">#</a></h3>
+<p>The importance assigned by the tree model to each variable during learning can be confirmed numerically.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Feature Importance</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sex</span></code></p></td>
+<td><p><strong>Highest</strong></p></td>
+<td><p>The decisive factor separating survival outcomes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Pclass</span></code></p></td>
+<td><p>High</p></td>
+<td><p>Social status influenced survival</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Age</span></code></p></td>
+<td><p>Medium</p></td>
+<td><p>Particularly important for distinguishing young children among males</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Fare</span></code></p></td>
+<td><p>Medium</p></td>
+<td><p>Correlated with <code class="docutils literal notranslate"><span class="pre">Pclass</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h3>3. Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h3>
+<p>This model learned the rule <strong>“women first, children first, and the wealthy (higher-class cabins) first”</strong> on its own from the Titanic data. The greatest advantage of decision trees is that they can identify core patterns in data using only “Twenty Questions”-style questions without complex formulas. However, learning too deeply (overfitting) may cause the model to perform poorly on new data, which is why pruning is necessary.</p>
+</section>
+</section>
+<section id="classification-performance">
+<h2><span style="color: blue;"><strong>3. Classification Performance</strong></span><a class="headerlink" href="#classification-performance" title="Link to this heading">#</a></h2>
+</section>
+<section id="id1">
+<h2><strong>Gemini Analysis</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>The performance of the Titanic survival prediction model (max depth 3) was evaluated using test data (20% of the total data).</p>
+<section id="confusion-matrix-analysis">
+<h3>1. Confusion Matrix Analysis<a class="headerlink" href="#confusion-matrix-analysis" title="Link to this heading">#</a></h3>
+<p>The confusion matrix shows how the model classified actual vs. predicted values.</p>
+<p><img alt="Tree4" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/17-4.png" /></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p><strong>Predicted: Dead (0)</strong></p></th>
+<th class="head"><p><strong>Predicted: Survived (1)</strong></p></th>
+<th class="head"><p><strong>Total</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Actual: Dead (0)</strong></p></td>
+<td><p><strong>92 (True Negative)</strong></p></td>
+<td><p>13 (False Positive)</p></td>
+<td><p>105</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Actual: Survived (1)</strong></p></td>
+<td><p>23 (False Negative)</p></td>
+<td><p><strong>51 (True Positive)</strong></p></td>
+<td><p>74</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Total</strong></p></td>
+<td><p>115</p></td>
+<td><p>64</p></td>
+<td><p>179</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><strong>Correct predictions</strong>:</p>
+<ul>
+<li><p>Deaths correctly predicted as dead: 92</p></li>
+<li><p>Survivors correctly predicted as survived: 51</p></li>
+</ul>
+</li>
+<li><p><strong>Incorrect predictions</strong>:</p>
+<ul>
+<li><p>Deaths incorrectly predicted as survived (Type I error): 13</p></li>
+<li><p>Survivors incorrectly predicted as dead (Type II error): 23</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="key-performance-metrics">
+<h3>2. Key Performance Metrics<a class="headerlink" href="#key-performance-metrics" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Value</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Accuracy</strong></p></td>
+<td><p><strong>0.80</strong></p></td>
+<td><p>Proportion of correct predictions among all predictions. The model correctly predicted survival status approximately 80% of the time.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Precision</strong></p></td>
+<td><p><strong>0.80</strong> (survived class)</p></td>
+<td><p>Proportion of actual survivors among those the model predicted as ‘survived.’ (51 / 64)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Recall</strong></p></td>
+<td><p><strong>0.69</strong> (survived class)</p></td>
+<td><p>Proportion correctly identified as ‘survived’ among actual survivors. (51 / 74)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>F1 Score</strong></p></td>
+<td><p><strong>0.74</strong></p></td>
+<td><p>Harmonic mean of precision and recall. A comprehensive performance metric considering data imbalance.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><strong>Interpretation</strong>:</p>
+<ul>
+<li><p><strong>The death prediction ability (Recall 0.88) is superior to the survival prediction ability (Recall 0.69).</strong> That is, the model is better at identifying those who died. This may be because death data is more abundant (majority class) or death patterns are more distinct.</p></li>
+<li><p>Cases of missing survivors (False Negative, 23) outnumber cases of incorrectly predicting deaths as survivors (False Positive, 13).</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="roc-curve-and-auc-area-under-curve">
+<h3>3. ROC Curve and AUC (Area Under Curve)<a class="headerlink" href="#roc-curve-and-auc-area-under-curve" title="Link to this heading">#</a></h3>
+<p><img alt="Tree5" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/17-5.png" /></p>
+<ul class="simple">
+<li><p><strong>ROC Curve</strong>: The closer the orange line is to the upper-left corner, the better the model. Since it is above the dashed line (random guessing), the model is making meaningful predictions.</p></li>
+<li><p><strong>AUC Value</strong>: <strong>0.82</strong> (see graph).</p></li>
+<li><p>AUC ranges from 0.5 (random) to 1.0 (perfect).</p></li>
+<li><p>A value of 0.8 or above is generally considered <strong>excellent performance</strong>.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="overall-assessment">
+<h3>Overall Assessment<a class="headerlink" href="#overall-assessment" title="Link to this heading">#</a></h3>
+<p>This model achieves approximately <strong>80% accuracy</strong> and an <strong>AUC of 0.82</strong> using simple rules (depth 3), demonstrating solid predictive performance. However, the recall for actual survivors is approximately 69%, which is somewhat low. To better identify survivors, improvements such as increasing model complexity (deeper trees) or adding additional variables may be needed.</p>
+</section>
+</section>
+<section id="pruning">
+<h2><span style="color: blue;"><strong>4. Pruning</strong></span><a class="headerlink" href="#pruning" title="Link to this heading">#</a></h2>
+</section>
+<section id="id2">
+<h2><strong>Gemini Analysis</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<section id="what-is-pruning">
+<h3>What Is Pruning?<a class="headerlink" href="#what-is-pruning" title="Link to this heading">#</a></h3>
+<p><strong>Pruning</strong> is a technique that removes unnecessary branches to prevent a decision tree from overfitting. When a tree becomes too complex, it fits excessively to the training data (overfitting), resulting in poor prediction performance on new data. Pruning addresses this by reducing the tree size or cutting branches to improve generalization performance.</p>
+<section id="types-of-pruning">
+<h4>Types of Pruning<a class="headerlink" href="#types-of-pruning" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>Pre-pruning</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p>A method that stops further splitting during tree construction if certain conditions (constraints) are not met.</p></li>
+<li><p>Mainly performed by setting hyperparameters such as <code class="docutils literal notranslate"><span class="pre">max_depth</span></code> (maximum depth), <code class="docutils literal notranslate"><span class="pre">min_samples_split</span></code> (minimum samples required for a split), and <code class="docutils literal notranslate"><span class="pre">min_samples_leaf</span></code> (minimum samples required for a leaf node).</p></li>
+<li><p>Advantages: Fast training time and easy implementation.</p></li>
+<li><p>Disadvantages: May miss important patterns (risk of underfitting).</p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p><strong>Post-pruning</strong></p></li>
+</ol>
+<ul class="simple">
+<li><p>A method that first trains the tree to maximum depth (overfitting state), then removes branches that do not contribute to performance.</p></li>
+<li><p><strong>Cost Complexity Pruning</strong> is the representative approach, using the <code class="docutils literal notranslate"><span class="pre">ccp_alpha</span></code> parameter to balance tree complexity and impurity reduction.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="titanic-data-example-post-pruning-applied">
+<h3>Titanic Data Example (Post-Pruning Applied)<a class="headerlink" href="#titanic-data-example-post-pruning-applied" title="Link to this heading">#</a></h3>
+<p><img alt="Tree6" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/17-6.png" /></p>
+<p>The graph above shows the results of applying <strong>Cost Complexity Pruning</strong> to the Titanic data.</p>
+<hr class="docutils" />
+<section id="overfitted-model-full-tree">
+<h4>1. Overfitted Model (Full Tree)<a class="headerlink" href="#overfitted-model-full-tree" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Depth</strong>: 23 (very complex)</p></li>
+<li><p><strong>Training Accuracy (Train Acc)</strong>: <strong>97.89%</strong> (nearly perfectly memorized)</p></li>
+<li><p><strong>Test Accuracy (Test Acc)</strong>: <strong>75.98%</strong> (weak on new data)</p></li>
+<li><p><strong>Interpretation</strong>: Because the tree is too deep and complex, it has learned the noise in the training data, causing actual prediction performance to suffer.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="pruning-process-alpha-value-adjustment">
+<h4>2. Pruning Process (Alpha Value Adjustment)<a class="headerlink" href="#pruning-process-alpha-value-adjustment" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Accuracy changes were observed while gradually increasing the <code class="docutils literal notranslate"><span class="pre">ccp_alpha</span></code> value from 0 (increasing pruning intensity).</p></li>
+</ul>
+<p><img alt="Tree7" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/17-7.png" /></p>
+<ul class="simple">
+<li><p><strong>Graph interpretation (Accuracy vs Alpha)</strong>:</p>
+<ul>
+<li><p>When <code class="docutils literal notranslate"><span class="pre">ccp_alpha</span></code> is 0 (left end), training accuracy (blue line) is highest but test accuracy (orange line) is low.</p></li>
+<li><p>As <code class="docutils literal notranslate"><span class="pre">ccp_alpha</span></code> increases (moving right), training accuracy decreases but a region where <strong>test accuracy rises</strong> appears.</p></li>
+<li><p>Beyond a certain point, too much is pruned (underfitting), and both accuracies drop sharply.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="optimal-pruned-model-pruned-tree">
+<h4>3. Optimal Pruned Model (Pruned Tree)<a class="headerlink" href="#optimal-pruned-model-pruned-tree" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Optimal Alpha</strong>: Approximately 0.002</p></li>
+<li><p><strong>Depth</strong>: 9 (substantially reduced from 23 to 9)</p></li>
+<li><p><strong>Test Accuracy (Test Acc)</strong>: <strong>81.01%</strong> (approximately 5 percentage points higher than 75.98%)</p></li>
+<li><p><strong>Result</strong>: Despite simplifying the tree through pruning, prediction performance actually improved. This is because unnecessary detailed rules were removed, leaving only the essential patterns in the data.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="visualized-tree-pruned-decision-tree">
+<h4>4. Visualized Tree (Pruned Decision Tree)<a class="headerlink" href="#visualized-tree-pruned-decision-tree" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>The second figure above shows the tree pruned with the optimal <code class="docutils literal notranslate"><span class="pre">ccp_alpha</span></code>.</p></li>
+<li><p>While more complex than the previous depth-3 model, it is far more concise than the overfitted model and presents an interpretable level of rules.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="feature-importance-analysis">
+<h2><span style="color: blue;"><strong>5. Feature Importance Analysis</strong></span><a class="headerlink" href="#feature-importance-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="id3">
+<h2><strong>Gemini Analysis</strong><a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<section id="methodology">
+<h3>1. Methodology<a class="headerlink" href="#methodology" title="Link to this heading">#</a></h3>
+<p>A decision tree model evaluates feature importance based on <strong>Mean Decrease Impurity</strong> during the learning process.</p>
+<ul class="simple">
+<li><p><strong>Principle</strong>: Each time data is split at a node based on a specific feature, impurity decreases. The impurity referred to here is typically the <strong>Gini index</strong> or <strong>Entropy</strong>. The greater the decrease in impurity, the better that variable separates the data.</p></li>
+<li><p><strong>Calculation process</strong>:</p>
+<ol class="arabic simple">
+<li><p>Sum the impurity reduction at all nodes where a specific variable (e.g., <code class="docutils literal notranslate"><span class="pre">Sex</span></code>) is used.</p></li>
+<li><p>Each node’s reduction is weighted proportionally to the number of samples in that node. (Correctly classifying more samples yields higher importance).</p></li>
+<li><p>Values calculated for all variables are normalized so that the total sums to 1.</p></li>
+</ol>
+</li>
+</ul>
+<p><strong>Advantages and caveats</strong>:</p>
+<ul class="simple">
+<li><p>Intuitive and clearly shows which variable contributed most to explaining the target (survival status).</p></li>
+<li><p>However, continuous variables (e.g., <code class="docutils literal notranslate"><span class="pre">Age</span></code>, <code class="docutils literal notranslate"><span class="pre">Fare</span></code>) can have many split points, potentially leading to overestimation (high cardinality bias).</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="titanic-data-analysis-results">
+<h3>2. Titanic Data Analysis Results<a class="headerlink" href="#titanic-data-analysis-results" title="Link to this heading">#</a></h3>
+<p>The feature importances extracted from the Titanic survival prediction model (max depth 5) are as follows.</p>
+<p><img alt="Tree8" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/17-8.png" /></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feature</p></th>
+<th class="head"><p>Importance</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Sex</span></code></p></td>
+<td><p><strong>0.557764</strong></p></td>
+<td><p>The most dominant variable, accounting for over 50% of total importance.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Pclass</span></code></p></td>
+<td><p><strong>0.189379</strong></p></td>
+<td><p>Ticket class also has a very significant influence on survival.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Fare</span></code></p></td>
+<td><p>0.101589</p></td>
+<td><p>Fare is highly correlated with <code class="docutils literal notranslate"><span class="pre">Pclass</span></code> and contributes to some extent.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Age</span></code></p></td>
+<td><p>0.097832</p></td>
+<td><p>Age is used to distinguish specific age groups (children, elderly, etc.).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">SibSp</span></code></p></td>
+<td><p>0.039846</p></td>
+<td><p>Number of siblings/spouses has relatively small influence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Parch</span></code></p></td>
+<td><p>0.013591</p></td>
+<td><p>Number of parents/children appeared as the least influential variable.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="interpretation">
+<h3>3. Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>The decisive role of sex (<code class="docutils literal notranslate"><span class="pre">Sex</span></code>)</strong>: With an importance of approximately 0.56, it has greater influence than all other variables combined. This is consistent with <code class="docutils literal notranslate"><span class="pre">Sex</span></code> being the root node (top split) in the tree diagram. The structural principle of <strong>“women and children first”</strong> is strongly reflected in the data.</p></li>
+<li><p><strong>Socioeconomic status (<code class="docutils literal notranslate"><span class="pre">Pclass</span></code>, <code class="docutils literal notranslate"><span class="pre">Fare</span></code>)</strong>: Combined, <code class="docutils literal notranslate"><span class="pre">Pclass</span></code> and <code class="docutils literal notranslate"><span class="pre">Fare</span></code> have an importance of approximately 0.29. This suggests that 1st-class passengers had higher survival probability than 3rd-class passengers.</p></li>
+<li><p><strong>Family relationship variables (<code class="docutils literal notranslate"><span class="pre">SibSp</span></code>, <code class="docutils literal notranslate"><span class="pre">Parch</span></code>)</strong>: Family-related variables appear to play a supplementary role rather than serving as direct criteria for survival.</p></li>
+</ol>
+<p>In conclusion, <strong>sex</strong> and <strong>ticket class</strong> are the most critical explanatory variables for Titanic survival prediction.</p>
+</section>
+</section>
+<section id="appendix-python-code">
+<h2><strong>Appendix: Python Code</strong><a class="headerlink" href="#appendix-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Data loading</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># Read CSV file into a DataFrame</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;http://bit.ly/kaggletrain&#39;</span><span class="p">)</span>
+
+<span class="c1"># Check dataset structure and info</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset Shape:&quot;</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Dataset Info:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+
+<span class="c1"># Check descriptive statistics</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Descriptive Statistics:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+
+<span class="c1"># Check missing values</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Missing Value Counts:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">isnull</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dataset Shape: (891, 12)
+
+Dataset Info:
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 891 entries, 0 to 890
+Data columns (total 12 columns):
+ #   Column       Non-Null Count  Dtype  
+---  ------       --------------  -----  
+ 0   PassengerId  891 non-null    int64  
+ 1   Survived     891 non-null    int64  
+ 2   Pclass       891 non-null    int64  
+ 3   Name         891 non-null    object 
+ 4   Sex          891 non-null    object 
+ 5   Age          714 non-null    float64
+ 6   SibSp        891 non-null    int64  
+ 7   Parch        891 non-null    int64  
+ 8   Ticket       891 non-null    object 
+ 9   Fare         891 non-null    float64
+ 10  Cabin        204 non-null    object 
+ 11  Embarked     889 non-null    object 
+dtypes: float64(2), int64(5), object(5)
+memory usage: 83.7+ KB
+None
+
+Descriptive Statistics:
+       PassengerId    Survived      Pclass         Age       SibSp  \
+count   891.000000  891.000000  891.000000  714.000000  891.000000   
+mean    446.000000    0.383838    2.308642   29.699118    0.523008   
+std     257.353842    0.486592    0.836071   14.526497    1.102743   
+min       1.000000    0.000000    1.000000    0.420000    0.000000   
+25%     223.500000    0.000000    2.000000   20.125000    0.000000   
+50%     446.000000    0.000000    3.000000   28.000000    0.000000   
+75%     668.500000    1.000000    3.000000   38.000000    1.000000   
+max     891.000000    1.000000    3.000000   80.000000    8.000000   
+
+            Parch        Fare  
+count  891.000000  891.000000  
+mean     0.381594   32.204208  
+std      0.806057   49.693429  
+min      0.000000    0.000000  
+25%      0.000000    7.910400  
+50%      0.000000   14.454200  
+75%      0.000000   31.000000  
+max      6.000000  512.329200  
+
+Missing Value Counts:
+PassengerId      0
+Survived         0
+Pclass           0
+Name             0
+Sex              0
+Age            177
+SibSp            0
+Parch            0
+Ticket           0
+Fare             0
+Cabin          687
+Embarked         2
+dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="c1"># Preprocessing</span>
+<span class="c1"># 1. Convert Sex to numeric (male: 0, female: 1)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Sex&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Sex&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">({</span><span class="s1">&#39;male&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;female&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">})</span>
+
+<span class="c1"># 2. Fill Age missing values with median</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Age&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">())</span>
+
+<span class="c1"># 3. Select features for analysis</span>
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Pclass&#39;</span><span class="p">,</span> <span class="s1">&#39;Sex&#39;</span><span class="p">,</span> <span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;SibSp&#39;</span><span class="p">,</span> <span class="s1">&#39;Parch&#39;</span><span class="p">,</span> <span class="s1">&#39;Fare&#39;</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">features</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Survived&#39;</span><span class="p">]</span>
+
+<span class="c1"># Train model (depth limited to 3 for interpretability)</span>
+<span class="n">tree_model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">tree_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Visualize tree</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plot_tree</span><span class="p">(</span><span class="n">tree_model</span><span class="p">,</span> 
+          <span class="n">feature_names</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> 
+          <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dead&#39;</span><span class="p">,</span> <span class="s1">&#39;Survived&#39;</span><span class="p">],</span> 
+          <span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+          <span class="n">rounded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+          <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Titanic Survival Decision Tree (Depth=3)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/95b690fea1defb184a75c1895ea7b9d66a7878b1556d58946e148397886052ec.png" src="../_images/95b690fea1defb184a75c1895ea7b9d66a7878b1556d58946e148397886052ec.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">confusion_matrix</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">,</span> <span class="n">accuracy_score</span><span class="p">,</span> <span class="n">roc_curve</span><span class="p">,</span> <span class="n">auc</span>
+
+<span class="c1"># Split data (train:test = 8:2)</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1"># Train model (max_depth=3)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">max_depth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="c1"># Predict</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">y_prob</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_test</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Calculate performance metrics</span>
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">report</span> <span class="o">=</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">output_dict</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+
+<span class="c1"># Display results</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Confusion Matrix:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cm</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Accuracy:&quot;</span><span class="p">,</span> <span class="n">acc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Classification Report:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">))</span>
+
+<span class="c1"># Confusion Matrix Heatmap</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">cm</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;Blues&#39;</span><span class="p">,</span> <span class="n">cbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">annot_kws</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Confusion Matrix&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Predicted Label&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Actual Label&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Dead (0)&#39;</span><span class="p">,</span> <span class="s1">&#39;Survived (1)&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Dead (0)&#39;</span><span class="p">,</span> <span class="s1">&#39;Survived (1)&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># ROC Curve</span>
+<span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">thresholds</span> <span class="o">=</span> <span class="n">roc_curve</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_prob</span><span class="p">)</span>
+<span class="n">roc_auc</span> <span class="o">=</span> <span class="n">auc</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fpr</span><span class="p">,</span> <span class="n">tpr</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkorange&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;ROC curve (AUC = </span><span class="si">{</span><span class="n">roc_auc</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;navy&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;False Positive Rate (1 - Specificity)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;True Positive Rate (Sensitivity)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;ROC Curve&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Confusion Matrix:
+ [[92 13]
+ [23 51]]
+
+Accuracy: 0.7988826815642458
+
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.80      0.88      0.84       105
+           1       0.80      0.69      0.74        74
+
+    accuracy                           0.80       179
+   macro avg       0.80      0.78      0.79       179
+weighted avg       0.80      0.80      0.80       179
+</pre></div>
+</div>
+<img alt="../_images/a1b023076a44d4a642e01dfb16a0c538092bfbd272a54fddd6bf543ba7dd241f.png" src="../_images/a1b023076a44d4a642e01dfb16a0c538092bfbd272a54fddd6bf543ba7dd241f.png" />
+<img alt="../_images/9a63ae4bbc32e9f88a23eb23878944505daa237d0e1b37cc9942b184ff3d3f78.png" src="../_images/9a63ae4bbc32e9f88a23eb23878944505daa237d0e1b37cc9942b184ff3d3f78.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span><span class="p">,</span> <span class="n">plot_tree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">accuracy_score</span>
+
+<span class="c1"># 2. Overfitted model without pruning (Full Tree)</span>
+<span class="n">clf_full</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">clf_full</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">train_acc_full</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">clf_full</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">))</span>
+<span class="n">test_acc_full</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">clf_full</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">))</span>
+<span class="n">depth_full</span> <span class="o">=</span> <span class="n">clf_full</span><span class="o">.</span><span class="n">get_depth</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Full Tree - Depth: </span><span class="si">{</span><span class="n">depth_full</span><span class="si">}</span><span class="s2">, Train Acc: </span><span class="si">{</span><span class="n">train_acc_full</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, Test Acc: </span><span class="si">{</span><span class="n">test_acc_full</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3. Post-pruning (using ccp_alpha)</span>
+<span class="c1"># Calculate effective alpha values path</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">clf_full</span><span class="o">.</span><span class="n">cost_complexity_pruning_path</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">ccp_alphas</span><span class="p">,</span> <span class="n">impurities</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">ccp_alphas</span><span class="p">,</span> <span class="n">path</span><span class="o">.</span><span class="n">impurities</span>
+
+<span class="c1"># Exclude the last alpha (leaves only the root node, usually too simple)</span>
+<span class="n">ccp_alphas</span> <span class="o">=</span> <span class="n">ccp_alphas</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">clfs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">train_scores</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">test_scores</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Train model for each alpha</span>
+<span class="k">for</span> <span class="n">ccp_alpha</span> <span class="ow">in</span> <span class="n">ccp_alphas</span><span class="p">:</span>
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">ccp_alpha</span><span class="o">=</span><span class="n">ccp_alpha</span><span class="p">)</span>
+    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+    <span class="n">clfs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clf</span><span class="p">)</span>
+    <span class="n">train_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_train</span><span class="p">)))</span>
+    <span class="n">test_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">clf</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)))</span>
+
+<span class="c1"># 4. Visualize accuracy changes by alpha</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ccp_alphas</span><span class="p">,</span> <span class="n">train_scores</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Train Accuracy&#39;</span><span class="p">,</span> <span class="n">drawstyle</span><span class="o">=</span><span class="s2">&quot;steps-post&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ccp_alphas</span><span class="p">,</span> <span class="n">test_scores</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Test Accuracy&#39;</span><span class="p">,</span> <span class="n">drawstyle</span><span class="o">=</span><span class="s2">&quot;steps-post&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;effective alpha (ccp_alpha)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Accuracy&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Accuracy vs Alpha for training and testing sets&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># 5. Select optimal alpha (simplest model among those with highest test accuracy)</span>
+<span class="c1"># Simply select the largest alpha with max test score (the most heavily pruned)</span>
+<span class="n">best_idx</span> <span class="o">=</span> <span class="n">test_scores</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">test_scores</span><span class="p">))</span>
+<span class="n">best_alpha</span> <span class="o">=</span> <span class="n">ccp_alphas</span><span class="p">[</span><span class="n">best_idx</span><span class="p">]</span>
+<span class="n">best_clf</span> <span class="o">=</span> <span class="n">clfs</span><span class="p">[</span><span class="n">best_idx</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Best Pruned Tree - Alpha: </span><span class="si">{</span><span class="n">best_alpha</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">, Depth: </span><span class="si">{</span><span class="n">best_clf</span><span class="o">.</span><span class="n">get_depth</span><span class="p">()</span><span class="si">}</span><span class="s2">, Test Acc: </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">test_scores</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 6. Visualize optimal tree</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+<span class="n">plot_tree</span><span class="p">(</span><span class="n">best_clf</span><span class="p">,</span> 
+          <span class="n">feature_names</span><span class="o">=</span><span class="n">features</span><span class="p">,</span> 
+          <span class="n">class_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Dead&#39;</span><span class="p">,</span> <span class="s1">&#39;Survived&#39;</span><span class="p">],</span> 
+          <span class="n">filled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+          <span class="n">rounded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+          <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Pruned Decision Tree (ccp_alpha=</span><span class="si">{</span><span class="n">best_alpha</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Full Tree - Depth: 23, Train Acc: 0.9789, Test Acc: 0.7598
+</pre></div>
+</div>
+<img alt="../_images/e1e012113f414aff04ec4eb850766915ca7481dfb309757cb5c25621f7b7eb86.png" src="../_images/e1e012113f414aff04ec4eb850766915ca7481dfb309757cb5c25621f7b7eb86.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best Pruned Tree - Alpha: 0.00203, Depth: 9, Test Acc: 0.8101
+</pre></div>
+</div>
+<img alt="../_images/f79eb5bce9552e3adf80d8f2ab7b5f76ccaa56afb9c696b24e9716afefc18bb1.png" src="../_images/f79eb5bce9552e3adf80d8f2ab7b5f76ccaa56afb9c696b24e9716afefc18bb1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.tree</span><span class="w"> </span><span class="kn">import</span> <span class="n">DecisionTreeClassifier</span>
+
+<span class="c1"># Train model</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">DecisionTreeClassifier</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+<span class="c1"># Extract feature importances</span>
+<span class="n">importances</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span>
+<span class="n">feature_imp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Feature&#39;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span> <span class="s1">&#39;Importance&#39;</span><span class="p">:</span> <span class="n">importances</span><span class="p">})</span>
+<span class="n">feature_imp_df</span> <span class="o">=</span> <span class="n">feature_imp_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Importance&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Visualization</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Importance&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Feature&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Feature&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">feature_imp_df</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Feature Importance (Decision Tree)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Importance (Mean Decrease Impurity)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Feature&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/734a007544280b55d233707ff39abfba45ff5de15fe805d3c0890f61a7bd707a.png" src="../_images/734a007544280b55d233707ff39abfba45ff5de15fe805d3c0890f61a7bd707a.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="16_Logistic_Regression.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 16. Logistic Regression</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="18_Tree_Based_Models.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 18. Tree-Based Models</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-explanation"><strong>Gemini Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-descriptions">Variable Descriptions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-characteristics">Dataset Characteristics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-statistics-describe">Descriptive Statistics (<code class="docutils literal notranslate"><span class="pre">describe</span></code>)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#survival-classification-using-a-tree-model"><span style="color: blue;"><strong>2. Survival Classification Using a Tree Model</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-analysis"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction-to-the-decision-tree-model">Introduction to the Decision Tree Model</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-concepts">Key Concepts</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#titanic-survival-prediction-modeling">Titanic Survival Prediction Modeling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-of-estimation-results-tree-diagram-explanation">1. Interpretation of Estimation Results (Tree Diagram Explanation)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#root-node-most-important-question">1.1 Root Node (Most Important Question)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#left-branch-male-group">1.2 Left Branch (Male Group)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#right-branch-female-group">1.3 Right Branch (Female Group)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-importance">2. Feature Importance</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">3. Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classification-performance"><span style="color: blue;"><strong>3. Classification Performance</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confusion-matrix-analysis">1. Confusion Matrix Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-performance-metrics">2. Key Performance Metrics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#roc-curve-and-auc-area-under-curve">3. ROC Curve and AUC (Area Under Curve)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-assessment">Overall Assessment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pruning"><span style="color: blue;"><strong>4. Pruning</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-pruning">What Is Pruning?</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#types-of-pruning">Types of Pruning</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#titanic-data-example-post-pruning-applied">Titanic Data Example (Post-Pruning Applied)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#overfitted-model-full-tree">1. Overfitted Model (Full Tree)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pruning-process-alpha-value-adjustment">2. Pruning Process (Alpha Value Adjustment)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimal-pruned-model-pruned-tree">3. Optimal Pruned Model (Pruned Tree)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#visualized-tree-pruned-decision-tree">4. Visualized Tree (Pruned Decision Tree)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#feature-importance-analysis"><span style="color: blue;"><strong>5. Feature Importance Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>Gemini Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#methodology">1. Methodology</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#titanic-data-analysis-results">2. Titanic Data Analysis Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">3. Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

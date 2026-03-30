@@ -1,0 +1,30 @@
+format: jb-book
+root: notebooks/00_Preface
+
+chapters:
+  - file: notebooks/01_Exam_Score_Analysis
+  - file: notebooks/02_Presidential_Approval_Rating_Analysis
+  - file: notebooks/03_KBO_Regular_Season_Team_Performance
+  - file: notebooks/04_PPP_Graph_Analysis
+  - file: notebooks/05_World_Bank_Data_Extraction
+  - file: notebooks/06_Stock_Price_Prediction_System
+  - file: notebooks/07_News_Comments_Analysis
+  - file: notebooks/08_Seoul_Apartment_Listing_Analysis
+  - file: notebooks/09_Survey_Analysis
+  - file: notebooks/10_Exploratory_Factor_Analysis
+  - file: notebooks/11_Boston_Housing_Price_Analysis
+  - file: notebooks/12_Comprehensive_Property_Tax_and_Rent
+  - file: notebooks/13_Hypermarket_Decline_Empirical_Analysis
+  - file: notebooks/14_Newborn_Special_Loan_and_Birth_Rate
+  - file: notebooks/15_Ridge_and_Lasso_Regression
+  - file: notebooks/16_Logistic_Regression
+  - file: notebooks/17_Decision_Tree_Model
+  - file: notebooks/18_Tree_Based_Models
+  - file: notebooks/19_Learning_Deep_Learning
+  - file: notebooks/20_Panel_Data_Analysis
+  - file: notebooks/21_Bone_Density_Test_Interpretation
+  - file: notebooks/22_Kinematics
+  - file: notebooks/23_Soccer_Match_Data_Analysis
+  - file: notebooks/24_Bombing_Destructive_Power_Analysis
+  - file: notebooks/25_Global_Cosmetics_Trade_Trends
+  - file: notebooks/26_Texas_Special_Education

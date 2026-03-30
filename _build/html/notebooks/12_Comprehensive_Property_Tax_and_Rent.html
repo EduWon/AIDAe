@@ -1,0 +1,821 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 12. Comprehensive Property Tax and Rent &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/12_Comprehensive_Property_Tax_and_Rent';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 13. Hypermarket Decline: An Empirical Analysis" href="13_Hypermarket_Decline_Empirical_Analysis.html" />
+    <link rel="prev" title="Ch 11. Boston Housing Price Analysis" href="11_Boston_Housing_Price_Analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/12_Comprehensive_Property_Tax_and_Rent.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/12_Comprehensive_Property_Tax_and_Rent.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 12. Comprehensive Property Tax and Rent</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#did-the-comprehensive-property-tax-drive-up-rents"><span style="color: blue;"><strong>Did the Comprehensive Property Tax Drive Up Rents?</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-assessment"><strong>Claude’s Assessment</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-assessment"><strong>ChatGPT’s Assessment</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-study-actually-did-structure">1. What the Study Actually Did: Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-biggest-problem-rents-did-not-rise-because-taxes-increased">2. The Biggest Problem: “Rents Did Not Rise Because Taxes Increased”</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#core-identification-problem-endogeneity">❗ Core Identification Problem: <strong>Endogeneity</strong></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-including-control-variables-does-not-resolve-this">3. Why “Including Control Variables” Does Not Resolve This</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-state-variables-of-the-real-estate-market-are-imperfectly-observed">Key State Variables of the Real Estate Market Are Imperfectly Observed</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-collection-amounts-itself-is-highly-vulnerable">4. Using “Collection Amounts” Itself Is Highly Vulnerable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-time-series-correlation-is-nearly-meaningless">5. Simple Time-Series Correlation Is Nearly Meaningless</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#roh-moo-hyun-administration">Roh Moo-hyun Administration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#moon-jae-in-administration">Moon Jae-in Administration</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-a-genuine-tax-pass-through-study-would-require">6. What a Genuine Tax Pass-Through Study Would Require</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-difference-in-differences-did-framework">✔ (1) A Difference-in-Differences (DID) Framework</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-centered-on-tax-rate-changes">✔ (2) Analysis Centered on Tax Rate Changes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-modeling-of-home-price-and-jeonse-dynamics">✔ (3) Explicit Modeling of Home Price and <em>Jeonse</em> Dynamics</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-credibility-of-this-study">7. Conclusion: Credibility of This Study</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sentence-summary">One-Sentence Summary</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-12-comprehensive-property-tax-and-rent">
+<h1><strong>Ch 12. Comprehensive Property Tax and Rent</strong><a class="headerlink" href="#ch-12-comprehensive-property-tax-and-rent" title="Link to this heading">#</a></h1>
+<section id="did-the-comprehensive-property-tax-drive-up-rents">
+<h2><span style="color: blue;"><strong>Did the Comprehensive Property Tax Drive Up Rents?</strong></span><a class="headerlink" href="#did-the-comprehensive-property-tax-drive-up-rents" title="Link to this heading">#</a></h2>
+<p><img alt="Rent" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/12-1.png" /></p>
+<p><span style="color: blue;">An empirical analysis has found that increasing property holding taxes, including the Comprehensive Real Estate Tax (종부세, <em>Jongbuse</em>), leads to sharp rent increases. The finding suggests that landlords pass the holding tax burden on to tenants. According to the analysis, during the Roh Moo-hyun administration (2003–2008), when the Comprehensive Property Tax was introduced, monthly rents rose by over 20%. During the Moon Jae-in administration (2017–2022), when the tax was expanded and strengthened, rents also surged by more than 30%.</span></p>
+<p><span style="color: blue;">The Comprehensive Property Tax was enacted on January 5, 2005, during the Roh Moo-hyun administration, and the tax burden was eased following the ‘9·1 Tax Reform Plan’ on September 1, 2008, after the Lee Myung-bak administration took office. However, after the Moon Jae-in administration came to power, the tax rate was raised again through measures such as the ‘Housing Market Stabilization Plan’ on September 13, 2018, and the ‘Housing Market Stabilization Measures’ on December 16, 2019.</span></p>
+<p><span style="color: blue;">On the 28th, according to academic circles, the research lab of Professor Lee Chang-moo at Hanyang University publicly released a study titled ‘Real Estate Market Conditions and Policy Diagnosis in the Early Lee Jae-myung Administration’ to the National Assembly on the 27th. To examine the pass-through effect of the Comprehensive Property Tax on rents, the study analyzed tax collection data from Seoul, Gyeonggi, and Incheon from 2005 to 2022, along with rent index and rent time-series data from 2006 to 2023.</span></p>
+<p><span style="color: blue;">To isolate the relationship between Comprehensive Property Tax collections and rents, housing supply and demand as well as macroeconomic factors were treated as control variables. The rent level was measured separately using two indicators: the R114 rent index and a self-calculated actual transaction price index based on transaction prices registered with the Ministry of Land, Infrastructure and Transport (MOLIT). Both the R114 rent index and the actual transaction price index use January 2011 rent as the base value of 100, measuring relative levels. However, the analysis is limited in that the Comprehensive Property Tax collection statistics were only available through the end of 2022, so rent increases thereafter could not be analyzed.</span></p>
+<p><span style="color: blue;">According to Professor Lee, the Comprehensive Property Tax collected in Seoul was 28.9 billion won in 2005, the year of introduction, but grew to 382.4 billion won in 2006 and nearly reached 1 trillion won at 903.7 billion won in 2007. In 2008, 610.7 billion won was collected. The decrease in 2008 collections reflects the impact of the global financial crisis and the phased implementation of the Lee Myung-bak administration’s tax reduction policy (the 9·1 Tax Reform Plan). Total collections from 2005 to 2008 amounted to 1.9259 trillion won.</span></p>
+<p><span style="color: blue;">Seoul’s R114 rent index stood at 79.80 in January 2005. However, it rose to 80.70 by December 2006, then to 90.05 by December 2007, and further to 96.18 by the end of 2008. The cumulative index increase over this period was 20.5% (16.38 points).</span></p>
+<p><span style="color: blue;">Over the same period, Comprehensive Property Tax collections in Gyeonggi Province also increased from 6.0 billion won in 2005 to 107.3 billion won in 2006, with 284.9 billion won collected in 2007 and 165.0 billion won in 2008. Total collections were 563.2 billion won. During this period, Gyeonggi Province’s R114 rent index also rose from 82.91 in January 2005 to 97.73 at the end of 2008, an increase of 17.8% (14.82 points).</span></p>
+<p><span style="color: blue;">In other words, rents in Seoul and Gyeonggi rose by approximately 20% following the introduction and strengthening of the Comprehensive Property Tax during the Roh Moo-hyun administration. Professor Lee explained, “Analysis and assessment of rent transaction prices reveals a pattern in which the Comprehensive Property Tax leads to sharp rent increases.”</span></p>
+<p><span style="color: blue;">A similar pattern appeared during the Moon Jae-in administration. The Moon administration, which took office in May 2017, implemented regulatory strengthening measures including Comprehensive Property Tax rate increases through the ‘9·13 Real Estate Measures,’ ‘12·16 Real Estate Measures,’ and other policies. This policy stance continued until the Yoon Suk-yeol administration finalized its 2022 Tax Reform Plan (July 21, 2022), which lowered the Comprehensive Property Tax rate for multi-home owners and raised the basic deduction threshold.</span></p>
+<p><span style="color: blue;">In 2018, the year after the Moon Jae-in administration took office, the Comprehensive Property Tax assessed in Seoul was 275.4 billion won, but it increased to 619.3 billion won in 2019, and tax revenue continued to grow in 2020 (996.5 billion won) and 2021 (2.3741 trillion won). Total collections during this period amounted to 4.2655 trillion won.</span></p>
+<p><span style="color: blue;">The R114 rent index was 103.74 in January 2018, only slightly above the base year of January 2011. However, after the Comprehensive Property Tax was strengthened, it rose to 114.36 by December 2021 and further to 123.46 in 2022, the last year of the Moon Jae-in administration. The cumulative rent index increase over this period was 19.0% (19.72 points).</span></p>
+<p><span style="color: blue;">The sharp rent increase was also confirmed using the actual transaction price index calculated independently by Professor Lee’s research lab based on MOLIT transaction data. The actual transaction rent index was 96.39 in January 2018, below the base year level of January 2011. However, by December 2022, this index had risen to 127.32. The cumulative increase was 32.08% (30.93 points). This means that someone paying 1 million won in monthly rent in 2018 would have had to pay 1.32 million won by the end of 2022.</span></p>
+<p><span style="color: blue;">Professor Lee stated, “The introduction and strengthening of the Comprehensive Property Tax during the Roh Moo-hyun administration caused a rent surge of nearly 20%, and the re-strengthening of the tax during the Moon Jae-in administration caused a rent surge of 30–40% based on the actual transaction price index.” He explained, “Since we used Comprehensive Property Tax collection statistics only through the end of 2022, we were unable to analyze rent trends in Seoul and other areas following the Yoon Suk-yeol administration’s announcement of tax cuts.” He added, “However, the recent rent increases are expected to be driven not only by the Comprehensive Property Tax factor but also by the effects of other regulations such as the government’s lending restrictions.” This study was presented as the keynote address at the ‘Is Real Estate Policy Really Okay?’ policy seminar held at the National Assembly Members’ Office Building on the afternoon of the 27th.</span></p>
+<p><span style="color: blue;">A real estate industry insider said, “Landlords tend to strongly pass their tax burden on to tenants during periods of strengthened holding taxes, and this is why strengthened holding taxes lead to rent increases.”</span></p>
+<p>Source: (<a class="reference external" href="https://biz.chosun.com/real_estate/real_estate_general/2026/01/28/BDIPOQHAO5CZDBYS22F3HLIXLY/?utm_source=naver&amp;amp;utm_medium=original&amp;amp;utm_campaign=biz">Chosun Biz, 2026-01-28</a>)</p>
+</section>
+<section id="claude-s-assessment">
+<h2><strong>Claude’s Assessment</strong><a class="headerlink" href="#claude-s-assessment" title="Link to this heading">#</a></h2>
+<p>This study addresses an interesting topic, but has several important limitations in terms of methodology and interpretation.</p>
+<p><strong>Strengths of the Study</strong></p>
+<p>Using a long time series (2005–2022) and conducting parallel analysis with two rent indices (R114 and actual transaction-based) is commendable. The stated effort to control for housing supply/demand and macroeconomic variables also demonstrates basic methodological rigor.</p>
+<p><strong>Key Problems</strong></p>
+<p>First, the greatest issue is the <strong>limitation in causal inference</strong>. Simply observing that Comprehensive Property Tax collections and rents rose during the same period is insufficient to conclude that “the Comprehensive Property Tax caused rent increases.” Both variables may move simultaneously due to a common cause: rising real estate prices. When home prices rise, both the tax base and the tax amount increase, while rents naturally rise as well. The possibility of <strong>spurious correlation</strong> is substantial.</p>
+<p>Second, the <strong>adequacy of control variables</strong> is questionable. While the study claims to have “controlled for housing supply, demand, and macroeconomic factors,” it is unclear exactly which variables were controlled and how. It is difficult to verify whether key factors directly affecting rents — such as the low interest rate environment, the trend of converting <em>jeonse</em> (lump-sum deposits) to monthly rent, and the implementation of the Three Rental Laws (2020) — were properly isolated.</p>
+<p>Third, the study <strong>overlooks the structural shift from <em>jeonse</em> to monthly rent</strong>. The rent increases during the Moon Jae-in administration were heavily influenced by reduced <em>jeonse</em> supply and accelerated conversion to monthly rent following the Three Rental Laws. Failing to separate this effect from the Comprehensive Property Tax effect risks overestimating the tax’s impact.</p>
+<p>Fourth, there is <strong>a problem with the choice of analysis periods</strong>. The study spotlights only the Roh Moo-hyun period (2005–2008) and the Moon Jae-in period (2018–2022), but lacks symmetric analysis of how rents changed when the Comprehensive Property Tax was eased during the Lee Myung-bak and Park Geun-hye administrations. Looking at the graph, rents appear to have risen steadily even during periods of tax easing, which rather suggests that factors other than the Comprehensive Property Tax are the primary drivers of rent increases.</p>
+<p>Fifth, as the researcher himself acknowledges, <strong>the tax reduction effect of the Yoon Suk-yeol administration after 2022 could not be verified.</strong> If rents continued to rise even after the Comprehensive Property Tax was reduced, the study’s core argument would be weakened.</p>
+<p><strong>Overall Assessment</strong></p>
+<p>This study has value in presenting the hypothesis of “Comprehensive Property Tax → rent pass-through,” but it tends to interpret correlation as causation, and lacks sufficient controls and comparisons for competing hypotheses (the <em>jeonse</em>-to-monthly-rent conversion, low interest rates, the Three Rental Laws, etc.). Given that this was a study presented at a policy seminar, it should be read with awareness that it may serve the purpose of supporting a particular policy direction.</p>
+</section>
+<section id="chatgpt-s-assessment">
+<h2><strong>ChatGPT’s Assessment</strong><a class="headerlink" href="#chatgpt-s-assessment" title="Link to this heading">#</a></h2>
+<p>This analysis claims a <strong>causal relationship</strong> — “increased holding tax → sharp rent increase” — but from an academic standpoint, the methodology presented is closer to <strong>describing a strong correlation, and is considerably weak as a causal inference design</strong>. Let us organize the key issues from an econometric perspective.</p>
+<hr class="docutils" />
+<section id="what-the-study-actually-did-structure">
+<h3>1. What the Study Actually Did: Structure<a class="headerlink" href="#what-the-study-actually-did-structure" title="Link to this heading">#</a></h3>
+<p>The study has roughly the following structure:</p>
+<ul class="simple">
+<li><p>Explanatory variable: Comprehensive Property Tax collections in Seoul, Gyeonggi, and Incheon</p></li>
+<li><p>Dependent variable: Rent index</p>
+<ul>
+<li><p>R114 rent index</p></li>
+<li><p>Self-calculated index based on MOLIT actual transaction prices</p></li>
+</ul>
+</li>
+<li><p>Period: 2005–2022</p></li>
+<li><p>Controls: Claims to have controlled for some supply, demand, and macroeconomic variables</p></li>
+</ul>
+<p>And it draws its conclusion based on:</p>
+<blockquote>
+<div><p>The periods of sharp Comprehensive Property Tax increases (Roh Moo-hyun and Moon Jae-in administrations) coincide with periods of sharp rent increases → Tax pass-through occurred</p>
+</div></blockquote>
+<p>This appears plausible at first glance, but <strong>econometrically, this is one of the most dangerous analytical structures</strong>.</p>
+</section>
+<hr class="docutils" />
+<section id="the-biggest-problem-rents-did-not-rise-because-taxes-increased">
+<h3>2. The Biggest Problem: “Rents Did Not Rise Because Taxes Increased”<a class="headerlink" href="#the-biggest-problem-rents-did-not-rise-because-taxes-increased" title="Link to this heading">#</a></h3>
+<section id="core-identification-problem-endogeneity">
+<h4>❗ Core Identification Problem: <strong>Endogeneity</strong><a class="headerlink" href="#core-identification-problem-endogeneity" title="Link to this heading">#</a></h4>
+<p>Comprehensive Property Tax collections appear to be a policy variable, but in reality:</p>
+<div class="math notranslate nohighlight">
+\[\text{Tax collections} = f(\text{tax rate}, \text{assessed value}, \text{housing price level}, \text{number of homes})\]</div>
+<p>In other words:</p>
+<blockquote>
+<div><p><strong>When home prices rise, tax collections automatically increase.</strong></p>
+</div></blockquote>
+<p>Rents are also influenced by the same real estate market conditions as home prices.</p>
+<p>Therefore, the observed relationship is likely due to:</p>
+<blockquote>
+<div><p>Rising real estate prices → Tax collections ↑
+Rising real estate prices → Rents ↑</p>
+</div></blockquote>
+<p>There is a very high probability that this <strong>common cause</strong> is driving the pattern.</p>
+<p>In this case, the estimation equation is effectively:</p>
+<div class="math notranslate nohighlight">
+\[\text{Rent}_t = \beta \cdot \text{TaxCollections}_t + u_t\]</div>
+<p>but the true structure is:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Rent}_t = \gamma \cdot \text{RealEstateConditions}_t + \epsilon_t
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+\text{TaxCollections}_t = \delta \cdot \text{RealEstateConditions}_t + \nu_t
+\]</div>
+<p>If <span class="math notranslate nohighlight">\(\text{RealEstateConditions}_t\)</span> is omitted, <span class="math notranslate nohighlight">\(\beta\)</span> will have <strong>severe bias</strong>.</p>
+<p>👉 This is a textbook case of <strong>omitted variable bias</strong>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="why-including-control-variables-does-not-resolve-this">
+<h3>3. Why “Including Control Variables” Does Not Resolve This<a class="headerlink" href="#why-including-control-variables-does-not-resolve-this" title="Link to this heading">#</a></h3>
+<p>The study claims to have “controlled for supply, demand, and macroeconomic variables,” but the following is important:</p>
+<section id="key-state-variables-of-the-real-estate-market-are-imperfectly-observed">
+<h4>Key State Variables of the Real Estate Market Are Imperfectly Observed<a class="headerlink" href="#key-state-variables-of-the-real-estate-market-are-imperfectly-observed" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Expected price appreciation rates</p></li>
+<li><p>Investment demand sentiment</p></li>
+<li><p><em>Jeonse</em>-to-monthly-rent conversion pressure</p></li>
+<li><p>Policy risk expectations</p></li>
+</ul>
+<p>These are difficult to properly quantify.
+The 2017–2022 period in particular saw overlapping structural changes such as lending regulations, <em>jeonse</em> loan policies, and the Three Rental Laws.</p>
+<p>In short, <strong>there are too many other shocks moving simultaneously with the tax.</strong></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="using-collection-amounts-itself-is-highly-vulnerable">
+<h3>4. Using “Collection Amounts” Itself Is Highly Vulnerable<a class="headerlink" href="#using-collection-amounts-itself-is-highly-vulnerable" title="Link to this heading">#</a></h3>
+<p>Tax pass-through studies typically examine:</p>
+<ul class="simple">
+<li><p>Changes in tax rates</p></li>
+<li><p>Changes in assessment criteria</p></li>
+<li><p>Policy changes that apply only to specific groups</p></li>
+</ul>
+<p>However, this study uses <strong>aggregate tax revenue (collection amounts)</strong>.</p>
+<p>This is a major problem:</p>
+<blockquote>
+<div><p>Collections = tax rate effect + tax base increase effect + taxpayer count increase effect</p>
+</div></blockquote>
+<p>In other words, it is <strong>impossible to separate whether the increase is due to policy or rising home prices</strong>.</p>
+<p>Academically, one should use <strong>exogenous policy shocks</strong> such as tax rate changes or assessment criteria changes.</p>
+</section>
+<hr class="docutils" />
+<section id="simple-time-series-correlation-is-nearly-meaningless">
+<h3>5. Simple Time-Series Correlation Is Nearly Meaningless<a class="headerlink" href="#simple-time-series-correlation-is-nearly-meaningless" title="Link to this heading">#</a></h3>
+<p>This study essentially shows:</p>
+<blockquote>
+<div><p>Administration A: Taxes ↑ + Rents ↑
+Administration B: Taxes ↑ + Rents ↑</p>
+</div></blockquote>
+<p>This is closer to a <strong>regime comparison</strong>.</p>
+<p>But other things happening during the same periods:</p>
+<section id="roh-moo-hyun-administration">
+<h4>Roh Moo-hyun Administration<a class="headerlink" href="#roh-moo-hyun-administration" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Rapid home price appreciation period</p></li>
+<li><p>Explosion of housing demand in the Capital Region</p></li>
+<li><p>Structural changes in the <em>jeonse</em> market</p></li>
+</ul>
+</section>
+<section id="moon-jae-in-administration">
+<h4>Moon Jae-in Administration<a class="headerlink" href="#moon-jae-in-administration" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Low interest rates + liquidity surge</p></li>
+<li><p>Three Rental Laws</p></li>
+<li><p><em>Jeonse</em> price spike → conversion to monthly rent</p></li>
+<li><p>Lending regulations</p></li>
+</ul>
+<p>In other words, “the period when the Comprehensive Property Tax rose” = “the period when the real estate market was undergoing upheaval.”</p>
+<p>Without separating these factors, the analysis captures a <strong>period effect, not a policy effect</strong>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="what-a-genuine-tax-pass-through-study-would-require">
+<h3>6. What a Genuine Tax Pass-Through Study Would Require<a class="headerlink" href="#what-a-genuine-tax-pass-through-study-would-require" title="Link to this heading">#</a></h3>
+<p>To be academically persuasive, the study would need at minimum:</p>
+<section id="a-difference-in-differences-did-framework">
+<h4>✔ (1) A Difference-in-Differences (DID) Framework<a class="headerlink" href="#a-difference-in-differences-did-framework" title="Link to this heading">#</a></h4>
+<p>For example:</p>
+<ul class="simple">
+<li><p>Areas heavily affected by the Comprehensive Property Tax vs. areas with minimal impact</p></li>
+<li><p>Homes subject to the tax vs. homes not subject to the tax</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+\text{Rent}_{it} = \alpha + \beta(\text{Taxed}_i \times \text{PostPolicy}_t) + \text{Fixed Effects} + \epsilon_{it}
+\]</div>
+<p>This would allow comparison between “homes that were taxed” and “homes that were not.”</p>
+</section>
+<section id="analysis-centered-on-tax-rate-changes">
+<h4>✔ (2) Analysis Centered on Tax Rate Changes<a class="headerlink" href="#analysis-centered-on-tax-rate-changes" title="Link to this heading">#</a></h4>
+<p>Instead of collection amounts, one should use <strong>policy design variables</strong> such as:</p>
+<ul class="simple">
+<li><p>Magnitude of tax rate increases</p></li>
+<li><p>Changes in deduction thresholds</p></li>
+<li><p>Shifts in assessment bracket boundaries</p></li>
+</ul>
+</section>
+<section id="explicit-modeling-of-home-price-and-jeonse-dynamics">
+<h4>✔ (3) Explicit Modeling of Home Price and <em>Jeonse</em> Dynamics<a class="headerlink" href="#explicit-modeling-of-home-price-and-jeonse-dynamics" title="Link to this heading">#</a></h4>
+<p>Monthly rent is strongly linked to the <em>jeonse</em> market.
+The key driver of the rent surge during the Moon Jae-in administration was:</p>
+<blockquote>
+<div><p>Decline in <em>jeonse</em> supply → conversion to monthly rent</p>
+</div></blockquote>
+<p>Without removing this effect, the estimated tax effect is distorted.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="conclusion-credibility-of-this-study">
+<h3>7. Conclusion: Credibility of This Study<a class="headerlink" href="#conclusion-credibility-of-this-study" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Evaluation Criterion</p></th>
+<th class="head"><p>Assessment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Correlation description</p></td>
+<td><p>Present</p></td>
+</tr>
+<tr class="row-odd"><td><p>Causal inference design</p></td>
+<td><p>Very weak</p></td>
+</tr>
+<tr class="row-even"><td><p>Endogeneity treatment</p></td>
+<td><p>Virtually absent</p></td>
+</tr>
+<tr class="row-odd"><td><p>Policy effect isolation</p></td>
+<td><p>Failed</p></td>
+</tr>
+<tr class="row-even"><td><p>Academic paper quality</p></td>
+<td><p>Below standard</p></td>
+</tr>
+<tr class="row-odd"><td><p>Policy advocacy report</p></td>
+<td><p>Acceptable</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This can be used as <strong>an advocacy document for policy debate</strong>, but it <strong>lacks persuasive power as a quantitative causal claim</strong> that “the Comprehensive Property Tax caused rents to rise by 20–40%.”</p>
+</section>
+<hr class="docutils" />
+<section id="one-sentence-summary">
+<h3>One-Sentence Summary<a class="headerlink" href="#one-sentence-summary" title="Link to this heading">#</a></h3>
+<blockquote>
+<div><p>This analysis merely shows that the period of rising Comprehensive Property Tax coincided with the period of rising rents;
+it does not prove that the Comprehensive Property Tax caused rents to rise.</p>
+</div></blockquote>
+<p>In short, the accurate assessment is: <strong>correlation exists, but evidence of causation is weak.</strong></p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="11_Boston_Housing_Price_Analysis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 11. Boston Housing Price Analysis</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="13_Hypermarket_Decline_Empirical_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#did-the-comprehensive-property-tax-drive-up-rents"><span style="color: blue;"><strong>Did the Comprehensive Property Tax Drive Up Rents?</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-assessment"><strong>Claude’s Assessment</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-assessment"><strong>ChatGPT’s Assessment</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-study-actually-did-structure">1. What the Study Actually Did: Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-biggest-problem-rents-did-not-rise-because-taxes-increased">2. The Biggest Problem: “Rents Did Not Rise Because Taxes Increased”</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#core-identification-problem-endogeneity">❗ Core Identification Problem: <strong>Endogeneity</strong></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-including-control-variables-does-not-resolve-this">3. Why “Including Control Variables” Does Not Resolve This</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-state-variables-of-the-real-estate-market-are-imperfectly-observed">Key State Variables of the Real Estate Market Are Imperfectly Observed</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-collection-amounts-itself-is-highly-vulnerable">4. Using “Collection Amounts” Itself Is Highly Vulnerable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-time-series-correlation-is-nearly-meaningless">5. Simple Time-Series Correlation Is Nearly Meaningless</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#roh-moo-hyun-administration">Roh Moo-hyun Administration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#moon-jae-in-administration">Moon Jae-in Administration</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-a-genuine-tax-pass-through-study-would-require">6. What a Genuine Tax Pass-Through Study Would Require</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-difference-in-differences-did-framework">✔ (1) A Difference-in-Differences (DID) Framework</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-centered-on-tax-rate-changes">✔ (2) Analysis Centered on Tax Rate Changes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-modeling-of-home-price-and-jeonse-dynamics">✔ (3) Explicit Modeling of Home Price and <em>Jeonse</em> Dynamics</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion-credibility-of-this-study">7. Conclusion: Credibility of This Study</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sentence-summary">One-Sentence Summary</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

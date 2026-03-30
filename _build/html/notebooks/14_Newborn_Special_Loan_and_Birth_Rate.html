@@ -1,0 +1,1691 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 14. Newborn Special Loan and Birth Rate &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/14_Newborn_Special_Loan_and_Birth_Rate';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 15. Ridge and Lasso Regression" href="15_Ridge_and_Lasso_Regression.html" />
+    <link rel="prev" title="Ch 13. Hypermarket Decline: An Empirical Analysis" href="13_Hypermarket_Decline_Empirical_Analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/14_Newborn_Special_Loan_and_Birth_Rate.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/14_Newborn_Special_Loan_and_Birth_Rate.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 14. Newborn Special Loan and Birth Rate</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#did-the-birth-rate-rise-only-among-upper-income-groups"><span style="color: blue;"><strong>1. Did the Birth Rate Rise Only Among Upper-Income Groups?</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-assessment"><strong>Claude’s Assessment</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-assessment"><strong>ChatGPT’s Assessment</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-structure-shown-by-the-chart">1. Key Structure Shown by the Chart</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-the-perspective-of-pre-and-post-policy-change">2. From the Perspective of Pre- and Post-Policy Change</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#top-30-income-8th10th-deciles">(1) Top 30% Income (8th–10th Deciles)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bottom-30-income-1st3rd-deciles">(2) Bottom 30% Income (1st–3rd Deciles)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-result-occurs-alignment-with-policy-design">3. Why This Result Occurs (Alignment with Policy Design)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caveats-causal-interpretation">4. Caveats (Causal Interpretation)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#based-on-this-alone">Based on this alone,</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#final-judgment">Final Judgment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causal-relationship"><span style="color: blue;"><strong>2. Causal Relationship</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-explanation"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#first-why-the-current-chart-is-not-evidence">0. First: Why the Current Chart Is Not ‘Evidence’</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#income-decile-year-did-comparing-pre-post-changes-by-income-group">1. Income Decile × Year DID — “Comparing Pre-Post Changes” by Income Group</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-skeleton-of-basic-did">1.1 The Skeleton of Basic DID</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#what-does-it-mean-to-use-income-decile-year-as-did">1.2 What Does It Mean to Use “Income Decile × Year” as DID?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-can-t-we-simply-compare-2023-2025-and-need-did">1.3 Why Can’t We Simply Compare 2023 → 2025 and Need DID?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#assumption-required-for-did-parallel-trends">1.4 Assumption Required for DID: Parallel Trends</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-design-considerations-important">1.5 Practical Design Considerations (Important)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#policy-eligible-vs-ineligible-group-comparison-defining-the-actual-treatment-more-precisely">2. Policy-Eligible vs. Ineligible Group Comparison — Defining the “Actual Treatment” More Precisely</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-an-eligibility-based-comparison-important">2.1 Why Is an ‘Eligibility’-Based Comparison Important?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cleanest-design-rdd-did-rdd-using-the-income-cutoff">2.2 Cleanest Design: RDD/DID-RDD Using the Income Cutoff</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#second-best-approach-when-data-is-limited-predicted-eligibility-probability-propensity-exposure">2.3 Second-Best Approach When Data Is Limited: Predicted Eligibility Probability (Propensity/Exposure)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls-in-eligible-vs-ineligible-comparisons">2.4 Common Pitfalls in “Eligible vs. Ineligible” Comparisons</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-marriage-rate-age-structure-and-economic-conditions-removing-other-reasons-for-upper-income-only-increases">3. Controlling for Marriage Rate, Age Structure, and Economic Conditions — Removing “Other Reasons for Upper-Income-Only Increases”</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-marriage-rate-or-marital-status">3.1 Controlling for Marriage Rate (or Marital Status)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-age-structure-especially-distribution-of-women-aged-2039">3.2 Controlling for Age Structure (Especially Distribution of Women Aged 20–39)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-economic-conditions-where-year-fixed-effects-are-not-enough">3.3 Controlling for Economic Conditions: “Where Year Fixed Effects Are Not Enough”</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-purpose-of-controls-is-identification-not-explanation">3.4 The Purpose of Controls Is “Identification,” Not “Explanation”</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recommended-analysis-flow-combining-all-three-practical-approach">4. Recommended Analysis Flow Combining All Three (Practical Approach)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-used-in-the-analysis"><span style="color: blue;"><strong>3. Data Used in the Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>ChatGPT’s Assessment</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-data-is-powerful-statistically-excellent-aspects">1. Why This Data Is Powerful (Statistically Excellent Aspects)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#accuracy-of-birth-measurement-medical-claims-db">(1) Accuracy of Birth Measurement (➊ Medical Claims DB)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reliability-of-income-information-national-tax-service-linkage">(2) Reliability of Income Information (➌ National Tax Service Linkage)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#individual-level-panel-structure-possible-health-insurance-eligibility-db">(3) Individual-Level Panel Structure Possible (➋ Health Insurance Eligibility DB)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#household-family-structure-identification-possible-resident-registration-db">(4) Household/Family Structure Identification Possible (➍ Resident Registration DB)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-size-15-of-the-total-population">(5) Sample Size (15% of the Total Population)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-alone-does-not-guarantee-policy-effect-reliability">2. Why This Alone Does Not Guarantee “Policy Effect Reliability”</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-core-issue-is-identification">The core issue is <strong>identification</strong>.</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#endogeneity-of-policy-exposure-selection-bias">(1) Endogeneity of Policy Exposure (Selection Bias)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simultaneous-changes-confounding-shocks">(2) Simultaneous Changes (Confounding Shocks)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fertility-is-structurally-a-lagged-variable">(3) Fertility Is Structurally a ‘Lagged Variable’</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-illusion-of-large-samples">(4) The Illusion of Large Samples</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-this-data-actually-means-for-did-analysis">3. What This Data “Actually Means” for DID Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#therefore-objectivity-and-reliability-should-be-assessed-as-follows">4. Therefore, “Objectivity and Reliability” Should Be Assessed as Follows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sentence-summary">One-Sentence Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-design-tailored-to-the-data-structure"><span style="color: blue;"><strong>4. Analysis Design Tailored to the Data Structure</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-design"><strong>ChatGPT’s Design</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-construction-and-unit-of-observation">1. Data Construction and Unit of Observation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#unit-of-observation">1.1 Unit of Observation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#outcome-variable-measuring-fertility">1.2 Outcome Variable (Measuring Fertility)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#income-variable-key-for-treatment-group-definition">1.3 Income Variable (Key for Treatment Group Definition)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#marriage-household-structure">1.4 Marriage-Household Structure</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-control-variable-candidates-if-available">1.5 Other Control Variable Candidates (If Available)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#treatment-definition-capturing-actual-exposure-in-two-stages">2. Treatment Definition: Capturing Actual Exposure in Two Stages</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-a-static-eligibility-based-on-policy-introduction-criteria">2.1 Level A: Static Eligibility (Based on Policy Introduction Criteria)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-b-eligibility-after-income-requirement-relaxation-leveraging-the-december-2024-change">2.2 Level B: Eligibility After Income Requirement Relaxation (Leveraging the December 2024 Change)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-analysis-1-individual-fixed-effects-event-study-did-policy-introduction-effect">3. Core Analysis 1: Individual Fixed Effects Event Study DID (Policy Introduction Effect)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#person-month-linear-probability-model-lpm">3.1 Person-Month Linear Probability Model (LPM)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#event-study-parallel-trends-verification-lag-reflection">3.2 Event Study (Parallel Trends Verification + Lag Reflection)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-errors">3.3 Standard Errors</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-analysis-2-did-on-the-december-2024-income-requirement-relaxation-strongest-identification">4. Core Analysis 2: DID on the December 2024 Income Requirement Relaxation (Strongest Identification)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#did-model">4.1 DID Model</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-this-design">4.2 Advantages of This Design</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#event-study-extension">4.3 Event Study Extension</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extended-design-triple-diff-to-further-reduce-confounding">5. Extended Design: Triple-Diff to Further Reduce Confounding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-marriage-rate-age-structure-and-economic-conditions-implementation-with-this-data">6. Controlling for Marriage Rate, Age Structure, and Economic Conditions: Implementation with This Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#marriage-cohabitation-controls">6.1 Marriage-Cohabitation Controls</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#age-structure-controls">6.2 Age Structure Controls</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-conditions-controls">6.3 Economic Conditions Controls</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-implementation-options-reflecting-fertility-s-time-lag">7. Two Implementation Options Reflecting Fertility’s Time Lag</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-based-on-birth-timing-simplest">7.1 Option A: Based on Birth Timing (Simplest)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-approximate-conception-date-alignment-more-precise">7.2 Option B: Approximate Conception Date Alignment (More Precise)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-design-recommended">8. Sample Design (Recommended)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#placebo-and-robustness-checks-required-to-claim-reliability">9. Placebo and Robustness Checks (Required to Claim Reliability)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fake-policy-timing-placebo">9.1 Fake Policy Timing Placebo</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#varying-the-comparison-group">9.2 Varying the Comparison Group</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-treatment-coefficient-verification-parallel-trends">9.3 Pre-Treatment Coefficient Verification (Parallel Trends)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#final-deliverables-result-set-for-reports-papers">10. Final Deliverables (Result Set for Reports/Papers)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-information-needed-to-finalize-the-design-checklist">11. Additional Information Needed to Finalize the Design (Checklist)</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-14-newborn-special-loan-and-birth-rate">
+<h1><strong>Ch 14. Newborn Special Loan and Birth Rate</strong><a class="headerlink" href="#ch-14-newborn-special-loan-and-birth-rate" title="Link to this heading">#</a></h1>
+<section id="did-the-birth-rate-rise-only-among-upper-income-groups">
+<h2><span style="color: blue;"><strong>1. Did the Birth Rate Rise Only Among Upper-Income Groups?</strong></span><a class="headerlink" href="#did-the-birth-rate-rise-only-among-upper-income-groups" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;">The Newborn Special Loan (<em>Shinsaeng-a Teukrye Daechul</em>) is a housing and low-birth-rate support program introduced in 2024. It targets not only low-income households but also middle- and upper-income households. Initially, the combined annual household income requirement was ‘less than 130 million won,’ but this was relaxed to ‘less than 200 million won’ starting December 2024.</span></p>
+<p><span style="color: blue;">The report analyzed changes in birth rates by income group before and after the introduction of the special loan to examine policy effects across income tiers. The findings revealed that the birth rate rose significantly only among upper-income groups. Specifically, “the total fertility rate (TFR) of the top 30% income group rose from 0.84 in 2023 to 0.95 in 2025, while no rebound in birth rates was observed in the bottom 30% income group.”</span></p>
+<p><img alt="Birth_Rate" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/14-1.png" /></p>
+<p>Source: <a class="reference external" href="https://biz.chosun.com/policy/policy_sub/2026/01/27/JY3E5VU3W5ER7PI6Y4ECASRJLM/?outputType=amp">Chosun Biz, 2026-01-27, Article</a></p>
+</section>
+<section id="claude-s-assessment">
+<h2><strong>Claude’s Assessment</strong><a class="headerlink" href="#claude-s-assessment" title="Link to this heading">#</a></h2>
+<p>Let me examine the chart.</p>
+<p><strong>2023 Panel</strong>: The curve is generally flat, hovering around the 0.7–0.8 level across all income deciles. No clear upward trend is visible even in the upper deciles (8th–10th).</p>
+<p><strong>2024 Panel</strong>: A slight upward curve begins to appear at the right end (high-income deciles). Meanwhile, the left side (low-income deciles) shows little change.</p>
+<p><strong>2025 Panel</strong>: The most noticeable change appears here. In the high-income deciles (8th–10th), the curve rises distinctly to approximately the 0.9–1.0 range, displaying a J-shaped pattern. The low-income deciles (1st–3rd) remain at the 0.7–0.8 level, showing no rebound.</p>
+<p><strong>Comparison with the report’s claims:</strong></p>
+<ul class="simple">
+<li><p>“The TFR of the top 30% income group rose from 0.84 in 2023 to 0.95 in 2025” → The upward trend in the upper deciles is visually confirmed in the chart. While exact figures are difficult to read, the magnitude and direction of the increase are consistent.</p></li>
+<li><p>“No rebound in birth rates was observed in the bottom 30% income group” → No meaningful change is visible on the left side (low-income deciles) of the chart between 2023 and 2025, so this claim is also consistent with the chart.</p></li>
+</ul>
+<p>Overall, the report’s core claims are <strong>broadly consistent</strong> with the visual patterns in this chart. In particular, the asymmetric effect — where the birth rate rebounds only among high-income groups during 2024–2025 — is clearly evident.</p>
+</section>
+<section id="chatgpt-s-assessment">
+<h2><strong>ChatGPT’s Assessment</strong><a class="headerlink" href="#chatgpt-s-assessment" title="Link to this heading">#</a></h2>
+<p>To state the conclusion first, <strong>the report’s summary is broadly consistent with the pattern shown in the chart</strong>. However, the expression “rose significantly” borders on slight exaggeration; more precisely, <strong>the structure shows a ‘relatively clear rebound’ only among upper-income groups</strong>.</p>
+<hr class="docutils" />
+<section id="key-structure-shown-by-the-chart">
+<h3>1. Key Structure Shown by the Chart<a class="headerlink" href="#key-structure-shown-by-the-chart" title="Link to this heading">#</a></h3>
+<p>The chart features:</p>
+<ul class="simple">
+<li><p>Horizontal axis: Income decile (left = low income, right = high income)</p></li>
+<li><p>Vertical axis: Total Fertility Rate (TFR)</p></li>
+<li><p>Panels by year (2006–2025)</p></li>
+</ul>
+<p>Looking at the shape, nearly all years share a common pattern:</p>
+<blockquote>
+<div><p><strong>U-shaped or gentle J-shaped structure</strong>
+Middle-income groups have the lowest fertility, with the rate rising again in the upper deciles.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="from-the-perspective-of-pre-and-post-policy-change">
+<h3>2. From the Perspective of Pre- and Post-Policy Change<a class="headerlink" href="#from-the-perspective-of-pre-and-post-policy-change" title="Link to this heading">#</a></h3>
+<p>The policy introduction point is 2024. Therefore, the relevant comparison window is effectively the <strong>2023 → 2024 → 2025</strong> trajectory.</p>
+<section id="top-30-income-8th10th-deciles">
+<h4>(1) Top 30% Income (8th–10th Deciles)<a class="headerlink" href="#top-30-income-8th10th-deciles" title="Link to this heading">#</a></h4>
+<p>Looking at the panels from 2023 onward:</p>
+<ul class="simple">
+<li><p>The 8th–10th decile lines <strong>hit a trough and then shift to an upward slope</strong></p></li>
+<li><p>The increase is largest in the 9th–10th deciles</p></li>
+<li><p>The downward trend from 2021–2023 reverses into a <strong>clear rebound phase</strong></p></li>
+</ul>
+<p>👉 The report’s statement:</p>
+<blockquote>
+<div><p>“Birth rates rose among the top 30% income group”
+is <strong>consistent with the chart pattern</strong></p>
+</div></blockquote>
+<p>The numerical example (0.84 → 0.95) is difficult to verify precisely,
+but <strong>the directional claim of ‘a noticeable increase only in upper deciles’ is correct.</strong></p>
+</section>
+<hr class="docutils" />
+<section id="bottom-30-income-1st3rd-deciles">
+<h4>(2) Bottom 30% Income (1st–3rd Deciles)<a class="headerlink" href="#bottom-30-income-1st3rd-deciles" title="Link to this heading">#</a></h4>
+<p>Looking at the same period:</p>
+<ul class="simple">
+<li><p>The 1st–3rd deciles <strong>generally stagnate or show slight recovery after further decline</strong></p></li>
+<li><p>However, no clear trend reversal like in the upper deciles</p></li>
+<li><p>The slope of the line is gentle or nearly flat</p></li>
+</ul>
+<p>In other words:</p>
+<blockquote>
+<div><p>“No rebound in birth rates was observed in the bottom 30%”</p>
+</div></blockquote>
+<p>This statement is also <strong>consistent with the impression from the chart</strong>.
+Even if some increase exists, it is <strong>marginal and difficult to characterize as a structural shift</strong>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="why-this-result-occurs-alignment-with-policy-design">
+<h3>3. Why This Result Occurs (Alignment with Policy Design)<a class="headerlink" href="#why-this-result-occurs-alignment-with-policy-design" title="Link to this heading">#</a></h3>
+<p>The institutional features described earlier are <strong>logically consistent</strong> with the chart:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Factor</p></th>
+<th class="head"><p>Income group with greater effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Loan-based policy</p></td>
+<td><p>Groups already capable of home purchase</p></td>
+</tr>
+<tr class="row-odd"><td><p>Income requirement relaxed to ≤200 million won</p></td>
+<td><p>Includes upper-middle and upper-income groups</p></td>
+</tr>
+<tr class="row-even"><td><p>Low-interest loans</p></td>
+<td><p>Favors households with credit and repayment capacity</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In other words, this policy is
+<strong>not a “cash transfer policy” but a “credit-based housing finance policy,”</strong> so
+it likely had a more direct effect on groups whose fertility constraints are rooted in <strong>housing stability rather than income insufficiency</strong> —
+that is, <strong>upper-middle and upper-income groups</strong>.</p>
+<p>The chart results are consistent with this mechanism.</p>
+</section>
+<hr class="docutils" />
+<section id="caveats-causal-interpretation">
+<h3>4. Caveats (Causal Interpretation)<a class="headerlink" href="#caveats-causal-interpretation" title="Link to this heading">#</a></h3>
+<p>The report’s description may be factually accurate, but the following is a separate matter:</p>
+<section id="based-on-this-alone">
+<h4>Based on this alone,<a class="headerlink" href="#based-on-this-alone" title="Link to this heading">#</a></h4>
+<p>the <strong>causal conclusion that “the Newborn Special Loan increased fertility among the upper class”</strong> cannot be established.</p>
+<p>Required analyses:</p>
+<ul class="simple">
+<li><p>Income decile × Year DID (Difference-in-Differences)</p></li>
+<li><p>Comparison of policy-eligible vs. ineligible groups</p></li>
+<li><p>Controls for marriage rates, age structure, and economic conditions</p></li>
+</ul>
+<p>The current chart is at the level of <strong>descriptive evidence (pattern evidence)</strong>.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="final-judgment">
+<h3>Final Judgment<a class="headerlink" href="#final-judgment" title="Link to this heading">#</a></h3>
+<p>The statements are <strong>directionally consistent with the chart</strong>.</p>
+<p>The most accurate assessment is:</p>
+<blockquote>
+<div><p>After the policy introduction, the birth rate rebound appeared primarily in the upper income deciles, with no clear recovery visible in the lower deciles — this statement is consistent with the year-by-year decile structure shown in the chart. However, this represents a correlational pattern, and additional identification strategies are needed to conclusively attribute it to the policy’s causal effect.</p>
+</div></blockquote>
+<p>In short:
+<strong>As a factual description, it is broadly correct;
+as a definitive claim of policy effect, it is still insufficient.</strong></p>
+</section>
+</section>
+<section id="causal-relationship">
+<h2><span style="color: blue;"><strong>2. Causal Relationship</strong></span><a class="headerlink" href="#causal-relationship" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;"><strong>In the ChatGPT response above, it was stated that the following analyses are needed for causal inference. Please explain in detail.</strong></span></p>
+<ul class="simple">
+<li><p><span style="color: blue;">Income decile × Year DID (Difference-in-Differences)</span></p></li>
+<li><p><span style="color: blue;">Comparison of policy-eligible vs. ineligible groups</span></p></li>
+<li><p><span style="color: blue;">Controls for marriage rates, age structure, and economic conditions</span></p></li>
+</ul>
+</section>
+<section id="chatgpt-explanation">
+<h2><strong>ChatGPT Explanation</strong><a class="headerlink" href="#chatgpt-explanation" title="Link to this heading">#</a></h2>
+<p>Below is a detailed explanation of each of the three items you listed — why and how they are needed to examine <strong>causally</strong> whether the Newborn Special Loan raised birth rates. (I will use terminology as it appears in practice and academic papers.)</p>
+<hr class="docutils" />
+<section id="first-why-the-current-chart-is-not-evidence">
+<h3>0. First: Why the Current Chart Is Not ‘Evidence’<a class="headerlink" href="#first-why-the-current-chart-is-not-evidence" title="Link to this heading">#</a></h3>
+<p>The year-by-year observation that “birth rates rose among the upper deciles” is a <strong>pattern (correlation)</strong>. However, other changes that occurred simultaneously with the Newborn Special Loan in 2024–2025 (interest rates, economic conditions, marriage/divorce trends, housing prices, other policies, etc.) may have disproportionately affected the upper deciles. In that case, attributing the birth rate increase to the loan policy would be a misjudgment.</p>
+<p>What is needed, then, is a structure that constructs “what would have happened without the policy (<strong>counterfactual</strong>),” and <strong>DID (Difference-in-Differences)</strong> is one of the most standard methods for doing so.</p>
+</section>
+<hr class="docutils" />
+<section id="income-decile-year-did-comparing-pre-post-changes-by-income-group">
+<h3>1. Income Decile × Year DID — “Comparing Pre-Post Changes” by Income Group<a class="headerlink" href="#income-decile-year-did-comparing-pre-post-changes-by-income-group" title="Link to this heading">#</a></h3>
+<section id="the-skeleton-of-basic-did">
+<h4>1.1 The Skeleton of Basic DID<a class="headerlink" href="#the-skeleton-of-basic-did" title="Link to this heading">#</a></h4>
+<p>The simplest DID looks like this:</p>
+<ul class="simple">
+<li><p>Groups: Treated vs. Control</p></li>
+<li><p>Time: Pre-policy vs. Post-policy</p></li>
+<li><p>Core:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+DID = (Y_{T,post}-Y_{T,pre}) - (Y_{C,post}-Y_{C,pre})
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(Y\)</span> is the outcome variable such as the total fertility rate (TFR).</p>
+<p>What this says is:
+“The treated group increased more after the policy, and this increase is not simply a time trend but an additional change occurring only in the treated group.”</p>
+</section>
+<hr class="docutils" />
+<section id="what-does-it-mean-to-use-income-decile-year-as-did">
+<h4>1.2 What Does It Mean to Use “Income Decile × Year” as DID?<a class="headerlink" href="#what-does-it-mean-to-use-income-decile-year-as-did" title="Link to this heading">#</a></h4>
+<p>Using the 10 income deciles directly gives 10 ‘groups.’ This means the analysis is not “one group vs. one group” but rather a <strong>multi-group DID (panel / repeated cross-section)</strong> format.</p>
+<p>The most common regression specification is:</p>
+<div class="math notranslate nohighlight">
+\[
+Y_{d,t}=\alpha + \sum_{d\neq d_0}\gamma_d \cdot 1[d] + \sum_{t\neq t_0}\delta_t \cdot 1[t] + \beta \cdot (Post_t \times Treat_d) + \varepsilon_{d,t}
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(d\)</span>: Income decile (1–10)</p></li>
+<li><p><span class="math notranslate nohighlight">\(t\)</span>: Year (2006–2025)</p></li>
+<li><p><span class="math notranslate nohighlight">\(1[d]\)</span>: Decile fixed effects (removes inherent differences in baseline fertility levels across deciles)</p></li>
+<li><p><span class="math notranslate nohighlight">\(1[t]\)</span>: Year fixed effects (removes year-specific shocks common to all deciles: economic conditions, COVID, interest rates, etc.)</p></li>
+<li><p><span class="math notranslate nohighlight">\(Post_t\)</span>: Equals 1 if year ≥ 2024</p></li>
+<li><p><span class="math notranslate nohighlight">\(Treat_d\)</span>: Equals 1 for deciles expected to experience the policy effect (e.g., 8th–10th deciles for the top 30%)</p></li>
+</ul>
+<p><span class="math notranslate nohighlight">\(\beta\)</span> is the DID estimate.
+It captures “how much more the birth rate changed in the treated (upper) deciles relative to the comparison (lower/middle) deciles after the policy.”</p>
+</section>
+<hr class="docutils" />
+<section id="why-can-t-we-simply-compare-2023-2025-and-need-did">
+<h4>1.3 Why Can’t We Simply Compare 2023 → 2025 and Need DID?<a class="headerlink" href="#why-can-t-we-simply-compare-2023-2025-and-need-did" title="Link to this heading">#</a></h4>
+<p>Even if birth rates rose among the upper deciles in 2024–2025, during the same period:</p>
+<ul class="simple">
+<li><p>Upper deciles may have married more</p></li>
+<li><p>Upper deciles may have moved/purchased homes more</p></li>
+<li><p>The share of adults in their 30s may have coincidentally increased in upper deciles</p></li>
+<li><p>High-income job/wage growth may have concentrated in upper deciles</p></li>
+</ul>
+<p>DID, at minimum, removes “year-common shocks” and “decile-fixed differences” and examines whether any additional change remains.</p>
+</section>
+<hr class="docutils" />
+<section id="assumption-required-for-did-parallel-trends">
+<h4>1.4 Assumption Required for DID: Parallel Trends<a class="headerlink" href="#assumption-required-for-did-parallel-trends" title="Link to this heading">#</a></h4>
+<p>Core assumption: Even without the policy, the outcomes for the treated and control groups would have <strong>followed similar trends in the pre-policy period</strong>.</p>
+<p>A typical method for verifying this is the <strong>event study</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+Y_{d,t}=\alpha + \gamma_d + \delta_t + \sum_{k\neq -1}\beta_k \cdot (1[t - t_0 = k]\times Treat_d)+\varepsilon_{d,t}
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(t_0\)</span>: Policy start year (2024)</p></li>
+<li><p><span class="math notranslate nohighlight">\(k\)</span>: Year relative to policy start (−3, −2, −1, 0, 1, 2, …)</p></li>
+</ul>
+<p>The key question here is <strong>whether the <span class="math notranslate nohighlight">\(\beta_k\)</span> values for the pre-policy period (<span class="math notranslate nohighlight">\(k&lt;0\)</span>) are close to 0</strong>.
+If the upper deciles were already on an upward trend before the policy, the post-policy increase cannot be attributed to the policy.</p>
+</section>
+<hr class="docutils" />
+<section id="practical-design-considerations-important">
+<h4>1.5 Practical Design Considerations (Important)<a class="headerlink" href="#practical-design-considerations-important" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Whether to set Post = 1 at 2024</strong> — since 2024 is the early implementation phase with monthly variation, one might consider setting post = 1 from 2025 (based on “actual exposure”)</p></li>
+<li><p>Fertility has a <strong>time lag</strong> (conception to birth). A 2024 policy may be more fully reflected in 2025 births</p></li>
+<li><p>If the unit is individuals: various models are possible — birth occurrence (0/1), birth count, first-birth hazard, etc.</p></li>
+<li><p>If the unit is decile × year aggregates: the sample becomes small (10 × 20 = 200), potentially weakening standard errors and estimation stability</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="policy-eligible-vs-ineligible-group-comparison-defining-the-actual-treatment-more-precisely">
+<h3>2. Policy-Eligible vs. Ineligible Group Comparison — Defining the “Actual Treatment” More Precisely<a class="headerlink" href="#policy-eligible-vs-ineligible-group-comparison-defining-the-actual-treatment-more-precisely" title="Link to this heading">#</a></h3>
+<p>The key point here: “top 30% income” does <strong>not map 1:1 to policy eligibility</strong>.</p>
+<p>The Newborn Special Loan depends not only on income but also (typically) on qualification criteria such as loan status, housing conditions, credit, and household composition. Therefore, the “policy-exposed population” must be defined more precisely.</p>
+<hr class="docutils" />
+<section id="why-is-an-eligibility-based-comparison-important">
+<h4>2.1 Why Is an ‘Eligibility’-Based Comparison Important?<a class="headerlink" href="#why-is-an-eligibility-based-comparison-important" title="Link to this heading">#</a></h4>
+<p>To examine the policy effect, the treated group should be “those who actually used or at least could have used the policy.”</p>
+<p>For example:</p>
+<ul class="simple">
+<li><p>Upper-income individuals who already own sufficient housing may have low demand for the loan, resulting in a small effect</p></li>
+<li><p>Middle-income individuals who are non-homeowners, newlyweds, and have clear childbearing plans may have high demand</p></li>
+<li><p>Credit/debt constraints may mean that “the program exists but is difficult to use” for low-income groups</p></li>
+</ul>
+<p>Therefore, comparing <strong>(i) eligible groups (meeting qualification requirements)</strong> vs. <strong>(ii) ineligible groups (outside the requirements from the start)</strong> offers much stronger identification.</p>
+</section>
+<hr class="docutils" />
+<section id="cleanest-design-rdd-did-rdd-using-the-income-cutoff">
+<h4>2.2 Cleanest Design: RDD/DID-RDD Using the Income Cutoff<a class="headerlink" href="#cleanest-design-rdd-did-rdd-using-the-income-cutoff" title="Link to this heading">#</a></h4>
+<p>The “relaxation of the annual income requirement from 130 million to 200 million won (December 2024)” you mentioned is a particularly useful signal. Such cutoffs enable the following designs:</p>
+<ul class="simple">
+<li><p>Examining people near the 130 million won threshold (e.g., 120–140 million won), where eligibility sharply diverges before and after the policy</p></li>
+<li><p>The same applies near the 200 million won threshold</p></li>
+</ul>
+<p>Possible approaches:</p>
+<ul class="simple">
+<li><p><strong>RDD (Regression Discontinuity Design)</strong>: Comparison just above/below the cutoff</p></li>
+<li><p><strong>DID-RDD</strong>: Comparing near the cutoff before and after the policy (removing time-specific shocks)</p></li>
+</ul>
+<p>If feasible, this is far stronger causally than a crude classification like “top 30%.”</p>
+</section>
+<hr class="docutils" />
+<section id="second-best-approach-when-data-is-limited-predicted-eligibility-probability-propensity-exposure">
+<h4>2.3 Second-Best Approach When Data Is Limited: Predicted Eligibility Probability (Propensity/Exposure)<a class="headerlink" href="#second-best-approach-when-data-is-limited-predicted-eligibility-probability-propensity-exposure" title="Link to this heading">#</a></h4>
+<p>When eligibility criteria are complex and individual conditions cannot be fully obtained, one can estimate “eligibility likelihood” using pre-policy characteristics and use exposure as a continuous variable.</p>
+<ul class="simple">
+<li><p>For example, using non-homeowner status, <em>jeonse</em> residence, location in high-price housing areas, income, debt, etc.</p></li>
+<li><p>Construct a “policy exposure index”</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+Y_{i,t} = \alpha + \gamma_i + \delta_t + \beta(Post_t \times Exposure_i) + \varepsilon_{i,t}
+\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(\beta\)</span> examines “whether those with 1 unit greater exposure had a larger post-policy increase in fertility.”</p>
+</section>
+<hr class="docutils" />
+<section id="common-pitfalls-in-eligible-vs-ineligible-comparisons">
+<h4>2.4 Common Pitfalls in “Eligible vs. Ineligible” Comparisons<a class="headerlink" href="#common-pitfalls-in-eligible-vs-ineligible-comparisons" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Endogenous selection</strong>: Actual loan users may have had stronger fertility intentions from the start
+→ Comparing “actual users” and “non-users” is therefore risky
+→ Better to use “eligibility” or “exposure” as an instrument-like variable</p></li>
+<li><p><strong>Simultaneous policy changes</strong>: If other fertility/housing policies also changed during the same period, confounding may occur
+→ Need to verify whether the comparison group was equally exposed to such policies</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="controlling-for-marriage-rate-age-structure-and-economic-conditions-removing-other-reasons-for-upper-income-only-increases">
+<h3>3. Controlling for Marriage Rate, Age Structure, and Economic Conditions — Removing “Other Reasons for Upper-Income-Only Increases”<a class="headerlink" href="#controlling-for-marriage-rate-age-structure-and-economic-conditions-removing-other-reasons-for-upper-income-only-increases" title="Link to this heading">#</a></h3>
+<p>If year fixed effects are already included in the DID, “economic shocks common to all groups” are largely removed. But the problem is:</p>
+<ul class="simple">
+<li><p>Shocks may operate <strong>differently across income deciles</strong></p></li>
+<li><p>Demographic composition changes (age, marriage) may move differently across deciles</p></li>
+</ul>
+<p>If these are not controlled, they bleed into <span class="math notranslate nohighlight">\(\beta\)</span> (omitted variable bias).</p>
+<hr class="docutils" />
+<section id="controlling-for-marriage-rate-or-marital-status">
+<h4>3.1 Controlling for Marriage Rate (or Marital Status)<a class="headerlink" href="#controlling-for-marriage-rate-or-marital-status" title="Link to this heading">#</a></h4>
+<p>Fertility is strongly linked to marriage (especially for first births). If marriages increased among upper deciles in 2024–2025, the fertility increase could be due to marriage changes rather than the policy.</p>
+<p>Possible variables:</p>
+<ul class="simple">
+<li><p>Decile × year marriage rate</p></li>
+<li><p>Birth rates by marital status (unmarried/married)</p></li>
+<li><p>First marriage rate, average age at first marriage</p></li>
+<li><p>Marriage-to-birth lag consideration (1–2 years after marriage)</p></li>
+</ul>
+<p>How to include in regression (aggregate-level example):</p>
+<div class="math notranslate nohighlight">
+\[
+Y_{d,t}=\alpha+\gamma_d+\delta_t+\beta(Post_t\times Treat_d) + \theta \cdot MarriageRate_{d,t} + \varepsilon_{d,t}
+\]</div>
+<p>Caution: The marriage rate may itself be an outcome of the policy (if the policy increased marriages which in turn increased births). In that case, controlling for marriage rate leaves only the “direct effect” rather than the “total effect.”
+In practice, both are typically presented:</p>
+<ul class="simple">
+<li><p>(a) Total effect estimate without controlling for marriage</p></li>
+<li><p>(b) Mechanism decomposition with marriage control</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="controlling-for-age-structure-especially-distribution-of-women-aged-2039">
+<h4>3.2 Controlling for Age Structure (Especially Distribution of Women Aged 20–39)<a class="headerlink" href="#controlling-for-age-structure-especially-distribution-of-women-aged-2039" title="Link to this heading">#</a></h4>
+<p>Birth rates are driven not only by ‘behavior’ but also by ‘composition.’</p>
+<p>Example: If the share of women aged 30–34 increases in the upper deciles, TFR can rise even with identical fertility behavior. Conversely, a decline in women in their 20s can lower it.</p>
+<p>Possible controls:</p>
+<ul class="simple">
+<li><p>Share of women of childbearing age (15–49) in the 25–29, 30–34, 35–39 brackets</p></li>
+<li><p>Mean age at childbirth</p></li>
+<li><p>Age standardization: fixing age structure to compare “behavior only”</p></li>
+</ul>
+<p>The strongest approach is to analyze using <strong>age-specific fertility rates (ASFR)</strong>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Y_{a,d,t}\)</span>: Fertility rate for age group <span class="math notranslate nohighlight">\(a\)</span></p></li>
+<li><p>This substantially reduces the age structure problem (because comparison is within age groups)</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+Y_{a,d,t} = \alpha + \gamma_{a,d} + \delta_t + \beta(Post_t \times Treat_d) + \varepsilon_{a,d,t}
+\]</div>
+<p>(where <span class="math notranslate nohighlight">\(\gamma_{a,d}\)</span> represents age × decile fixed effects)</p>
+</section>
+<hr class="docutils" />
+<section id="controlling-for-economic-conditions-where-year-fixed-effects-are-not-enough">
+<h4>3.3 Controlling for Economic Conditions: “Where Year Fixed Effects Are Not Enough”<a class="headerlink" href="#controlling-for-economic-conditions-where-year-fixed-effects-are-not-enough" title="Link to this heading">#</a></h4>
+<p>Year fixed effects remove economy-wide shocks common to all groups. But the problem is that upper and lower deciles may have different sensitivities to economic fluctuations.</p>
+<p>Example: Upper deciles may be more sensitive to asset prices (stocks/real estate), while lower deciles may be more sensitive to unemployment/wages.</p>
+<p>At the decile × year level, the following can be added:</p>
+<ul class="simple">
+<li><p>Decile-specific unemployment/employment rates</p></li>
+<li><p>Decile-specific real income growth (wages)</p></li>
+<li><p>Asset price indicators (housing prices, interest rates) interacted with deciles</p></li>
+<li><p>Adding regional fixed effects strengthens identification further (region × year shocks)</p></li>
+</ul>
+<p>For example:</p>
+<div class="math notranslate nohighlight">
+\[
+Y_{d,t}=\alpha+\gamma_d+\delta_t+\beta(Post_t\times Treat_d)+\phi X_{d,t}+ \varepsilon_{d,t}
+\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[
+Y_{r,d,t}=\alpha+\gamma_{r,d}+\delta_t+\beta(Post_t\times Treat_d)+\phi X_{r,t}+ \varepsilon_{r,d,t}
+\]</div>
+<p>(Adding region <span class="math notranslate nohighlight">\(r\)</span> improves identification)</p>
+</section>
+<hr class="docutils" />
+<section id="the-purpose-of-controls-is-identification-not-explanation">
+<h4>3.4 The Purpose of Controls Is “Identification,” Not “Explanation”<a class="headerlink" href="#the-purpose-of-controls-is-identification-not-explanation" title="Link to this heading">#</a></h4>
+<p>The reason for including controls is not to “make the model look plausible,” but to prevent the treatment effect <span class="math notranslate nohighlight">\(\beta\)</span> from being spuriously inflated or deflated by changes in other factors (marriage/age/economic conditions).</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="recommended-analysis-flow-combining-all-three-practical-approach">
+<h3>4. Recommended Analysis Flow Combining All Three (Practical Approach)<a class="headerlink" href="#recommended-analysis-flow-combining-all-three-practical-approach" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Baseline charts/summary statistics</strong>: TFR trends by decile</p></li>
+<li><p><strong>Event study</strong> to check parallel trends (are pre-policy coefficients ≈ 0?)</p></li>
+<li><p><strong>Basic DID</strong>: Post × Treat (Treat = top 30%, etc.)</p></li>
+<li><p><strong>Alternative definitions</strong>: Redefine Treat as “eligible” (using cutoff if possible)</p></li>
+<li><p><strong>Add controls</strong>: Add marriage/age/economic variables and check stability of <span class="math notranslate nohighlight">\(\beta\)</span></p></li>
+<li><p><strong>Sensitivity/placebo</strong>: Does the effect appear with a fake policy year (e.g., 2022)? If so, this is a warning sign</p></li>
+<li><p><strong>Heterogeneity</strong>: First vs. second child, age group (30–34), region (high housing price areas), etc.</p></li>
+</ol>
+<hr class="docutils" />
+<p>If desired, I can immediately draft a specific design — including the exact regression specification (fixed effects structure), standard errors (where to cluster), and how to plot the event study — tailored to whatever data format you can obtain (individual micro-data, decile × year aggregates, regional breakdowns, etc.).</p>
+</section>
+</section>
+<section id="data-used-in-the-analysis">
+<h2><span style="color: blue;"><strong>3. Data Used in the Analysis</strong></span><a class="headerlink" href="#data-used-in-the-analysis" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;">The study “Analysis of Key Characteristics and Causes of the Recent Birth Rate Rebound” reportedly used administrative data from the National Health Insurance Service (NHIS) spanning January 2006 to June 2025. (<a class="reference external" href="https://www.betterfuture.go.kr/front/notificationSpace/pressReleaseDetail.do?articleId=552">Presidential Committee on Ageing Society and Population Policy, Press Release, 2026-01-28</a>)</span></p>
+<p><span style="color: blue;">※ Sub-components of the NHIS Administrative Data:</span></p>
+<p><span style="color: blue;">➊ Medical Claims Database, from which childbirth events can be identified,</span></p>
+<p><span style="color: blue;">➋ Eligibility Database, containing individual health insurance enrollment information,</span></p>
+<p><span style="color: blue;">➌ Income Database, linked with National Tax Service tax records,</span></p>
+<p><span style="color: blue;">➍ Resident Registration Database, containing household information from the resident registration system</span></p>
+<p><span style="color: blue;"><strong>This study analyzed a large-scale sample equivalent to 15% of the total population. Given this, is it meaningful in terms of objectivity and reliability?</strong></span></p>
+</section>
+<section id="id1">
+<h2><strong>ChatGPT’s Assessment</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>To state the conclusion first, <strong>this data structure is very strong for ‘descriptive statistics’ and has great potential for ‘causal estimation,’ but reliability is not automatically guaranteed.</strong>
+“Large sample = accurate policy effect” is an entirely different matter.</p>
+<p>Below, I organize the reasoning in the order of <strong>strengths of the data → structural limitations → implications for DID analysis</strong>.</p>
+<hr class="docutils" />
+<section id="why-this-data-is-powerful-statistically-excellent-aspects">
+<h3>1. Why This Data Is Powerful (Statistically Excellent Aspects)<a class="headerlink" href="#why-this-data-is-powerful-statistically-excellent-aspects" title="Link to this heading">#</a></h3>
+<p>This is not a typical survey but an <strong>administrative linked dataset</strong>. As research data, it is among the top-tier structures.</p>
+<section id="accuracy-of-birth-measurement-medical-claims-db">
+<h4>(1) Accuracy of Birth Measurement (➊ Medical Claims DB)<a class="headerlink" href="#accuracy-of-birth-measurement-medical-claims-db" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Based on hospital medical records → virtually no measurement error in identifying births</p></li>
+<li><p>No self-report or survey omission issues</p></li>
+<li><p>Precise timing of birth → allows accurate temporal alignment with the policy</p></li>
+</ul>
+<p>👉 The outcome variable <span class="math notranslate nohighlight">\(Y\)</span> (birth occurrence/count) has <strong>very small measurement error</strong></p>
+</section>
+<hr class="docutils" />
+<section id="reliability-of-income-information-national-tax-service-linkage">
+<h4>(2) Reliability of Income Information (➌ National Tax Service Linkage)<a class="headerlink" href="#reliability-of-income-information-national-tax-service-linkage" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Based on <strong>tax records</strong>, not self-reported income</p></li>
+<li><p>Particularly low distortion in higher income brackets</p></li>
+<li><p>High accuracy in income decile classification</p></li>
+</ul>
+<p>👉 The <strong>treatment group definition (Treat)</strong> crucial for DID is highly reliable</p>
+</section>
+<hr class="docutils" />
+<section id="individual-level-panel-structure-possible-health-insurance-eligibility-db">
+<h4>(3) Individual-Level Panel Structure Possible (➋ Health Insurance Eligibility DB)<a class="headerlink" href="#individual-level-panel-structure-possible-health-insurance-eligibility-db" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Health insurance eligibility information = can track individual employment status, workplace/regional enrollment, and changes</p></li>
+<li><p><strong>Panel construction</strong> tracking individuals over years is possible</p></li>
+</ul>
+<p>👉 Individual fixed effects models are feasible
+→ Can substantially remove the problem of “people with inherently different birth propensities”</p>
+</section>
+<hr class="docutils" />
+<section id="household-family-structure-identification-possible-resident-registration-db">
+<h4>(4) Household/Family Structure Identification Possible (➍ Resident Registration DB)<a class="headerlink" href="#household-family-structure-identification-possible-resident-registration-db" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Spouse identification possible</p></li>
+<li><p>Household separation/union, birth order analysis possible</p></li>
+<li><p>Analysis based on household income criteria possible</p></li>
+</ul>
+<p>👉 Enables <strong>household-level fertility decision modeling</strong>, not just individual female analysis</p>
+</section>
+<hr class="docutils" />
+<section id="sample-size-15-of-the-total-population">
+<h4>(5) Sample Size (15% of the Total Population)<a class="headerlink" href="#sample-size-15-of-the-total-population" title="Link to this heading">#</a></h4>
+<p>This is not just large:</p>
+<ul class="simple">
+<li><p>Sample possibly in the millions</p></li>
+<li><p>Smaller standard errors</p></li>
+<li><p>Detailed analyses like decile × year × age group become feasible</p></li>
+<li><p>Event study coefficients can be estimated stably</p></li>
+</ul>
+<p>In other words, <strong>statistical precision</strong> is very high.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="why-this-alone-does-not-guarantee-policy-effect-reliability">
+<h3>2. Why This Alone Does Not Guarantee “Policy Effect Reliability”<a class="headerlink" href="#why-this-alone-does-not-guarantee-policy-effect-reliability" title="Link to this heading">#</a></h3>
+<p>This is the point where many people are misled.</p>
+<blockquote>
+<div><p>Large administrative data reduces “measurement error”
+but does not automatically remove “causal bias”</p>
+</div></blockquote>
+<section id="the-core-issue-is-identification">
+<h4>The core issue is <strong>identification</strong>.<a class="headerlink" href="#the-core-issue-is-identification" title="Link to this heading">#</a></h4>
+<p>No matter how good the administrative data, policy effects can be distorted if the following are not resolved.</p>
+</section>
+<hr class="docutils" />
+<section id="endogeneity-of-policy-exposure-selection-bias">
+<h4>(1) Endogeneity of Policy Exposure (Selection Bias)<a class="headerlink" href="#endogeneity-of-policy-exposure-selection-bias" title="Link to this heading">#</a></h4>
+<p>The Newborn Special Loan is meaningful for <strong>households that can utilize the loan</strong>.</p>
+<p>However:</p>
+<ul class="simple">
+<li><p>Households that apply for the loan = likely those already planning to have children</p></li>
+<li><p>Households prepared to purchase a home = those with stable income and stable marriage</p></li>
+</ul>
+<p>In this case:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Loan utilization} \rightarrow \text{Fertility increase}
+\]</div>
+<p>may not be the actual mechanism; rather:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{Existing birth plan} \rightarrow \text{Loan utilization}
+\]</div>
+<p>could be what is happening.</p>
+<p>No matter how large the data, this problem persists.</p>
+</section>
+<hr class="docutils" />
+<section id="simultaneous-changes-confounding-shocks">
+<h4>(2) Simultaneous Changes (Confounding Shocks)<a class="headerlink" href="#simultaneous-changes-confounding-shocks" title="Link to this heading">#</a></h4>
+<p>In 2024–2025 simultaneously:</p>
+<ul class="simple">
+<li><p>Interest rate changes</p></li>
+<li><p>Housing market changes</p></li>
+<li><p>Marriage rate rebound</p></li>
+<li><p>Post-COVID lagged effects</p></li>
+</ul>
+<p>These may have affected the upper-income group more strongly.
+Even with administrative data, failing to control for these leads to misattribution as policy effects.</p>
+</section>
+<hr class="docutils" />
+<section id="fertility-is-structurally-a-lagged-variable">
+<h4>(3) Fertility Is Structurally a ‘Lagged Variable’<a class="headerlink" href="#fertility-is-structurally-a-lagged-variable" title="Link to this heading">#</a></h4>
+<p>From conception to birth takes 9–10 months.
+The policy implementation timing and birth occurrence timing are offset.
+Without accounting for this lag structure, the effect timing is distorted.</p>
+</section>
+<hr class="docutils" />
+<section id="the-illusion-of-large-samples">
+<h4>(4) The Illusion of Large Samples<a class="headerlink" href="#the-illusion-of-large-samples" title="Link to this heading">#</a></h4>
+<p>With large samples:</p>
+<ul class="simple">
+<li><p>Even small effects appear statistically significant</p></li>
+<li><p>However, <strong>significance ≠ causality</strong></p></li>
+</ul>
+<p>In fact, large samples can <strong>make even very small biases appear strongly in statistical terms.</strong></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="what-this-data-actually-means-for-did-analysis">
+<h3>3. What This Data “Actually Means” for DID Analysis<a class="headerlink" href="#what-this-data-actually-means-for-did-analysis" title="Link to this heading">#</a></h3>
+<p>This data has <strong>the conditions for conducting high-quality research</strong>.
+But that only applies “when methods are properly used.”</p>
+<p>Advanced designs this data makes possible:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Feasible Analysis</p></th>
+<th class="head"><p>Rationale</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Individual fixed effects DID</p></td>
+<td><p>Can examine pre-post fertility changes for the same individual</p></td>
+</tr>
+<tr class="row-odd"><td><p>Couple-level analysis</p></td>
+<td><p>Enables policy effect estimation based on household income</p></td>
+</tr>
+<tr class="row-even"><td><p>Age-specific fertility hazard models</p></td>
+<td><p>Can separately analyze first vs. second births</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cutoff-based RDD</p></td>
+<td><p>Can leverage the income requirement relaxation event</p></td>
+</tr>
+<tr class="row-even"><td><p>Event study</p></td>
+<td><p>Can examine pre-policy trend validity</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>If all of these are implemented → high-confidence causal estimation is possible</p>
+</section>
+<hr class="docutils" />
+<section id="therefore-objectivity-and-reliability-should-be-assessed-as-follows">
+<h3>4. Therefore, “Objectivity and Reliability” Should Be Assessed as Follows<a class="headerlink" href="#therefore-objectivity-and-reliability-should-be-assessed-as-follows" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Assessment</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Birth measurement accuracy</p></td>
+<td><p>Very high</p></td>
+</tr>
+<tr class="row-odd"><td><p>Income measurement accuracy</p></td>
+<td><p>Very high</p></td>
+</tr>
+<tr class="row-even"><td><p>Sample size</p></td>
+<td><p>Very large</p></td>
+</tr>
+<tr class="row-odd"><td><p>Descriptive statistics reliability</p></td>
+<td><p>Very high</p></td>
+</tr>
+<tr class="row-even"><td><p>Causal estimation reliability</p></td>
+<td><p>Depends on research design</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In other words:</p>
+<blockquote>
+<div><p>“The data is top-tier, but if the analysis design is not causally rigorous, the results may still be at the level of correlation.”</p>
+</div></blockquote>
+<p>This is the accurate assessment.</p>
+</section>
+<hr class="docutils" />
+<section id="one-sentence-summary">
+<h3>One-Sentence Summary<a class="headerlink" href="#one-sentence-summary" title="Link to this heading">#</a></h3>
+<p>This data is
+<strong>a ‘good gun.’</strong>
+But <strong>without proper ‘aiming (DID, identification strategy),’ hitting the target (causal conclusion) is not guaranteed.</strong></p>
+<hr class="docutils" />
+<p>As a next step, I can design:</p>
+<ul class="simple">
+<li><p><strong>Specific regression specifications</strong> tailored to this data structure</p></li>
+<li><p>Whether individual panel or aggregate data is optimal</p></li>
+<li><p>Where to cluster standard errors</p></li>
+</ul>
+</section>
+</section>
+<section id="analysis-design-tailored-to-the-data-structure">
+<h2><span style="color: blue;"><strong>4. Analysis Design Tailored to the Data Structure</strong></span><a class="headerlink" href="#analysis-design-tailored-to-the-data-structure" title="Link to this heading">#</a></h2>
+</section>
+<section id="chatgpt-s-design">
+<h2><strong>ChatGPT’s Design</strong><a class="headerlink" href="#chatgpt-s-design" title="Link to this heading">#</a></h2>
+<p>Below is a causal estimation design specifically tailored to the NHIS administrative data structure you described (Medical Claims ➊, Eligibility ➋, Income ➌, Household ➍). The core approach is to (i) define policy exposure as precisely as possible, (ii) account for the time lag in fertility, and (iii) use a fixed effects structure that absorbs confounders such as marriage, age, and economic conditions.</p>
+<hr class="docutils" />
+<section id="data-construction-and-unit-of-observation">
+<h3>1. Data Construction and Unit of Observation<a class="headerlink" href="#data-construction-and-unit-of-observation" title="Link to this heading">#</a></h3>
+<section id="unit-of-observation">
+<h4>1.1 Unit of Observation<a class="headerlink" href="#unit-of-observation" title="Link to this heading">#</a></h4>
+<p>The optimal unit is the person-month panel. The rationale is that the policy was introduced in 2024 and fertility involves substantial monthly lags (conception to birth). Using annual units would blur the timing of effects, and the advantage of having data through June 2025 would be diminished.</p>
+<ul class="simple">
+<li><p>Sample period: January 2006 – June 2025</p></li>
+<li><p>Target population: Women of childbearing age (e.g., 15–49), or extended to couple-level</p></li>
+<li><p>Panel: Track individual <span class="math notranslate nohighlight">\(i\)</span> by month <span class="math notranslate nohighlight">\(t\)</span></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="outcome-variable-measuring-fertility">
+<h4>1.2 Outcome Variable (Measuring Fertility)<a class="headerlink" href="#outcome-variable-measuring-fertility" title="Link to this heading">#</a></h4>
+<p>Birth events are identified from Medical Claims ➊.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Birth_{i,t}\)</span>: Equals 1 if a birth (delivery) occurred in month <span class="math notranslate nohighlight">\(t\)</span>, 0 otherwise</p></li>
+<li><p>Derived variables:</p>
+<ul>
+<li><p>First birth only: births occurring with no prior birth history</p></li>
+<li><p>Separation by parity (second, third, etc.): separate analyses (policy responses may differ)</p></li>
+<li><p>Birth timing precision: based on delivery date (or month)</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="income-variable-key-for-treatment-group-definition">
+<h4>1.3 Income Variable (Key for Treatment Group Definition)<a class="headerlink" href="#income-variable-key-for-treatment-group-definition" title="Link to this heading">#</a></h4>
+<p>Ideally, the National Tax Service–linked income ➌ can be converted to combined annual spousal income.</p>
+<ul class="simple">
+<li><p>Individual income <span class="math notranslate nohighlight">\(Inc_{i,year}\)</span></p></li>
+<li><p>Combined with spouse’s income to create <span class="math notranslate nohighlight">\(HHInc_{h,year}\)</span> (spouse linkage via Household DB ➍ + Eligibility DB ➋)</p></li>
+<li><p>Decile: <span class="math notranslate nohighlight">\(Decile_{h,year}\)</span> or continuous income</p></li>
+<li><p>Policy income thresholds:</p>
+<ul>
+<li><p>Initial: <span class="math notranslate nohighlight">\(HHInc \le 130\)</span> million won</p></li>
+<li><p>Post-December 2024: <span class="math notranslate nohighlight">\(HHInc \le 200\)</span> million won
+This change is extremely advantageous for identification.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="marriage-household-structure">
+<h4>1.4 Marriage-Household Structure<a class="headerlink" href="#marriage-household-structure" title="Link to this heading">#</a></h4>
+<p>Constructed from Resident Registration ➍ + Eligibility ➋:</p>
+<ul class="simple">
+<li><p>Marital status (to extent possible): approximated by presence of spouse within the same household, changes in household composition, etc.</p></li>
+<li><p>Cohabitation and household separation: can also serve as housing events (since the policy involves housing finance)</p></li>
+<li><p>Pre-/post-birth household changes: simultaneous household changes around birth may occur, so timing requires caution</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="other-control-variable-candidates-if-available">
+<h4>1.5 Other Control Variable Candidates (If Available)<a class="headerlink" href="#other-control-variable-candidates-if-available" title="Link to this heading">#</a></h4>
+<p>From Eligibility ➋:</p>
+<ul class="simple">
+<li><p>Employment type (workplace/regional enrollment), insurance premium assessments, eligibility changes</p></li>
+<li><p>Workplace enrollee status is a strong proxy for income-employment stability</p></li>
+</ul>
+<p>If regional information is available (address-administrative district):</p>
+<ul class="simple">
+<li><p>Region × month fixed effects can absorb regional economic and housing market shocks</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="treatment-definition-capturing-actual-exposure-in-two-stages">
+<h3>2. Treatment Definition: Capturing Actual Exposure in Two Stages<a class="headerlink" href="#treatment-definition-capturing-actual-exposure-in-two-stages" title="Link to this heading">#</a></h3>
+<p>For this policy, using actual loan users as the treated group would introduce excessive selection if actual utilization data is unavailable. Therefore, the standard approach is eligibility-based.</p>
+<section id="level-a-static-eligibility-based-on-policy-introduction-criteria">
+<h4>2.1 Level A: Static Eligibility (Based on Policy Introduction Criteria)<a class="headerlink" href="#level-a-static-eligibility-based-on-policy-introduction-criteria" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Eligible^{A}_{h,t}=1\)</span> if <span class="math notranslate nohighlight">\(HHInc_{h,\mathrm{year}(t)} \le 130\)</span> million won (initial policy criterion)</p></li>
+<li><p>Post: <span class="math notranslate nohighlight">\(Post^{A}_t=1\)</span> if <span class="math notranslate nohighlight">\(t \ge\)</span> January 2024</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="level-b-eligibility-after-income-requirement-relaxation-leveraging-the-december-2024-change">
+<h4>2.2 Level B: Eligibility After Income Requirement Relaxation (Leveraging the December 2024 Change)<a class="headerlink" href="#level-b-eligibility-after-income-requirement-relaxation-leveraging-the-december-2024-change" title="Link to this heading">#</a></h4>
+<p>This is the truly powerful identification point.</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Eligible^{B}_{h,t}=1\)</span> if <span class="math notranslate nohighlight">\(HHInc_{h,\mathrm{year}(t)} \le 200\)</span> million won</p></li>
+<li><p>Define the newly eligible group:
+$<span class="math notranslate nohighlight">\(
+NewlyEligible_h = 1\big[130\text{ million} &lt; HHInc_{h,year} \le 200\text{ million}\big]
+\)</span>$</p></li>
+<li><p>Post-relaxation:
+$<span class="math notranslate nohighlight">\(
+Post^{B}_t = 1[t \ge \text{December 2024}]
+\)</span>$
+This creates a group that suddenly gained policy exposure after the relaxation, strengthening the DID-RD design.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="core-analysis-1-individual-fixed-effects-event-study-did-policy-introduction-effect">
+<h3>3. Core Analysis 1: Individual Fixed Effects Event Study DID (Policy Introduction Effect)<a class="headerlink" href="#core-analysis-1-individual-fixed-effects-event-study-did-policy-introduction-effect" title="Link to this heading">#</a></h3>
+<p>Objective: Did fertility increase relatively more among the eligible group after the 2024 policy introduction?</p>
+<section id="person-month-linear-probability-model-lpm">
+<h4>3.1 Person-Month Linear Probability Model (LPM)<a class="headerlink" href="#person-month-linear-probability-model-lpm" title="Link to this heading">#</a></h4>
+<div class="math notranslate nohighlight">
+\[
+Birth_{i,t}=\alpha_i+\delta_t+\beta\,(Post^{A}_t \times Eligible^{A}_{h(i),t}) + \Gamma'X_{i,t} + \varepsilon_{i,t}
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha_i\)</span>: Individual fixed effects (removes time-invariant birth propensity)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\delta_t\)</span>: Month fixed effects (absorbs nationwide common shocks: interest rates, COVID, policy bundles, etc.)</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_{i,t}\)</span>: Time-varying controls (marital-household status, employment eligibility, age group, etc.)</p></li>
+</ul>
+<p>The <span class="math notranslate nohighlight">\(\beta\)</span> in this model represents how much more the birth probability increased for the eligible group relative to the non-eligible group after the policy introduction.</p>
+</section>
+<hr class="docutils" />
+<section id="event-study-parallel-trends-verification-lag-reflection">
+<h4>3.2 Event Study (Parallel Trends Verification + Lag Reflection)<a class="headerlink" href="#event-study-parallel-trends-verification-lag-reflection" title="Link to this heading">#</a></h4>
+<p>Since fertility involves substantial lags, a single Post indicator is insufficient; relative-time coefficients are needed.</p>
+<div class="math notranslate nohighlight">
+\[
+Birth_{i,t}=\alpha_i+\delta_t+\sum_{k\neq -1}\beta_k\,(1[\mathrm{event\_time}(t)=k]\times Eligible^{A}_{h(i),t})+\Gamma'X_{i,t}+\varepsilon_{i,t}
+\]</div>
+<ul class="simple">
+<li><p>event_time is the relative month with January 2024 as 0 (e.g., −24 to +18)</p></li>
+<li><p>If <span class="math notranslate nohighlight">\(\beta_k\)</span> values are near 0 in the pre-policy period (<span class="math notranslate nohighlight">\(k&lt;0\)</span>), parallel trends are plausible</p></li>
+<li><p>In the post-policy period (<span class="math notranslate nohighlight">\(k&gt;0\)</span>), one can verify when effects begin to appear</p></li>
+<li><p>Realistically, fertility has a minimum 9–12 month lag, so the key is whether strong responses appear in the <span class="math notranslate nohighlight">\(k=9\)</span> to <span class="math notranslate nohighlight">\(k=18\)</span> window</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="standard-errors">
+<h4>3.3 Standard Errors<a class="headerlink" href="#standard-errors" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Minimum: Individual-level clustering (panel correlation)</p></li>
+<li><p>If possible: Household/family-level clustering (spouse-sibling correlation) should also be considered
+In practice, individual-level clustering + absorbing aggregate month-level shocks via month fixed effects is typical</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="core-analysis-2-did-on-the-december-2024-income-requirement-relaxation-strongest-identification">
+<h3>4. Core Analysis 2: DID on the December 2024 Income Requirement Relaxation (Strongest Identification)<a class="headerlink" href="#core-analysis-2-did-on-the-december-2024-income-requirement-relaxation-strongest-identification" title="Link to this heading">#</a></h3>
+<p>This is the point where the policy genuinely changed treatment intensity, so identification is much stronger. The newly eligible group in the 130–200 million won bracket is a natural treatment group.</p>
+<section id="did-model">
+<h4>4.1 DID Model<a class="headerlink" href="#did-model" title="Link to this heading">#</a></h4>
+<div class="math notranslate nohighlight">
+\[
+Birth_{i,t}=\alpha_i+\delta_t+\beta\,(Post^{B}_t \times NewlyEligible_{h(i)})+\Gamma'X_{i,t}+\varepsilon_{i,t}
+\]</div>
+<ul class="simple">
+<li><p>Treatment group: <span class="math notranslate nohighlight">\(NewlyEligible=1\)</span> (income &gt; 130 million and ≤ 200 million won)</p></li>
+<li><p>Recommended comparison group: A group just below the cutoff</p>
+<ul>
+<li><p>e.g., <span class="math notranslate nohighlight">\(HHInc \in [110\text{ million},130\text{ million}]\)</span> or <span class="math notranslate nohighlight">\([100\text{ million},130\text{ million}]\)</span>
+Comparing within similar income ranges reduces confounding.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="advantages-of-this-design">
+<h4>4.2 Advantages of This Design<a class="headerlink" href="#advantages-of-this-design" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Far more persuasive than crude comparisons like top 30% vs. bottom 30%</p></li>
+<li><p>The policy shock is clearly pinned to December 2024, making event timing unambiguous</p></li>
+<li><p>Considering the fertility lag, effects are likely to appear in the first half of 2025 (policy → conception → birth lag)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="event-study-extension">
+<h4>4.3 Event Study Extension<a class="headerlink" href="#event-study-extension" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Estimate <span class="math notranslate nohighlight">\(\beta_k\)</span> relative to December 2024 to examine dynamics through June 2025</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="extended-design-triple-diff-to-further-reduce-confounding">
+<h3>5. Extended Design: Triple-Diff to Further Reduce Confounding<a class="headerlink" href="#extended-design-triple-diff-to-further-reduce-confounding" title="Link to this heading">#</a></h3>
+<p>Since the policy is housing-finance in nature, effects are likely greater among non-homeowner, <em>jeonse</em>-renting, and housing-unstable groups. If housing status cannot be directly identified from the eligibility-household databases, proxy variables can be constructed (e.g., frequent household moves, young adults, region, workplace enrollment status, etc.).</p>
+<p>If possible, introduce a housing-related proxy <span class="math notranslate nohighlight">\(Z_i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+Birth_{i,t}=\alpha_i+\delta_t+\beta\,(Post_t\times Eligible_i) + \theta\,(Post_t\times Eligible_i \times Z_i)+\Gamma'X_{i,t}+\varepsilon_{i,t}
+\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(\theta\)</span> indicates whether the policy effect is larger among groups with greater housing constraints. This substantially increases causal explanatory power (consistency with the mechanism).</p>
+</section>
+<hr class="docutils" />
+<section id="controlling-for-marriage-rate-age-structure-and-economic-conditions-implementation-with-this-data">
+<h3>6. Controlling for Marriage Rate, Age Structure, and Economic Conditions: Implementation with This Data<a class="headerlink" href="#controlling-for-marriage-rate-age-structure-and-economic-conditions-implementation-with-this-data" title="Link to this heading">#</a></h3>
+<section id="marriage-cohabitation-controls">
+<h4>6.1 Marriage-Cohabitation Controls<a class="headerlink" href="#marriage-cohabitation-controls" title="Link to this heading">#</a></h4>
+<p>Implementation order (depending on data availability):</p>
+<ul class="simple">
+<li><p>(If possible) Direct marital status variable: best if marriage-divorce administrative records are available</p></li>
+<li><p>(Proxy) Presence of spouse in the same household, couple household composition</p></li>
+<li><p>(Proxy) Marriage transition event: the month when a spouse joins the same household</p></li>
+</ul>
+<p>Control approach:</p>
+<ul class="simple">
+<li><p>Version including marital/cohabitation status in <span class="math notranslate nohighlight">\(X_{i,t}\)</span></p></li>
+<li><p>Alternatively, restrict the sample to the married/cohabiting group (conditional effect) to examine only birth decisions</p></li>
+</ul>
+<p>Caution: Marriage may be on the causal pathway of the policy. Therefore, both sets of results are typically presented in a report:</p>
+<ul class="simple">
+<li><p>Without marriage control: Total effect</p></li>
+<li><p>With marriage control: Direct effect (or residual effect) after removing the marriage pathway</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="age-structure-controls">
+<h4>6.2 Age Structure Controls<a class="headerlink" href="#age-structure-controls" title="Link to this heading">#</a></h4>
+<p>With an individual panel, age structure is easy to control.</p>
+<ul class="simple">
+<li><p>Include age (or age group) dummies in <span class="math notranslate nohighlight">\(X_{i,t}\)</span></p></li>
+<li><p>More aggressively: age × month fixed effects are also possible (if the sample is large)</p></li>
+</ul>
+<p>Recommended: Age-specific analysis</p>
+<ul class="simple">
+<li><p>Split into 25–29, 30–34, 35–39 for separate event studies
+Fertility response is almost always most sensitive in the early 30s.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="economic-conditions-controls">
+<h4>6.3 Economic Conditions Controls<a class="headerlink" href="#economic-conditions-controls" title="Link to this heading">#</a></h4>
+<p>Month fixed effects <span class="math notranslate nohighlight">\(\delta_t\)</span> absorb most nationwide common economic shocks. The problem arises when shocks differentially affect income groups.</p>
+<p>Possible reinforcements:</p>
+<ul class="simple">
+<li><p>Workplace enrollee status × month interaction (absorbs heterogeneity in income-employment stability shocks)</p></li>
+<li><p>If region is available, region × month fixed effects (removes regional housing-economic shocks)</p></li>
+<li><p>Insurance premium changes (income shock proxy) included in <span class="math notranslate nohighlight">\(X_{i,t}\)</span></p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="two-implementation-options-reflecting-fertility-s-time-lag">
+<h3>7. Two Implementation Options Reflecting Fertility’s Time Lag<a class="headerlink" href="#two-implementation-options-reflecting-fertility-s-time-lag" title="Link to this heading">#</a></h3>
+<section id="option-a-based-on-birth-timing-simplest">
+<h4>7.1 Option A: Based on Birth Timing (Simplest)<a class="headerlink" href="#option-a-based-on-birth-timing-simplest" title="Link to this heading">#</a></h4>
+<p>Use the event study presented above to directly examine whether births increased several months after the policy.</p>
+</section>
+<hr class="docutils" />
+<section id="option-b-approximate-conception-date-alignment-more-precise">
+<h4>7.2 Option B: Approximate Conception Date Alignment (More Precise)<a class="headerlink" href="#option-b-approximate-conception-date-alignment-more-precise" title="Link to this heading">#</a></h4>
+<p>Approximate the conception month by subtracting 9 months from the birth month and realign policy exposure accordingly.</p>
+<ul class="simple">
+<li><p>Example: <span class="math notranslate nohighlight">\(ConceptionMonth = BirthMonth - 9\)</span>
+This approach more directly examines whether the policy influenced the conception decision. With large datasets, this method substantially increases persuasiveness.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="sample-design-recommended">
+<h3>8. Sample Design (Recommended)<a class="headerlink" href="#sample-design-recommended" title="Link to this heading">#</a></h3>
+<p>Since the policy targets newborn/birth households, the following is recommended as the primary analysis:</p>
+<ul class="simple">
+<li><p>Women of childbearing age, 20–44 (too broad reduces signal-to-noise)</p></li>
+<li><p>Separate by parity using birth history</p>
+<ul>
+<li><p>First birth: strongly linked to marriage and housing constraints</p></li>
+<li><p>Second or higher: linked to income and housing stability</p></li>
+</ul>
+</li>
+<li><p>Center the event study on January 2022 – June 2025 (2 years pre-policy + 18 months post-policy)
+Using the full period from 2006 has advantages, but sufficient length for pre-policy trend verification is all that is needed. Long-term trends can be presented as supplementary material.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="placebo-and-robustness-checks-required-to-claim-reliability">
+<h3>9. Placebo and Robustness Checks (Required to Claim Reliability)<a class="headerlink" href="#placebo-and-robustness-checks-required-to-claim-reliability" title="Link to this heading">#</a></h3>
+<section id="fake-policy-timing-placebo">
+<h4>9.1 Fake Policy Timing Placebo<a class="headerlink" href="#fake-policy-timing-placebo" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Run the same DID as if the policy started in January 2022. If an effect appears, the design is not adequately controlling for confounders.</p></li>
+</ul>
+</section>
+<section id="varying-the-comparison-group">
+<h4>9.2 Varying the Comparison Group<a class="headerlink" href="#varying-the-comparison-group" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Slightly adjust the eligibility criterion (e.g., 120 million, 140 million won)</p></li>
+<li><p>Verify whether results are similar when changing the bandwidth around the cutoff</p></li>
+</ul>
+</section>
+<section id="pre-treatment-coefficient-verification-parallel-trends">
+<h4>9.3 Pre-Treatment Coefficient Verification (Parallel Trends)<a class="headerlink" href="#pre-treatment-coefficient-verification-parallel-trends" title="Link to this heading">#</a></h4>
+<p>If the pre-policy <span class="math notranslate nohighlight">\(\beta_k\)</span> values in the event study are systematically different from 0, interpretation should be conservative.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="final-deliverables-result-set-for-reports-papers">
+<h3>10. Final Deliverables (Result Set for Reports/Papers)<a class="headerlink" href="#final-deliverables-result-set-for-reports-papers" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Figure 1: Fertility rate trends for eligible vs. non-eligible groups (monthly)</p></li>
+<li><p>Figure 2: Event study coefficients (relative to January 2024)</p></li>
+<li><p>Figure 3: Relaxation event study coefficients (relative to December 2024, centered on NewlyEligible)</p></li>
+<li><p>Table 1: Basic DID estimates (stepwise: no controls → marriage control → age control → economic control)</p></li>
+<li><p>Table 2: Heterogeneity (age group, parity, workplace enrollee status, region, etc.)</p></li>
+<li><p>Placebo results table</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="additional-information-needed-to-finalize-the-design-checklist">
+<h3>11. Additional Information Needed to Finalize the Design (Checklist)<a class="headerlink" href="#additional-information-needed-to-finalize-the-design-checklist" title="Link to this heading">#</a></h3>
+<p>This is not a request for you to ask again, but a checklist to finalize the design level based on what is feasible with the data you currently have:</p>
+<ul class="simple">
+<li><p>Whether income is reported annually or monthly (most likely annual)</p></li>
+<li><p>Whether spousal linkage is possible (household-spouse identification)</p></li>
+<li><p>Whether regional codes are available (even municipality-level is sufficiently powerful)</p></li>
+<li><p>Whether marriage events can be directly observed (if not, proxy treatment is used)</p></li>
+<li><p>Whether loan utilization data is available (even without it, eligibility-based analysis is fully feasible)</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="13_Hypermarket_Decline_Empirical_Analysis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="15_Ridge_and_Lasso_Regression.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 15. Ridge and Lasso Regression</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#did-the-birth-rate-rise-only-among-upper-income-groups"><span style="color: blue;"><strong>1. Did the Birth Rate Rise Only Among Upper-Income Groups?</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-assessment"><strong>Claude’s Assessment</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-assessment"><strong>ChatGPT’s Assessment</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-structure-shown-by-the-chart">1. Key Structure Shown by the Chart</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-the-perspective-of-pre-and-post-policy-change">2. From the Perspective of Pre- and Post-Policy Change</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#top-30-income-8th10th-deciles">(1) Top 30% Income (8th–10th Deciles)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#bottom-30-income-1st3rd-deciles">(2) Bottom 30% Income (1st–3rd Deciles)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-result-occurs-alignment-with-policy-design">3. Why This Result Occurs (Alignment with Policy Design)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#caveats-causal-interpretation">4. Caveats (Causal Interpretation)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#based-on-this-alone">Based on this alone,</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#final-judgment">Final Judgment</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#causal-relationship"><span style="color: blue;"><strong>2. Causal Relationship</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-explanation"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#first-why-the-current-chart-is-not-evidence">0. First: Why the Current Chart Is Not ‘Evidence’</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#income-decile-year-did-comparing-pre-post-changes-by-income-group">1. Income Decile × Year DID — “Comparing Pre-Post Changes” by Income Group</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-skeleton-of-basic-did">1.1 The Skeleton of Basic DID</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#what-does-it-mean-to-use-income-decile-year-as-did">1.2 What Does It Mean to Use “Income Decile × Year” as DID?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-can-t-we-simply-compare-2023-2025-and-need-did">1.3 Why Can’t We Simply Compare 2023 → 2025 and Need DID?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#assumption-required-for-did-parallel-trends">1.4 Assumption Required for DID: Parallel Trends</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#practical-design-considerations-important">1.5 Practical Design Considerations (Important)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#policy-eligible-vs-ineligible-group-comparison-defining-the-actual-treatment-more-precisely">2. Policy-Eligible vs. Ineligible Group Comparison — Defining the “Actual Treatment” More Precisely</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#why-is-an-eligibility-based-comparison-important">2.1 Why Is an ‘Eligibility’-Based Comparison Important?</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cleanest-design-rdd-did-rdd-using-the-income-cutoff">2.2 Cleanest Design: RDD/DID-RDD Using the Income Cutoff</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#second-best-approach-when-data-is-limited-predicted-eligibility-probability-propensity-exposure">2.3 Second-Best Approach When Data Is Limited: Predicted Eligibility Probability (Propensity/Exposure)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#common-pitfalls-in-eligible-vs-ineligible-comparisons">2.4 Common Pitfalls in “Eligible vs. Ineligible” Comparisons</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-marriage-rate-age-structure-and-economic-conditions-removing-other-reasons-for-upper-income-only-increases">3. Controlling for Marriage Rate, Age Structure, and Economic Conditions — Removing “Other Reasons for Upper-Income-Only Increases”</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-marriage-rate-or-marital-status">3.1 Controlling for Marriage Rate (or Marital Status)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-age-structure-especially-distribution-of-women-aged-2039">3.2 Controlling for Age Structure (Especially Distribution of Women Aged 20–39)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-economic-conditions-where-year-fixed-effects-are-not-enough">3.3 Controlling for Economic Conditions: “Where Year Fixed Effects Are Not Enough”</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-purpose-of-controls-is-identification-not-explanation">3.4 The Purpose of Controls Is “Identification,” Not “Explanation”</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#recommended-analysis-flow-combining-all-three-practical-approach">4. Recommended Analysis Flow Combining All Three (Practical Approach)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-used-in-the-analysis"><span style="color: blue;"><strong>3. Data Used in the Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>ChatGPT’s Assessment</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-data-is-powerful-statistically-excellent-aspects">1. Why This Data Is Powerful (Statistically Excellent Aspects)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#accuracy-of-birth-measurement-medical-claims-db">(1) Accuracy of Birth Measurement (➊ Medical Claims DB)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#reliability-of-income-information-national-tax-service-linkage">(2) Reliability of Income Information (➌ National Tax Service Linkage)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#individual-level-panel-structure-possible-health-insurance-eligibility-db">(3) Individual-Level Panel Structure Possible (➋ Health Insurance Eligibility DB)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#household-family-structure-identification-possible-resident-registration-db">(4) Household/Family Structure Identification Possible (➍ Resident Registration DB)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-size-15-of-the-total-population">(5) Sample Size (15% of the Total Population)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-alone-does-not-guarantee-policy-effect-reliability">2. Why This Alone Does Not Guarantee “Policy Effect Reliability”</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-core-issue-is-identification">The core issue is <strong>identification</strong>.</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#endogeneity-of-policy-exposure-selection-bias">(1) Endogeneity of Policy Exposure (Selection Bias)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#simultaneous-changes-confounding-shocks">(2) Simultaneous Changes (Confounding Shocks)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fertility-is-structurally-a-lagged-variable">(3) Fertility Is Structurally a ‘Lagged Variable’</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#the-illusion-of-large-samples">(4) The Illusion of Large Samples</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-this-data-actually-means-for-did-analysis">3. What This Data “Actually Means” for DID Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#therefore-objectivity-and-reliability-should-be-assessed-as-follows">4. Therefore, “Objectivity and Reliability” Should Be Assessed as Follows</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sentence-summary">One-Sentence Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-design-tailored-to-the-data-structure"><span style="color: blue;"><strong>4. Analysis Design Tailored to the Data Structure</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-design"><strong>ChatGPT’s Design</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-construction-and-unit-of-observation">1. Data Construction and Unit of Observation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#unit-of-observation">1.1 Unit of Observation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#outcome-variable-measuring-fertility">1.2 Outcome Variable (Measuring Fertility)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#income-variable-key-for-treatment-group-definition">1.3 Income Variable (Key for Treatment Group Definition)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#marriage-household-structure">1.4 Marriage-Household Structure</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-control-variable-candidates-if-available">1.5 Other Control Variable Candidates (If Available)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#treatment-definition-capturing-actual-exposure-in-two-stages">2. Treatment Definition: Capturing Actual Exposure in Two Stages</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-a-static-eligibility-based-on-policy-introduction-criteria">2.1 Level A: Static Eligibility (Based on Policy Introduction Criteria)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#level-b-eligibility-after-income-requirement-relaxation-leveraging-the-december-2024-change">2.2 Level B: Eligibility After Income Requirement Relaxation (Leveraging the December 2024 Change)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-analysis-1-individual-fixed-effects-event-study-did-policy-introduction-effect">3. Core Analysis 1: Individual Fixed Effects Event Study DID (Policy Introduction Effect)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#person-month-linear-probability-model-lpm">3.1 Person-Month Linear Probability Model (LPM)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#event-study-parallel-trends-verification-lag-reflection">3.2 Event Study (Parallel Trends Verification + Lag Reflection)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-errors">3.3 Standard Errors</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-analysis-2-did-on-the-december-2024-income-requirement-relaxation-strongest-identification">4. Core Analysis 2: DID on the December 2024 Income Requirement Relaxation (Strongest Identification)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#did-model">4.1 DID Model</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#advantages-of-this-design">4.2 Advantages of This Design</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#event-study-extension">4.3 Event Study Extension</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extended-design-triple-diff-to-further-reduce-confounding">5. Extended Design: Triple-Diff to Further Reduce Confounding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#controlling-for-marriage-rate-age-structure-and-economic-conditions-implementation-with-this-data">6. Controlling for Marriage Rate, Age Structure, and Economic Conditions: Implementation with This Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#marriage-cohabitation-controls">6.1 Marriage-Cohabitation Controls</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#age-structure-controls">6.2 Age Structure Controls</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#economic-conditions-controls">6.3 Economic Conditions Controls</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#two-implementation-options-reflecting-fertility-s-time-lag">7. Two Implementation Options Reflecting Fertility’s Time Lag</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-a-based-on-birth-timing-simplest">7.1 Option A: Based on Birth Timing (Simplest)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#option-b-approximate-conception-date-alignment-more-precise">7.2 Option B: Approximate Conception Date Alignment (More Precise)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sample-design-recommended">8. Sample Design (Recommended)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#placebo-and-robustness-checks-required-to-claim-reliability">9. Placebo and Robustness Checks (Required to Claim Reliability)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fake-policy-timing-placebo">9.1 Fake Policy Timing Placebo</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#varying-the-comparison-group">9.2 Varying the Comparison Group</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-treatment-coefficient-verification-parallel-trends">9.3 Pre-Treatment Coefficient Verification (Parallel Trends)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#final-deliverables-result-set-for-reports-papers">10. Final Deliverables (Result Set for Reports/Papers)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-information-needed-to-finalize-the-design-checklist">11. Additional Information Needed to Finalize the Design (Checklist)</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

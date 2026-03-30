@@ -1,0 +1,644 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 6. Building a Stock Price Prediction System &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/06_Stock_Price_Prediction_System';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 7. News Comments Analysis" href="07_News_Comments_Analysis.html" />
+    <link rel="prev" title="Ch 5. World Bank Data Extraction" href="05_World_Bank_Data_Extraction.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/06_Stock_Price_Prediction_System.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/06_Stock_Price_Prediction_System.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 6. Building a Stock Price Prediction System</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt"><span style="color: blue;"><strong>1. Prompt</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-idea"><strong>Claude’s Idea</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rationale-for-weight-settings"><span style="color: blue;"><strong>2. Rationale for Weight Settings</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-response"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-1-p-up-the-probability-of-decline"><span style="color: blue;"><strong>3. Is (1 - P(Up)) the Probability of Decline?</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-upgrade-3-class-classification"><span style="color: blue;"><strong>4. Model Upgrade: 3-Class Classification</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-work"><strong>Claude’s Work</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-6-building-a-stock-price-prediction-system">
+<h1><strong>Ch 6. Building a Stock Price Prediction System</strong><a class="headerlink" href="#ch-6-building-a-stock-price-prediction-system" title="Link to this heading">#</a></h1>
+<section id="prompt">
+<h2><span style="color: blue;"><strong>1. Prompt</strong></span><a class="headerlink" href="#prompt" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;"><strong>I want to build a system that estimates the probability of a stock price increase in real time using the following data.</strong></span></p>
+<p><img alt="Stock" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/6-1.png" /></p>
+<p>Source: Two screenshots from the Mirae Asset Securities mobile app</p>
+</section>
+<section id="claude-s-idea">
+<h2><strong>Claude’s Idea</strong><a class="headerlink" href="#claude-s-idea" title="Link to this heading">#</a></h2>
+<p>I identified the order book and 1-minute candlestick chart data from the images. I will build a dashboard that estimates the probability of a price increase in real time by combining order flow imbalance, price momentum, trading volume, and other factors. Based on the uploaded order book and chart data, I have created a real-time probability estimation system for price increases.</p>
+<p><strong>Estimation Model Structure</strong> — Weighted sum of 6 factors:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Factor</p></th>
+<th class="head"><p>Weight</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Order book imbalance (overall)</p></td>
+<td><p>15%</p></td>
+<td><p>Total bid volume vs. ask volume ratio</p></td>
+</tr>
+<tr class="row-odd"><td><p>Order book imbalance (near price)</p></td>
+<td><p>25%</p></td>
+<td><p>Imbalance of the 3 price levels nearest to the current price (most immediate signal)</p></td>
+</tr>
+<tr class="row-even"><td><p>Price momentum</p></td>
+<td><p>20%</p></td>
+<td><p>Rate of price change over the last 5 candles</p></td>
+</tr>
+<tr class="row-odd"><td><p>Volume signal</p></td>
+<td><p>15%</p></td>
+<td><p>Proportion of volume on bullish candles + volume expansion</p></td>
+</tr>
+<tr class="row-even"><td><p>RSI signal</p></td>
+<td><p>10%</p></td>
+<td><p>Overbought/oversold contrarian signal</p></td>
+</tr>
+<tr class="row-odd"><td><p>Spread pressure</p></td>
+<td><p>15%</p></td>
+<td><p>Best bid-ask spread + volume ratio</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In the dashboard below, pressing the <strong>“Start Simulation”</strong> button generates random ticks, updating the order book, chart, and probabilities every 1.2 seconds. To use with a real API, simply replace the simulation component with live data feeds.</p>
+<blockquote>
+<div><p>🔗 <strong>Stock Price Prediction System: Binary Model Dashboard</strong> (<a class="reference external" href="https://claude.ai/public/artifacts/b52ce4f8-90bb-4782-9202-e778a5661dca">https://claude.ai/public/artifacts/b52ce4f8-90bb-4782-9202-e778a5661dca</a>)</p>
+</div></blockquote>
+<p><img alt="Stock" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/6-2.png" /></p>
+</section>
+<section id="rationale-for-weight-settings">
+<h2><span style="color: blue;"><strong>2. Rationale for Weight Settings</strong></span><a class="headerlink" href="#rationale-for-weight-settings" title="Link to this heading">#</a></h2>
+</section>
+<section id="claude-s-response">
+<h2><strong>Claude’s Response</strong><a class="headerlink" href="#claude-s-response" title="Link to this heading">#</a></h2>
+<p>Good question. Let me explain the rationale behind each factor’s weight.</p>
+<p><strong>Near-Price Order Book Imbalance (25%) — Highest Weight</strong></p>
+<p>The bid-ask volume difference at the 3 price levels immediately above and below the current price has the most direct impact on ultra-short-term price direction. While orders at distant price levels are frequently canceled or modified, near-price orders have a higher probability of being executed. In your uploaded data, the difference between the ask volume just above the current price (161,100: 15,800) and the bid volume just below (160,900: 11,965) suggests the short-term direction.</p>
+<p><strong>Price Momentum (20%)</strong></p>
+<p>Looking at the 1-minute chart, the pattern shows a sharp rally from 158,800 at 18:13 to 161,600 at 19:08, followed by consolidation. Whether this momentum continues or fades is a key variable determining the next move, which is why it was assigned the second-highest weight.</p>
+<p><strong>Overall Order Book Imbalance (15%) &amp; Spread Pressure (15%)</strong></p>
+<p>The overall order book imbalance (ask 254K vs. bid 159K) shows the big-picture supply and demand, but distant price levels contain many spoofed orders, making them less reliable than near-price levels. Spread pressure also serves as a supplementary confirmation signal, so both were set at 15%.</p>
+<p><strong>Volume Signal (15%)</strong></p>
+<p>Following the principle that “price is confirmed by volume,” this factor examines whether volume is concentrated on bullish candles. However, at the 1-minute candle level, noise is significant, so it was weighted lower than momentum.</p>
+<p><strong>RSI Signal (10%) — Lowest Weight</strong></p>
+<p>RSI is a lagging indicator, and since it is calculated based on 14 candles, it reacts slowly on 1-minute charts. It provides meaningful contrarian signals only in extreme overbought/oversold zones, so it was assigned a supplementary role at 10%.</p>
+<hr class="docutils" />
+<p>To be candid, these weights are initial values reflecting conventional wisdom from market microstructure research. For more precise use in practice, it would be far more accurate to run backtests on historical data to find optimal weights, or to train a model such as logistic regression or XGBoost. If desired, I can also modify the UI to allow direct weight adjustment via sliders.</p>
+</section>
+<section id="is-1-p-up-the-probability-of-decline">
+<h2><span style="color: blue;"><strong>3. Is (1 - P(Up)) the Probability of Decline?</strong></span><a class="headerlink" href="#is-1-p-up-the-probability-of-decline" title="Link to this heading">#</a></h2>
+</section>
+<section id="id1">
+<h2><strong>Claude’s Response</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>Strictly speaking, no.</p>
+<p>The next price movement has three possible outcomes — up, unchanged, or down — so <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">-</span> <span class="pre">P(up)</span></code> = <code class="docutils literal notranslate"><span class="pre">P(unchanged)</span> <span class="pre">+</span> <span class="pre">P(down)</span></code>. The current model does not distinguish between these and treats the output as a binary score. For example, if the estimated probability of an increase is 40%, it is impossible to tell whether the remaining 60% represents a likely decline or a likely flat market.</p>
+<p>There are three directions for improvement.</p>
+<p>First, switching to a 3-class model. This would estimate separate probabilities for up, unchanged, and down, outputting them in a softmax form so they sum to 100%. Example: Up 35%, Unchanged 40%, Down 25%.</p>
+<p>Second, introducing a threshold. Define movements within ±0.1% of the current price as unchanged, and classify only movements beyond that range as up or down.</p>
+<p>Third, switching to expected return. Instead of probabilities, estimating the “expected price change over the next N minutes” can express both direction and magnitude simultaneously.</p>
+<p>Shall I upgrade to a 3-class model?</p>
+</section>
+<section id="model-upgrade-3-class-classification">
+<h2><span style="color: blue;"><strong>4. Model Upgrade: 3-Class Classification</strong></span><a class="headerlink" href="#model-upgrade-3-class-classification" title="Link to this heading">#</a></h2>
+</section>
+<section id="claude-s-work">
+<h2><strong>Claude’s Work</strong><a class="headerlink" href="#claude-s-work" title="Link to this heading">#</a></h2>
+<p>I will rewrite the entire file as a 3-class model. The key changes are softmax-based 3-class probabilities, introduction of an unchanged-zone threshold, and a 3-color probability trend chart. The upgrade to a 3-class model is complete. The major changes are as follows.</p>
+<p><strong>Model Structure Change</strong></p>
+<p>Instead of the previous binary score (0–100%), the model first computes a directional score from the weighted sum of 6 factors, then combines it with a volatility indicator to produce 3 logits. The up-logit increases when the directional score is positive, the down-logit increases when it is negative, and the unchanged-logit strengthens when volatility is low and directionality is weak. Softmax is applied to these 3 logits to convert them into a probability distribution summing to 100%.</p>
+<p><strong>Unchanged Classification Logic</strong></p>
+<p>Unchanged strength = <code class="docutils literal notranslate"><span class="pre">(1</span> <span class="pre">-</span> <span class="pre">volatility)</span> <span class="pre">×</span> <span class="pre">0.7</span> <span class="pre">+</span> <span class="pre">(1</span> <span class="pre">-</span> <span class="pre">directional</span> <span class="pre">strength)</span> <span class="pre">×</span> <span class="pre">0.3</span></code>. This formula naturally raises the unchanged probability in periods where recent candle ranges are small and factors conflict, resulting in weak directionality.</p>
+<p><strong>UI Changes</strong></p>
+<p>The gauge chart has been replaced with a 3-class bar chart, and the probability trend chart now shows 3 separate lines (green/yellow/red). Directional score, volatility level, and RSI are displayed as separate metric cards.</p>
+<blockquote>
+<div><p>🔗 <strong>Stock Price Prediction System: 3-Class Model Dashboard</strong> (<a class="reference external" href="https://claude.ai/public/artifacts/159d4993-6fdd-4468-8802-d5d25f6026f8">https://claude.ai/public/artifacts/159d4993-6fdd-4468-8802-d5d25f6026f8</a>)</p>
+</div></blockquote>
+<p><img alt="Stock" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/6-3.png" /></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="05_World_Bank_Data_Extraction.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 5. World Bank Data Extraction</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="07_News_Comments_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 7. News Comments Analysis</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prompt"><span style="color: blue;"><strong>1. Prompt</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-idea"><strong>Claude’s Idea</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rationale-for-weight-settings"><span style="color: blue;"><strong>2. Rationale for Weight Settings</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-response"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#is-1-p-up-the-probability-of-decline"><span style="color: blue;"><strong>3. Is (1 - P(Up)) the Probability of Decline?</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Response</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-upgrade-3-class-classification"><span style="color: blue;"><strong>4. Model Upgrade: 3-Class Classification</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-work"><strong>Claude’s Work</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

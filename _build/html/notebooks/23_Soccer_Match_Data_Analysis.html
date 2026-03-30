@@ -1,0 +1,996 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 23. Soccer Match Data Analysis &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/23_Soccer_Match_Data_Analysis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 24. Bombing Destructive Power Analysis" href="24_Bombing_Destructive_Power_Analysis.html" />
+    <link rel="prev" title="Ch 22. Kinematics" href="22_Kinematics.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/23_Soccer_Match_Data_Analysis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/23_Soccer_Match_Data_Analysis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 23. Soccer Match Data Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fifa-world-cup-final-dataset"><span style="color: blue;"><strong>1. 2018 FIFA World Cup Final Dataset</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-explanation"><strong>Claude’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">1. Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#event-file-event-data">2. Event File (Event Data)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#common-fields">2-1. Common Fields</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#event-type-distribution">2-2. Event Type Distribution</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#type-specific-fields">2-3. Type-Specific Fields</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#play-pattern">2-4. Play Pattern</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-system">2-5. Coordinate System</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lineup-file-lineup-data">3. Lineup File (Lineup Data)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#field-structure">3-1. Field Structure</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#position-change-history-positions">3-2. Position Change History (positions)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#potential-use-cases">4. Potential Use Cases</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">5. Notes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#match-flow-analysis"><span style="color: blue;"><strong>2. Match Flow Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-analysis"><strong>Claude’s Analysis</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#player-evaluation"><span style="color: blue;"><strong>3. Player Evaluation</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Analysis</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-23-soccer-match-data-analysis">
+<h1><strong>Ch 23. Soccer Match Data Analysis</strong><a class="headerlink" href="#ch-23-soccer-match-data-analysis" title="Link to this heading">#</a></h1>
+<section id="fifa-world-cup-final-dataset">
+<h2><span style="color: blue;"><strong>1. 2018 FIFA World Cup Final Dataset</strong></span><a class="headerlink" href="#fifa-world-cup-final-dataset" title="Link to this heading">#</a></h2>
+<p><img alt="Worldcup" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/23-1.png" /></p>
+<p>Data: 2018 FIFA World Cup Final — two JSON files (<a class="reference external" href="https://raw.githubusercontent.com/statsbomb/open-data/master/data/events/8658.json">events</a>, <a class="reference external" href="https://raw.githubusercontent.com/statsbomb/open-data/master/data/lineups/8658.json">lineups</a>)</p>
+</section>
+<section id="claude-s-explanation">
+<h2><strong>Claude’s Explanation</strong><a class="headerlink" href="#claude-s-explanation" title="Link to this heading">#</a></h2>
+<p><strong>2018 FIFA World Cup Final — France vs Croatia (Match ID: 8658)</strong></p>
+<hr class="docutils" />
+<section id="overview">
+<h3>1. Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h3>
+<p>This document describes the structure and fields of the 2018 FIFA World Cup Final (France vs Croatia) match data provided in <strong>StatsBomb Open Data</strong> format. The data consists of two JSON files.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>File</p></th>
+<th class="head"><p>Scale</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">16-event_8658.json</span></code></p></td>
+<td><p>2,978 events</p></td>
+<td><p>Detailed records of all events occurring during the match (passes, shots, tackles, fouls, etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">16-lineup8658.json</span></code></p></td>
+<td><p>45 players</p></td>
+<td><p>Player information, positions, and card records for both team squads (23 + 22 players)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Match result:</strong> France 4 – 2 Croatia | <strong>Formation:</strong> France 4-4-2, Croatia 4-3-3 | <strong>Coordinate system:</strong> 120×80 yards</p>
+</section>
+<hr class="docutils" />
+<section id="event-file-event-data">
+<h3>2. Event File (Event Data)<a class="headerlink" href="#event-file-event-data" title="Link to this heading">#</a></h3>
+<p>The event file is a JSON array that records all actions occurring during the match in chronological order. Each event consists of common fields and type-specific fields.</p>
+<section id="common-fields">
+<h4>2-1. Common Fields<a class="headerlink" href="#common-fields" title="Link to this heading">#</a></h4>
+<p>Basic fields included in all events:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p>UUID</p></td>
+<td><p>Unique identifier for each event</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">index</span></code></p></td>
+<td><p>Integer</p></td>
+<td><p>Event sequence number (starting from 1)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">period</span></code></p></td>
+<td><p>Integer</p></td>
+<td><p>Match half (1: first half, 2: second half)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">timestamp</span></code></p></td>
+<td><p>String</p></td>
+<td><p>Time within the half (HH:MM:SS.sss)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">minute</span></code> / <code class="docutils literal notranslate"><span class="pre">second</span></code></p></td>
+<td><p>Integer</p></td>
+<td><p>Minutes/seconds based on overall match time</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>Object</p></td>
+<td><p>Event type (<code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code>)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">possession</span></code></p></td>
+<td><p>Integer</p></td>
+<td><p>Possession sequence number</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">possession_team</span></code></p></td>
+<td><p>Object</p></td>
+<td><p>Team information for the possession</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">play_pattern</span></code></p></td>
+<td><p>Object</p></td>
+<td><p>Play pattern (open play, set piece, etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">team</span></code></p></td>
+<td><p>Object</p></td>
+<td><p>Team performing the event</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">player</span></code></p></td>
+<td><p>Object</p></td>
+<td><p>Player performing the event (<code class="docutils literal notranslate"><span class="pre">id</span></code>, <code class="docutils literal notranslate"><span class="pre">name</span></code>)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">position</span></code></p></td>
+<td><p>Object</p></td>
+<td><p>Player’s position at the time of the event</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">location</span></code></p></td>
+<td><p>Array [x, y]</p></td>
+<td><p>Pitch coordinates (based on 120×80)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">duration</span></code></p></td>
+<td><p>Float</p></td>
+<td><p>Event duration (seconds)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">related_events</span></code></p></td>
+<td><p>Array</p></td>
+<td><p>List of related event UUIDs</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="event-type-distribution">
+<h4>2-2. Event Type Distribution<a class="headerlink" href="#event-type-distribution" title="Link to this heading">#</a></h4>
+<p>Distribution of major event types among 32 total types:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Event Type</p></th>
+<th class="head"><p>Count</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pass</p></td>
+<td><p>846</p></td>
+<td><p>Pass events (recipient, length, angle, height, outcome, etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ball Receipt*</p></td>
+<td><p>747</p></td>
+<td><p>Pass reception events</p></td>
+</tr>
+<tr class="row-even"><td><p>Carry</p></td>
+<td><p>617</p></td>
+<td><p>Ball carry (start/end coordinates)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Pressure</p></td>
+<td><p>254</p></td>
+<td><p>Pressing events against opponents</p></td>
+</tr>
+<tr class="row-even"><td><p>Ball Recovery</p></td>
+<td><p>88</p></td>
+<td><p>Ball recovery</p></td>
+</tr>
+<tr class="row-odd"><td><p>Duel</p></td>
+<td><p>53</p></td>
+<td><p>1v1 contests (aerial duels/tackles, etc.)</p></td>
+</tr>
+<tr class="row-even"><td><p>Clearance</p></td>
+<td><p>37</p></td>
+<td><p>Clearances</p></td>
+</tr>
+<tr class="row-odd"><td><p>Shot</p></td>
+<td><p>23</p></td>
+<td><p>Shots (includes xG, outcome, freeze frame)</p></td>
+</tr>
+<tr class="row-even"><td><p>Goal Keeper</p></td>
+<td><p>32</p></td>
+<td><p>Goalkeeper actions (saves, punches, etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Foul Committed</p></td>
+<td><p>28</p></td>
+<td><p>Fouls</p></td>
+</tr>
+<tr class="row-even"><td><p>Dribble</p></td>
+<td><p>28</p></td>
+<td><p>Dribble attempts</p></td>
+</tr>
+<tr class="row-odd"><td><p>Interception</p></td>
+<td><p>17</p></td>
+<td><p>Interceptions</p></td>
+</tr>
+<tr class="row-even"><td><p>Other</p></td>
+<td><p>208</p></td>
+<td><p>Substitutions, injury stoppages, camera, tactical changes, etc.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="type-specific-fields">
+<h4>2-3. Type-Specific Fields<a class="headerlink" href="#type-specific-fields" title="Link to this heading">#</a></h4>
+<p>▶ Pass</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pass.recipient</span></code> (Object)</p></td>
+<td><p>Receiving player</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pass.length</span></code> (Float)</p></td>
+<td><p>Pass distance</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pass.angle</span></code> (Float)</p></td>
+<td><p>Pass angle (radians)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pass.height</span></code> (Object)</p></td>
+<td><p>Height (Ground / Low / High)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pass.outcome</span></code> (Object)</p></td>
+<td><p>Outcome (absent = successful)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pass.type</span></code> (Object)</p></td>
+<td><p>Type (Corner, Free Kick, Goal Kick, etc.)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>▶ Shot</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shot.statsbomb_xg</span></code> (Float)</p></td>
+<td><p>Expected goals (xG) value</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shot.end_location</span></code> (Array [x,y,z])</p></td>
+<td><p>Shot destination coordinates (3D)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shot.outcome</span></code> (Object)</p></td>
+<td><p>Outcome (Goal, Saved, Off T, Blocked, Wayward)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shot.technique</span></code> (Object)</p></td>
+<td><p>Technique (Normal, Volley, Half Volley, etc.)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shot.body_part</span></code> (Object)</p></td>
+<td><p>Body part</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shot.freeze_frame</span></code> (Array)</p></td>
+<td><p>Coordinates and positions of all players at the moment of the shot</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>▶ Carry</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">carry.end_location</span></code> (Array [x, y])</p></td>
+<td><p>Ball carry end coordinates</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>▶ Duel</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">duel.type</span></code> (Object)</p></td>
+<td><p>Contest type (Aerial Lost/Won, Tackle)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">duel.outcome</span></code> (Object)</p></td>
+<td><p>Outcome</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>▶ Goal Keeper</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">goalkeeper.type</span></code> (Object)</p></td>
+<td><p>Action type (Shot Faced, Save, Punch, etc.)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">goalkeeper.position</span></code> (Object)</p></td>
+<td><p>Stance (Set, Moving)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">goalkeeper.end_location</span></code> (Array)</p></td>
+<td><p>End coordinates</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>▶ Substitution</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">substitution.outcome</span></code> (Object)</p></td>
+<td><p>Reason (Tactical, Injury)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">substitution.replacement</span></code> (Object)</p></td>
+<td><p>Replacement player</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="play-pattern">
+<h4>2-4. Play Pattern<a class="headerlink" href="#play-pattern" title="Link to this heading">#</a></h4>
+<p>Each event records the type of play initiation:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Regular</span> <span class="pre">Play</span></code> · <code class="docutils literal notranslate"><span class="pre">From</span> <span class="pre">Corner</span></code> · <code class="docutils literal notranslate"><span class="pre">From</span> <span class="pre">Counter</span></code> · <code class="docutils literal notranslate"><span class="pre">From</span> <span class="pre">Free</span> <span class="pre">Kick</span></code> · <code class="docutils literal notranslate"><span class="pre">From</span> <span class="pre">Goal</span> <span class="pre">Kick</span></code> · <code class="docutils literal notranslate"><span class="pre">From</span> <span class="pre">Keeper</span></code> · <code class="docutils literal notranslate"><span class="pre">From</span> <span class="pre">Kick</span> <span class="pre">Off</span></code> · <code class="docutils literal notranslate"><span class="pre">From</span> <span class="pre">Throw</span> <span class="pre">In</span></code> · <code class="docutils literal notranslate"><span class="pre">Other</span></code></p>
+</section>
+<section id="coordinate-system">
+<h4>2-5. Coordinate System<a class="headerlink" href="#coordinate-system" title="Link to this heading">#</a></h4>
+<p>StatsBomb uses a <strong>120 × 80 yards</strong> coordinate system. The attacking direction is always left to right (x: 0→120), and the y-axis goes from 0 (top) to 80 (bottom). The <code class="docutils literal notranslate"><span class="pre">end_location</span></code> for shots is three-dimensional (x, y, z), where z represents height.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="lineup-file-lineup-data">
+<h3>3. Lineup File (Lineup Data)<a class="headerlink" href="#lineup-file-lineup-data" title="Link to this heading">#</a></h3>
+<p>The lineup file contains complete squad information for both teams. It includes data for a total of 45 players: 23 from France and 22 from Croatia.</p>
+<section id="field-structure">
+<h4>3-1. Field Structure<a class="headerlink" href="#field-structure" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">team_id</span></code> / <code class="docutils literal notranslate"><span class="pre">team_name</span></code></p></td>
+<td><p>Team identification</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">player_id</span></code> / <code class="docutils literal notranslate"><span class="pre">player_name</span></code></p></td>
+<td><p>Player identification</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">player_nickname</span></code></p></td>
+<td><p>Player nickname (e.g., Kylian Mbappé)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">jersey_number</span></code></p></td>
+<td><p>Jersey number</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">country</span></code></p></td>
+<td><p>Player nationality</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cards</span></code></p></td>
+<td><p>List of yellow/red cards</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">positions</span></code></p></td>
+<td><p>Position change history (with time and reason)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="position-change-history-positions">
+<h3>3-2. Position Change History (positions)<a class="headerlink" href="#position-change-history-positions" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">positions</span></code> array records player position changes during the match in chronological order. Each entry includes <code class="docutils literal notranslate"><span class="pre">position</span></code> (position name), <code class="docutils literal notranslate"><span class="pre">from</span></code>/<code class="docutils literal notranslate"><span class="pre">to</span></code> (time), <code class="docutils literal notranslate"><span class="pre">from_period</span></code>/<code class="docutils literal notranslate"><span class="pre">to_period</span></code> (half), and <code class="docutils literal notranslate"><span class="pre">start_reason</span></code>/<code class="docutils literal notranslate"><span class="pre">end_reason</span></code> (reason for change: Starting XI, Substitution, Tactical Shift, Final Whistle, etc.).</p>
+<p><strong>Example:</strong> Kylian Mbappé started as Right Midfield, then changed to Right Center Forward via Tactical Shift at the 81st minute, maintaining that position until the end of the match.</p>
+</section>
+<hr class="docutils" />
+<section id="potential-use-cases">
+<h3>4. Potential Use Cases<a class="headerlink" href="#potential-use-cases" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Match flow analysis:</strong> Visualize match flow using <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> and <code class="docutils literal notranslate"><span class="pre">possession</span></code> sequences</p></li>
+<li><p><strong>Pass network:</strong> Construct pass networks from passer→recipient relationships in Pass events</p></li>
+<li><p><strong>xG model validation:</strong> Expected goals analysis using <code class="docutils literal notranslate"><span class="pre">statsbomb_xg</span></code> and <code class="docutils literal notranslate"><span class="pre">freeze_frame</span></code> from Shot events</p></li>
+<li><p><strong>Defensive analysis:</strong> Measure defensive intensity using Pressure, Duel, Interception, and Ball Recovery data</p></li>
+<li><p><strong>Heatmaps / Visualization:</strong> Spatial analysis of shots, passes, pressing, etc. using <code class="docutils literal notranslate"><span class="pre">location</span></code> coordinates</p></li>
+<li><p><strong>Player evaluation:</strong> Individual performance analysis combining Lineup position change history + event data</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="notes">
+<h3>5. Notes<a class="headerlink" href="#notes" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Data source:</strong> StatsBomb Open Data (<a class="github reference external" href="https://github.com/statsbomb/open-data">statsbomb/open-data</a>)</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">*</span></code> in <code class="docutils literal notranslate"><span class="pre">Ball</span> <span class="pre">Receipt*</span></code> indicates that the event may have been an incomplete reception (miscontrol).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">under_pressure</span></code> (Boolean) is additionally flagged for events performed under opponent pressure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">related_events</span></code> allows identification of connections between events (e.g., pass ↔ reception, shot ↔ save).</p></li>
+<li><p><strong>xG (Expected Goals):</strong> France 1.10, Croatia 1.48 — Croatia led in xG but the actual result was reversed.</p></li>
+</ul>
+</section>
+</section>
+<section id="match-flow-analysis">
+<h2><span style="color: blue;"><strong>2. Match Flow Analysis</strong></span><a class="headerlink" href="#match-flow-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="claude-s-analysis">
+<h2><strong>Claude’s Analysis</strong><a class="headerlink" href="#claude-s-analysis" title="Link to this heading">#</a></h2>
+<p>An interactive match flow visualization dashboard was created. The components are as follows:</p>
+<blockquote>
+<div><p>🔗 <strong>2018 FIFA World Cup Final Match Flow Dashboard</strong> (<a class="reference external" href="https://claude.ai/public/artifacts/e804fc63-135d-41c8-95bb-37013f47b65e">https://claude.ai/public/artifacts/e804fc63-135d-41c8-95bb-37013f47b65e</a>)</p>
+</div></blockquote>
+<p><img alt="Worldcup" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/23-2.png" /></p>
+<p><strong>Goal Timeline</strong> — All 6 goals are plotted on a time axis for an at-a-glance view of the scoring flow.</p>
+<p><strong>Possession Flow Strip</strong> — 182 possession sequences are visualized by half. Each block’s width is proportional to the number of events, and hovering reveals detailed possession information (time, number of passes, shots, xG, play pattern). Goals are marked with gold dots and shots with white dots.</p>
+<p><strong>Momentum Chart</strong> — Shows changes in match dominance for both teams based on a 5-minute moving average. It clearly reveals that Croatia overwhelmingly dominated from after the 30th minute of the first half through early in the second half, but France scored 2 goals during a brief period of dominance between the 58th and 65th minutes.</p>
+</section>
+<section id="player-evaluation">
+<h2><span style="color: blue;"><strong>3. Player Evaluation</strong></span><a class="headerlink" href="#player-evaluation" title="Link to this heading">#</a></h2>
+</section>
+<section id="id1">
+<h2><strong>Claude’s Analysis</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>An individual performance analysis dashboard was created for all 27 players who appeared in the match. Clicking each player card expands the detailed analysis.</p>
+<blockquote>
+<div><p>🔗 <strong>2018 FIFA World Cup Final Player Evaluation Dashboard</strong> (<a class="reference external" href="https://claude.ai/public/artifacts/b878065b-1feb-4837-8014-bd686662baec">https://claude.ai/public/artifacts/b878065b-1feb-4837-8014-bd686662baec</a>)</p>
+</div></blockquote>
+<p><img alt="Worldcup" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/23-3.png" /></p>
+<p><strong>Radar Chart</strong> — Visualizes percentile rankings relative to starting players on a Per 90-minute basis across six axes: Attack, Passing, Carrying, Pressing, Defense, and Volume. Pogba shows extreme values on both the attacking and defensive fronts, while Brozović shows extreme values in passing and volume.</p>
+<p><strong>Position Change History</strong> — Displays the <code class="docutils literal notranslate"><span class="pre">positions</span></code> array from the Lineup data as a timeline. For example, Mbappé switched from Right Midfield → Right Center Forward at the 81st minute, and Griezmann also changed positions at the same time, allowing tracking of Didier Deschamps’ second-half tactical adjustments.</p>
+<p><strong>Key Findings:</strong></p>
+<ul class="simple">
+<li><p><strong>Brozović</strong> — 271 touches and 99 passes (87 successful), the most in the match. The absolute hub of Croatia’s build-up play.</p></li>
+<li><p><strong>Mbappé</strong> — 6 progressive dribbles and 245 yards of carry distance, the core of France’s counter-attacks. Scored 1 goal from an xG of 0.06 (exceeding expected finishing).</p></li>
+<li><p><strong>Griezmann</strong> — 31 pressures, the most for France. Despite being an attacker, his forward defensive contribution was overwhelming.</p></li>
+<li><p><strong>Kanté</strong> — 19 pressures in 54 minutes played, plus 1 yellow card. This suggests his substitution was motivated by fitness management and card avoidance.</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="22_Kinematics.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 22. Kinematics</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="24_Bombing_Destructive_Power_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 24. Bombing Destructive Power Analysis</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fifa-world-cup-final-dataset"><span style="color: blue;"><strong>1. 2018 FIFA World Cup Final Dataset</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-explanation"><strong>Claude’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">1. Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#event-file-event-data">2. Event File (Event Data)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#common-fields">2-1. Common Fields</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#event-type-distribution">2-2. Event Type Distribution</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#type-specific-fields">2-3. Type-Specific Fields</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#play-pattern">2-4. Play Pattern</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#coordinate-system">2-5. Coordinate System</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lineup-file-lineup-data">3. Lineup File (Lineup Data)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#field-structure">3-1. Field Structure</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#position-change-history-positions">3-2. Position Change History (positions)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#potential-use-cases">4. Potential Use Cases</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#notes">5. Notes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#match-flow-analysis"><span style="color: blue;"><strong>2. Match Flow Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-analysis"><strong>Claude’s Analysis</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#player-evaluation"><span style="color: blue;"><strong>3. Player Evaluation</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Claude’s Analysis</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

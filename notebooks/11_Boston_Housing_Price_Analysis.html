@@ -1,0 +1,2623 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 11. Boston Housing Price Analysis &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/11_Boston_Housing_Price_Analysis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 12. Comprehensive Property Tax and Rent" href="12_Comprehensive_Property_Tax_and_Rent.html" />
+    <link rel="prev" title="Ch 10. Exploratory Factor Analysis" href="10_Exploratory_Factor_Analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/11_Boston_Housing_Price_Analysis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/11_Boston_Housing_Price_Analysis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 11. Boston Housing Price Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-upload"><span style="color: blue;"><strong>1. Data Upload</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-explanation"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-overview">1. Dataset Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-descriptions">2. Variable Descriptions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analytical-perspective">3. Analytical Perspective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features-of-the-data">4. Key Features of the Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">5. Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-correlations-and-scatter-plot-matrix"><span style="color: blue;"><strong>2. Summary Statistics, Correlations, and Scatter Plot Matrix</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics">1. Summary Statistics</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-observations">Key Observations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-between-variables">2. Correlation Between Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-with-medv-sorted-by-absolute-value">Correlation with MEDV (sorted by absolute value)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-interpretations">Key Interpretations</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-matrix">Correlation Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scatter-plot-matrix">3. Scatter Plot Matrix</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-observations-what-to-look-for-in-this-plot">Key Observations (what to look for in this plot)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-linear-regression"><span style="color: blue;"><strong>3. Simple Linear Regression</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimated-regression-coefficients">1. Estimated Regression Coefficients</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goodness-of-fit-summary">2. Goodness of Fit Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scatter-plot-with-regression-line">3. Scatter Plot with Regression Line</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-diagnostics">4. Residual Diagnostics</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#residuals-vs-fitted">(1) Residuals vs Fitted</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-q-q">(2) Normal Q-Q</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#scale-location">(3) Scale-Location</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#leverage-vs-standardized-residuals-influential-points">(4) Leverage vs Standardized Residuals, Influential Points</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-issues-observed-in-lstat-only-simple-linear-regression">Summary: Issues Observed in LSTAT-Only Simple Linear Regression</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression-analysis"><span style="color: blue;"><strong>4. Multiple Regression Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-analysis"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-specification">1. Model Specification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-coefficient-summary-key-variables">2. Regression Coefficient Summary (Key Variables)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression-medv-all-explanatory-variables-ols-coefficient-table">Multiple Regression: MEDV ~ All Explanatory Variables (OLS) Coefficient Table</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goodness-of-fit-interpretation">3. Goodness of Fit Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residuals-vs-fitted-values-plot">4. Residuals vs Fitted Values Plot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">5. Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multicollinearity-diagnostics"><span style="color: blue;"><strong>5. Multicollinearity Diagnostics</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-intuition">Key Intuition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-guidelines-conventions">Interpretation Guidelines (Conventions)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vif-diagnostic-results-descending-order">VIF Diagnostic Results (Descending Order)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intuitive-interpretation-what-is-happening-in-this-data">Intuitive Interpretation (What Is Happening in This Data)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vif-and-r-j-2-relationship-top-values">VIF and <span class="math notranslate nohighlight">\(R_j^2\)</span> Relationship (Top Values)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-matters-problems-that-arise-in-practice">Why This Matters (Problems That Arise in Practice)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#next-step-options">Next Step Options</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standardized-coefficients"><span style="color: blue;"><strong>6. Standardized Coefficients</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-are-standardized-coefficients">What Are Standardized Coefficients?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-importance-table-based-on-standardized-coefficients">Variable Importance Table Based on Standardized Coefficients</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intuitive-interpretation">Intuitive Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sentence-summary">One-Sentence Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#log-transformed-regression-analysis"><span style="color: blue;"><strong>7. Log-Transformed Regression Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-meaning-of-taking-logarithms-of-appropriate-variables-intuition">1. The Meaning of Taking Logarithms of Appropriate Variables (Intuition)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#log-transformed-regression-model">2. Log-Transformed Regression Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficient-estimates-table">3. Coefficient Estimates Table</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficient-interpretation-key-points">4. Coefficient Interpretation (Key Points)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loglog-variables-elasticity">(1) Log–log variables: <strong>Elasticity</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loglevel-variables-semi-elasticity">(2) Log–level variables: <strong>Semi-elasticity</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dummy-variable">(3) Dummy variable</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">5. Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-11-boston-housing-price-analysis">
+<h1><strong>Ch 11. Boston Housing Price Analysis</strong><a class="headerlink" href="#ch-11-boston-housing-price-analysis" title="Link to this heading">#</a></h1>
+<section id="data-upload">
+<h2><span style="color: blue;"><strong>1. Data Upload</strong></span><a class="headerlink" href="#data-upload" title="Link to this heading">#</a></h2>
+<p><img alt="Regression1" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-1.png" /></p>
+</section>
+<section id="chatgpt-explanation">
+<h2><strong>ChatGPT Explanation</strong><a class="headerlink" href="#chatgpt-explanation" title="Link to this heading">#</a></h2>
+<section id="dataset-overview">
+<h3>1. Dataset Overview<a class="headerlink" href="#dataset-overview" title="Link to this heading">#</a></h3>
+<p>This dataset contains housing prices and socioeconomic characteristics for various census tracts (cross-sectional units) in the Boston area of Massachusetts, USA, from the 1970s. Each row represents a single tract, and the columns represent tract-level characteristics (explanatory variables) or housing prices (response variable). It is one of the most widely used classic datasets for regression analysis examples.</p>
+<ul class="simple">
+<li><p><strong>Unit of observation</strong>: Census tracts within Boston (cross-sectional data)</p></li>
+<li><p><strong>Number of observations</strong>: 506</p></li>
+<li><p><strong>Number of explanatory variables</strong>: 13</p></li>
+<li><p><strong>Response variable</strong>: 1 (housing price)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="variable-descriptions">
+<h3>2. Variable Descriptions<a class="headerlink" href="#variable-descriptions" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Variable</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head text-center"><p>Type</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>CRIM</p></td>
+<td><p>Per capita crime rate by town</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>ZN</p></td>
+<td><p>Proportion of residential land zoned for lots over 25,000 sq.ft</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>INDUS</p></td>
+<td><p>Proportion of non-retail business acres per town</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>CHAS</p></td>
+<td><p>Charles River dummy variable (1 = tract bounds river)</p></td>
+<td class="text-center"><p>Binary</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>NOX</p></td>
+<td><p>Nitric oxide concentration</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>RM</p></td>
+<td><p>Average number of rooms per dwelling</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>AGE</p></td>
+<td><p>Proportion of owner-occupied units built prior to 1940</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>DIS</p></td>
+<td><p>Weighted distance to employment centers</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>RAD</p></td>
+<td><p>Index of accessibility to radial highways</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>TAX</p></td>
+<td><p>Property tax rate</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>PTRATIO</p></td>
+<td><p>Pupil-teacher ratio by town</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>B</p></td>
+<td><p>Index based on proportion of Black residents (historical variable)</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>LSTAT</p></td>
+<td><p>Percentage of lower-status population (%)</p></td>
+<td class="text-center"><p>Continuous</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>MEDV</p></td>
+<td><p><strong>Median home value (in $1,000s)</strong></p></td>
+<td class="text-center"><p><strong>Response</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="analytical-perspective">
+<h3>3. Analytical Perspective<a class="headerlink" href="#analytical-perspective" title="Link to this heading">#</a></h3>
+<p>This dataset has a structure well-suited for illustrating the standard <strong>multiple linear regression model</strong>:</p>
+<div class="math notranslate nohighlight">
+\[
+Y = X\beta + \epsilon
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(Y\)</span> = <code class="docutils literal notranslate"><span class="pre">MEDV</span></code> (housing price)</p></li>
+<li><p><span class="math notranslate nohighlight">\(X\)</span> = vector of tract characteristics</p></li>
+<li><p><span class="math notranslate nohighlight">\(\beta\)</span> = marginal effect of each characteristic on price</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span> = unexplained error</p></li>
+</ul>
+<p>In other words, this dataset can be interpreted as a problem of <strong>estimating the determinants of housing prices</strong>.</p>
+</section>
+<hr class="docutils" />
+<section id="key-features-of-the-data">
+<h3>4. Key Features of the Data<a class="headerlink" href="#key-features-of-the-data" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Cross-sectional data</strong>
+The analysis examines differences across tracts, not changes over time.</p></li>
+<li><p><strong>Mix of continuous and discrete variables</strong>
+Good for demonstrating dummy variable handling in regression models (<code class="docutils literal notranslate"><span class="pre">CHAS</span></code>).</p></li>
+<li><p><strong>Potential multicollinearity</strong>
+<code class="docutils literal notranslate"><span class="pre">RAD</span></code>, <code class="docutils literal notranslate"><span class="pre">TAX</span></code>, <code class="docutils literal notranslate"><span class="pre">INDUS</span></code>, etc., may be highly correlated with each other, making this suitable for regression diagnostics examples.</p></li>
+<li><p><strong>Possible nonlinear relationships</strong>
+<code class="docutils literal notranslate"><span class="pre">LSTAT</span></code> and <code class="docutils literal notranslate"><span class="pre">MEDV</span></code> exhibit a relationship closer to a curve than a straight line, demonstrating the need for model extension.</p></li>
+<li><p><strong>Socioeconomic data characteristics</strong>
+Not only physical attributes but also social factors influence price determination.</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h3>5. Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h3>
+<p>This dataset is highly suitable as an educational resource for:</p>
+<ul class="simple">
+<li><p><strong>Understanding the structure of regression models</strong></p></li>
+<li><p><strong>Diagnosing model assumptions</strong></p></li>
+<li><p><strong>Explaining the difference between prediction and causal interpretation</strong></p></li>
+</ul>
+<p>In short, this dataset goes beyond simple price prediction and can be viewed as a <strong>standard textbook case for practicing statistical inference and econometric model interpretation</strong>.</p>
+<hr class="docutils" />
+<p>As next steps, we can proceed with:</p>
+<ul class="simple">
+<li><p>Summary statistics</p></li>
+<li><p>Correlation analysis between variables</p></li>
+<li><p>Scatter plot matrix</p></li>
+</ul>
+<p>Which shall we start with?</p>
+</section>
+</section>
+<section id="summary-statistics-correlations-and-scatter-plot-matrix">
+<h2><span style="color: blue;"><strong>2. Summary Statistics, Correlations, and Scatter Plot Matrix</strong></span><a class="headerlink" href="#summary-statistics-correlations-and-scatter-plot-matrix" title="Link to this heading">#</a></h2>
+</section>
+<section id="id1">
+<h2><strong>ChatGPT Explanation</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<section id="summary-statistics">
+<h3>1. Summary Statistics<a class="headerlink" href="#summary-statistics" title="Link to this heading">#</a></h3>
+<p>The table serves as a starting point for a quick overview of each variable’s distribution. The mean and standard deviation indicate center and spread, while the quartiles quickly reveal asymmetry and potential outliers.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Variable</p></th>
+<th class="head text-center"><p>Count</p></th>
+<th class="head text-center"><p>Mean</p></th>
+<th class="head text-center"><p>Std</p></th>
+<th class="head text-center"><p>Min</p></th>
+<th class="head text-center"><p>Q1 (25%)</p></th>
+<th class="head text-center"><p>Median (50%)</p></th>
+<th class="head text-center"><p>Q3 (75%)</p></th>
+<th class="head text-center"><p>Max</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>CRIM</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>3.614</p></td>
+<td class="text-center"><p>8.602</p></td>
+<td class="text-center"><p>0.006</p></td>
+<td class="text-center"><p>0.082</p></td>
+<td class="text-center"><p>0.257</p></td>
+<td class="text-center"><p>3.677</p></td>
+<td class="text-center"><p>88.976</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>ZN</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>11.364</p></td>
+<td class="text-center"><p>23.322</p></td>
+<td class="text-center"><p>0.000</p></td>
+<td class="text-center"><p>0.000</p></td>
+<td class="text-center"><p>0.000</p></td>
+<td class="text-center"><p>12.500</p></td>
+<td class="text-center"><p>100.000</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>INDUS</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>11.137</p></td>
+<td class="text-center"><p>6.860</p></td>
+<td class="text-center"><p>0.460</p></td>
+<td class="text-center"><p>5.190</p></td>
+<td class="text-center"><p>9.690</p></td>
+<td class="text-center"><p>18.100</p></td>
+<td class="text-center"><p>27.740</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>CHAS</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>0.069</p></td>
+<td class="text-center"><p>0.254</p></td>
+<td class="text-center"><p>0.000</p></td>
+<td class="text-center"><p>0.000</p></td>
+<td class="text-center"><p>0.000</p></td>
+<td class="text-center"><p>0.000</p></td>
+<td class="text-center"><p>1.000</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>NOX</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>0.555</p></td>
+<td class="text-center"><p>0.116</p></td>
+<td class="text-center"><p>0.385</p></td>
+<td class="text-center"><p>0.449</p></td>
+<td class="text-center"><p>0.538</p></td>
+<td class="text-center"><p>0.624</p></td>
+<td class="text-center"><p>0.871</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>RM</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>6.285</p></td>
+<td class="text-center"><p>0.703</p></td>
+<td class="text-center"><p>3.561</p></td>
+<td class="text-center"><p>5.885</p></td>
+<td class="text-center"><p>6.208</p></td>
+<td class="text-center"><p>6.623</p></td>
+<td class="text-center"><p>8.780</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>AGE</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>68.575</p></td>
+<td class="text-center"><p>28.149</p></td>
+<td class="text-center"><p>2.900</p></td>
+<td class="text-center"><p>45.025</p></td>
+<td class="text-center"><p>77.500</p></td>
+<td class="text-center"><p>94.075</p></td>
+<td class="text-center"><p>100.000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>DIS</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>3.795</p></td>
+<td class="text-center"><p>2.106</p></td>
+<td class="text-center"><p>1.130</p></td>
+<td class="text-center"><p>2.100</p></td>
+<td class="text-center"><p>3.207</p></td>
+<td class="text-center"><p>5.188</p></td>
+<td class="text-center"><p>12.127</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>RAD</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>9.549</p></td>
+<td class="text-center"><p>8.707</p></td>
+<td class="text-center"><p>1.000</p></td>
+<td class="text-center"><p>4.000</p></td>
+<td class="text-center"><p>5.000</p></td>
+<td class="text-center"><p>24.000</p></td>
+<td class="text-center"><p>24.000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>TAX</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>408.237</p></td>
+<td class="text-center"><p>168.537</p></td>
+<td class="text-center"><p>187.000</p></td>
+<td class="text-center"><p>279.000</p></td>
+<td class="text-center"><p>330.000</p></td>
+<td class="text-center"><p>666.000</p></td>
+<td class="text-center"><p>711.000</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>PTRATIO</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>18.456</p></td>
+<td class="text-center"><p>2.165</p></td>
+<td class="text-center"><p>12.600</p></td>
+<td class="text-center"><p>17.400</p></td>
+<td class="text-center"><p>19.050</p></td>
+<td class="text-center"><p>20.200</p></td>
+<td class="text-center"><p>22.000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>B</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>356.674</p></td>
+<td class="text-center"><p>91.295</p></td>
+<td class="text-center"><p>0.320</p></td>
+<td class="text-center"><p>375.377</p></td>
+<td class="text-center"><p>391.440</p></td>
+<td class="text-center"><p>396.225</p></td>
+<td class="text-center"><p>396.900</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>LSTAT</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>12.653</p></td>
+<td class="text-center"><p>7.141</p></td>
+<td class="text-center"><p>1.730</p></td>
+<td class="text-center"><p>6.950</p></td>
+<td class="text-center"><p>11.360</p></td>
+<td class="text-center"><p>16.955</p></td>
+<td class="text-center"><p>37.970</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>MEDV</p></td>
+<td class="text-center"><p>506</p></td>
+<td class="text-center"><p>22.533</p></td>
+<td class="text-center"><p>9.197</p></td>
+<td class="text-center"><p>5.000</p></td>
+<td class="text-center"><p>17.025</p></td>
+<td class="text-center"><p>21.200</p></td>
+<td class="text-center"><p>25.000</p></td>
+<td class="text-center"><p>50.000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr class="docutils" />
+<section id="key-observations">
+<h4>Key Observations<a class="headerlink" href="#key-observations" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>CHAS is a binary 0/1 variable, so its mean of 0.069 is interpreted as the proportion of 1s (approximately 6.9%).</p></li>
+<li><p>CRIM has a maximum far exceeding its mean, suggesting a distribution with a long right tail (strong positive skewness).</p></li>
+<li><p>MEDV has a maximum of 50, which looks like a cap. This raises suspicion of censoring or a ceiling effect in the dependent variable for regression.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="correlation-between-variables">
+<h3>2. Correlation Between Variables<a class="headerlink" href="#correlation-between-variables" title="Link to this heading">#</a></h3>
+<p>The correlation coefficient summarizes the degree of linear co-movement between two continuous variables. Here we use the Pearson correlation coefficient <span class="math notranslate nohighlight">\(r\)</span>. The sign of <span class="math notranslate nohighlight">\(r\)</span> indicates direction (increase/decrease), and the absolute value indicates the strength of the linear relationship.</p>
+<hr class="docutils" />
+<section id="correlation-with-medv-sorted-by-absolute-value">
+<h4>Correlation with MEDV (sorted by absolute value)<a class="headerlink" href="#correlation-with-medv-sorted-by-absolute-value" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Variable</p></th>
+<th class="head text-center"><p>Correlation with MEDV</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>LSTAT</p></td>
+<td class="text-center"><p>-0.738</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>RM</p></td>
+<td class="text-center"><p>0.695</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>PTRATIO</p></td>
+<td class="text-center"><p>-0.508</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>INDUS</p></td>
+<td class="text-center"><p>-0.484</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>TAX</p></td>
+<td class="text-center"><p>-0.469</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>NOX</p></td>
+<td class="text-center"><p>-0.427</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>CRIM</p></td>
+<td class="text-center"><p>-0.388</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>RAD</p></td>
+<td class="text-center"><p>-0.382</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>AGE</p></td>
+<td class="text-center"><p>-0.377</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>ZN</p></td>
+<td class="text-center"><p>0.360</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>B</p></td>
+<td class="text-center"><p>0.333</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>DIS</p></td>
+<td class="text-center"><p>0.250</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>CHAS</p></td>
+<td class="text-center"><p>0.175</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="key-interpretations">
+<h4>Key Interpretations<a class="headerlink" href="#key-interpretations" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>LSTAT–MEDV: Strong negative correlation. A clear tendency for housing prices to decrease as the proportion of lower-status population increases.</p></li>
+<li><p>RM–MEDV: Strong positive correlation. A clear tendency for housing prices to increase as the number of rooms increases.</p></li>
+<li><p>TAX, RAD, INDUS, NOX, etc., are likely also highly correlated with each other. In such cases, multicollinearity can arise in multiple regression, so one should not infer causation from simple correlations alone.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="correlation-matrix">
+<h4>Correlation Matrix<a class="headerlink" href="#correlation-matrix" title="Link to this heading">#</a></h4>
+<p><img alt="Regression2" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-2.png" /></p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="scatter-plot-matrix">
+<h3>3. Scatter Plot Matrix<a class="headerlink" href="#scatter-plot-matrix" title="Link to this heading">#</a></h3>
+<p>The scatter plot matrix shows:</p>
+<ul class="simple">
+<li><p>(Diagonal) Univariate distribution of each variable (histogram)</p></li>
+<li><p>(Off-diagonal) Pairwise relationships between variables (linearity/nonlinearity, clusters, outliers, heterogeneity of variance)</p></li>
+</ul>
+<p>all at once.</p>
+<p><img alt="Regression3" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-3.png" /></p>
+<hr class="docutils" />
+<section id="key-observations-what-to-look-for-in-this-plot">
+<h4>Key Observations (what to look for in this plot)<a class="headerlink" href="#key-observations-what-to-look-for-in-this-plot" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>MEDV–LSTAT: Negative direction, and shows signs of curvature (nonlinearity) rather than a purely linear pattern. This suggests candidates for transformation (e.g., log, polynomial, spline) in linear regression.</p></li>
+<li><p>MEDV–RM: Positive direction and relatively clear, but if values are compressed at the top (50), this could reflect the effect of a dependent variable cap.</p></li>
+<li><p>CRIM: Values are typically clustered near 0 with a few large outliers. A log transformation (log(CRIM)) is frequently considered in regression.</p></li>
+<li><p>TAX–RAD: If the points cluster in a grid-like pattern, it indicates a discrete (or step-like) value structure, and a simple continuous assumption may be inappropriate.</p></li>
+</ul>
+<hr class="docutils" />
+<p>Next, we will proceed with:</p>
+<ul class="simple">
+<li><p>Fitting two simple regressions on MEDV (with LSTAT and RM), followed by residual diagnostics (Residuals vs Fitted, Q-Q), to naturally illustrate why transformation, nonlinearity, and outlier treatment become necessary.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="simple-linear-regression">
+<h2><span style="color: blue;"><strong>3. Simple Linear Regression</strong></span><a class="headerlink" href="#simple-linear-regression" title="Link to this heading">#</a></h2>
+</section>
+<section id="id2">
+<h2><strong>ChatGPT Explanation</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>Below, we fit a simple linear regression with <span class="math notranslate nohighlight">\(Y=\text{MEDV}\)</span> and <span class="math notranslate nohighlight">\(X=\text{LSTAT}\)</span>, then examine model assumptions through residual diagnostics.</p>
+<p>The model is:</p>
+<div class="math notranslate nohighlight">
+\[
+Y_i = \beta_0 + \beta_1 X_i + \epsilon_i
+\]</div>
+<hr class="docutils" />
+<section id="estimated-regression-coefficients">
+<h3>1. Estimated Regression Coefficients<a class="headerlink" href="#estimated-regression-coefficients" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Term</p></th>
+<th class="head text-center"><p>Estimate</p></th>
+<th class="head text-center"><p>Std. Error</p></th>
+<th class="head text-center"><p>t-value</p></th>
+<th class="head text-center"><p>p-value</p></th>
+<th class="head text-center"><p>95% CI (Lower)</p></th>
+<th class="head text-center"><p>95% CI (Upper)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>Intercept (constant)</p></td>
+<td class="text-center"><p>34.554</p></td>
+<td class="text-center"><p>0.563</p></td>
+<td class="text-center"><p>61.415</p></td>
+<td class="text-center"><p>3.74e-236</p></td>
+<td class="text-center"><p>33.448</p></td>
+<td class="text-center"><p>35.659</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>LSTAT</p></td>
+<td class="text-center"><p>-0.950</p></td>
+<td class="text-center"><p>0.039</p></td>
+<td class="text-center"><p>-24.528</p></td>
+<td class="text-center"><p>5.08e-88</p></td>
+<td class="text-center"><p>-1.026</p></td>
+<td class="text-center"><p>-0.874</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Interpretation:</p>
+<ul class="simple">
+<li><p>Slope <span class="math notranslate nohighlight">\(\hat\beta_1=-0.95\)</span>: The estimated linear trend suggests that when LSTAT increases by 1 unit, the conditional mean of MEDV decreases by approximately 0.95. (MEDV is in units of $1,000.)</p></li>
+<li><p>The p-value is extremely small, so the null hypothesis of “zero linear slope” is strongly rejected. However, this only indicates the existence of a linear relationship, not causation.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="goodness-of-fit-summary">
+<h3>2. Goodness of Fit Summary<a class="headerlink" href="#goodness-of-fit-summary" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Metric</p></th>
+<th class="head text-center"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>Number of observations</p></td>
+<td class="text-center"><p>506</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>R²</p></td>
+<td class="text-center"><p>0.544</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Adj. R²</p></td>
+<td class="text-center"><p>0.543</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Residual Std. Error (σ̂)</p></td>
+<td class="text-center"><p>6.216</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>F-statistic</p></td>
+<td class="text-center"><p>601.6</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>F-statistic p-value</p></td>
+<td class="text-center"><p>5.08e-88</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Interpretation:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(R^2=0.544\)</span>: LSTAT alone linearly explains approximately 54.4% of the variation in MEDV.</p></li>
+<li><p><span class="math notranslate nohighlight">\(\hat\sigma=6.216\)</span>: The typical magnitude of prediction error is approximately 6.2 (in units of $1,000).</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="scatter-plot-with-regression-line">
+<h3>3. Scatter Plot with Regression Line<a class="headerlink" href="#scatter-plot-with-regression-line" title="Link to this heading">#</a></h3>
+<p><img alt="Regression4" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-4.png" /></p>
+<ul class="simple">
+<li><p>A clear negative relationship is visible overall.</p></li>
+<li><p>In the right segment (large LSTAT values), the linear line does not appear to fully capture the curvature of the data. This suggests possible nonlinearity.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="residual-diagnostics">
+<h3>4. Residual Diagnostics<a class="headerlink" href="#residual-diagnostics" title="Link to this heading">#</a></h3>
+<section id="residuals-vs-fitted">
+<h4>(1) Residuals vs Fitted<a class="headerlink" href="#residuals-vs-fitted" title="Link to this heading">#</a></h4>
+<p><img alt="Regression5" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-5.png" /></p>
+<ul class="simple">
+<li><p>In the “Residuals vs Fitted (MEDV ~ LSTAT)” plot, if residuals are randomly scattered around 0, the linearity and homoscedasticity assumptions are reasonably satisfied.</p></li>
+<li><p>In practice, a fan-shaped pattern is visible where residual variance increases in the region of larger fitted values. This strongly suggests heteroscedasticity.</p></li>
+<li><p>Additionally, if a systematic curved pattern is observed, <span class="math notranslate nohighlight">\(E[Y|X]\)</span> may not be a straight line (nonlinearity).</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="normal-q-q">
+<h4>(2) Normal Q-Q<a class="headerlink" href="#normal-q-q" title="Link to this heading">#</a></h4>
+<p><img alt="Regression6" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-6.png" /></p>
+<ul class="simple">
+<li><p>In the “Normal Q-Q (Residuals)” plot, deviations from the line in the tails (especially the upper tail) are noticeable.</p></li>
+<li><p>Residual normality may not be perfect. Since the sample size is 506, asymptotic normality of the estimators can be expected, but robust standard errors provide a practically useful alternative for interval estimation and hypothesis testing.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="scale-location">
+<h4>(3) Scale-Location<a class="headerlink" href="#scale-location" title="Link to this heading">#</a></h4>
+<p><img alt="Regression7" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-7.png" /></p>
+<ul class="simple">
+<li><p>In the “Scale-Location” plot, the tendency for <span class="math notranslate nohighlight">\(\sqrt{|\text{standardized residuals}|}\)</span> to increase with fitted values reconfirms violation of the homoscedasticity assumption (heteroscedasticity).</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="leverage-vs-standardized-residuals-influential-points">
+<h4>(4) Leverage vs Standardized Residuals, Influential Points<a class="headerlink" href="#leverage-vs-standardized-residuals-influential-points" title="Link to this heading">#</a></h4>
+<p><img alt="Regression8" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-8.png" /></p>
+<ul class="simple">
+<li><p>In the “Leverage vs Standardized Residuals” plot, points with high leverage or large standardized residuals are candidates for influential observations.</p></li>
+<li><p>The table below shows the top 10 observations by Cook’s distance (larger values indicate greater influence on regression coefficients).</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Obs. Index</p></th>
+<th class="head text-center"><p>LSTAT</p></th>
+<th class="head text-center"><p>MEDV</p></th>
+<th class="head text-center"><p>FITTED</p></th>
+<th class="head text-center"><p>RESID</p></th>
+<th class="head text-center"><p>LEVERAGE</p></th>
+<th class="head text-center"><p>COOKS_D</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>374</p></td>
+<td class="text-center"><p>37.970</p></td>
+<td class="text-center"><p>13.800</p></td>
+<td class="text-center"><p>-1.520</p></td>
+<td class="text-center"><p>15.320</p></td>
+<td class="text-center"><p>0.027</p></td>
+<td class="text-center"><p>0.086</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>412</p></td>
+<td class="text-center"><p>34.370</p></td>
+<td class="text-center"><p>17.900</p></td>
+<td class="text-center"><p>1.901</p></td>
+<td class="text-center"><p>15.999</p></td>
+<td class="text-center"><p>0.020</p></td>
+<td class="text-center"><p>0.070</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>214</p></td>
+<td class="text-center"><p>29.550</p></td>
+<td class="text-center"><p>23.700</p></td>
+<td class="text-center"><p>6.480</p></td>
+<td class="text-center"><p>17.220</p></td>
+<td class="text-center"><p>0.013</p></td>
+<td class="text-center"><p>0.051</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>141</p></td>
+<td class="text-center"><p>34.410</p></td>
+<td class="text-center"><p>14.400</p></td>
+<td class="text-center"><p>1.863</p></td>
+<td class="text-center"><p>12.537</p></td>
+<td class="text-center"><p>0.020</p></td>
+<td class="text-center"><p>0.043</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>373</p></td>
+<td class="text-center"><p>34.770</p></td>
+<td class="text-center"><p>13.800</p></td>
+<td class="text-center"><p>1.521</p></td>
+<td class="text-center"><p>12.279</p></td>
+<td class="text-center"><p>0.021</p></td>
+<td class="text-center"><p>0.043</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>161</p></td>
+<td class="text-center"><p>1.730</p></td>
+<td class="text-center"><p>50.000</p></td>
+<td class="text-center"><p>32.910</p></td>
+<td class="text-center"><p>17.090</p></td>
+<td class="text-center"><p>0.007</p></td>
+<td class="text-center"><p>0.025</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>162</p></td>
+<td class="text-center"><p>1.920</p></td>
+<td class="text-center"><p>50.000</p></td>
+<td class="text-center"><p>32.730</p></td>
+<td class="text-center"><p>17.270</p></td>
+<td class="text-center"><p>0.006</p></td>
+<td class="text-center"><p>0.025</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>204</p></td>
+<td class="text-center"><p>2.880</p></td>
+<td class="text-center"><p>50.000</p></td>
+<td class="text-center"><p>31.818</p></td>
+<td class="text-center"><p>18.182</p></td>
+<td class="text-center"><p>0.006</p></td>
+<td class="text-center"><p>0.025</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>370</p></td>
+<td class="text-center"><p>2.960</p></td>
+<td class="text-center"><p>50.000</p></td>
+<td class="text-center"><p>31.742</p></td>
+<td class="text-center"><p>18.258</p></td>
+<td class="text-center"><p>0.006</p></td>
+<td class="text-center"><p>0.025</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>195</p></td>
+<td class="text-center"><p>2.970</p></td>
+<td class="text-center"><p>50.000</p></td>
+<td class="text-center"><p>31.732</p></td>
+<td class="text-center"><p>18.268</p></td>
+<td class="text-center"><p>0.006</p></td>
+<td class="text-center"><p>0.025</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Notable observations:</p>
+<ul class="simple">
+<li><p>Observations with very large LSTAT values (e.g., 374) are extreme <span class="math notranslate nohighlight">\(X\)</span> values, so their leverage is high. If the linear model fails to explain that range well, their residuals are also large, making them likely influential points.</p></li>
+<li><p>Observations with MEDV = 50 appear repeatedly. Large positive residuals arise because of the dependent variable ceiling, which can affect model fitting and diagnostics.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="summary-issues-observed-in-lstat-only-simple-linear-regression">
+<h3>Summary: Issues Observed in LSTAT-Only Simple Linear Regression<a class="headerlink" href="#summary-issues-observed-in-lstat-only-simple-linear-regression" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>A strong negative linear trend in the mean relationship is clear (significant slope, large <span class="math notranslate nohighlight">\(R^2\)</span>).</p></li>
+<li><p>However, residual plots simultaneously reveal signals of nonlinearity and heteroscedasticity.</p></li>
+<li><p>Extreme LSTAT values and MEDV ceiling (50) observations play important roles in diagnostics.</p></li>
+</ul>
+<hr class="docutils" />
+<p>Two natural next steps to choose from:</p>
+<ul class="simple">
+<li><p>(A) LSTAT transformation / nonlinear extension: e.g., comparing with a model including a quadratic term $<span class="math notranslate nohighlight">\(\text{MEDV}=\beta_0+\beta_1\text{LSTAT}+\beta_2\text{LSTAT}^2+\epsilon\)</span>$</p></li>
+<li><p>(B) Robust inference: Recalculating coefficient significance and confidence intervals using heteroscedasticity-consistent (robust) standard errors</p></li>
+</ul>
+</section>
+</section>
+<section id="multiple-regression-analysis">
+<h2><span style="color: blue;"><strong>4. Multiple Regression Analysis</strong></span><a class="headerlink" href="#multiple-regression-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="chatgpt-analysis">
+<h2><strong>ChatGPT Analysis</strong><a class="headerlink" href="#chatgpt-analysis" title="Link to this heading">#</a></h2>
+<p>Below, we summarize the results of the <strong>multiple regression analysis with all explanatory variables included simultaneously</strong> and provide an intuitive interpretation of the key findings.</p>
+<hr class="docutils" />
+<section id="model-specification">
+<h3>1. Model Specification<a class="headerlink" href="#model-specification" title="Link to this heading">#</a></h3>
+<div class="math notranslate nohighlight">
+\[
+\text{MEDV}
+= \beta_0
++ \beta_1 \text{CRIM}
++ \beta_2 \text{ZN}
++ \cdots
++ \beta_{13} \text{LSTAT}
++ \epsilon
+\]</div>
+<p>The meaning is straightforward: each coefficient represents the average change in MEDV caused by a one-unit increase in that variable, <strong>holding all other variables constant</strong>.</p>
+</section>
+<hr class="docutils" />
+<section id="regression-coefficient-summary-key-variables">
+<h3>2. Regression Coefficient Summary (Key Variables)<a class="headerlink" href="#regression-coefficient-summary-key-variables" title="Link to this heading">#</a></h3>
+<section id="multiple-regression-medv-all-explanatory-variables-ols-coefficient-table">
+<h4>Multiple Regression: MEDV ~ All Explanatory Variables (OLS) Coefficient Table<a class="headerlink" href="#multiple-regression-medv-all-explanatory-variables-ols-coefficient-table" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Variable</p></th>
+<th class="head text-center"><p>Estimate</p></th>
+<th class="head text-center"><p>Std. Error</p></th>
+<th class="head text-center"><p>t-value</p></th>
+<th class="head text-center"><p>p-value</p></th>
+<th class="head text-center"><p>95% CI (Lower)</p></th>
+<th class="head text-center"><p>95% CI (Upper)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>const</p></td>
+<td class="text-center"><p>36.459</p></td>
+<td class="text-center"><p>5.103</p></td>
+<td class="text-center"><p>7.144</p></td>
+<td class="text-center"><p>3.28e-12</p></td>
+<td class="text-center"><p>26.432</p></td>
+<td class="text-center"><p>46.487</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>CRIM</p></td>
+<td class="text-center"><p>-0.108</p></td>
+<td class="text-center"><p>0.033</p></td>
+<td class="text-center"><p>-3.287</p></td>
+<td class="text-center"><p>0.00109</p></td>
+<td class="text-center"><p>-0.173</p></td>
+<td class="text-center"><p>-0.043</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>ZN</p></td>
+<td class="text-center"><p>0.046</p></td>
+<td class="text-center"><p>0.014</p></td>
+<td class="text-center"><p>3.382</p></td>
+<td class="text-center"><p>0.000778</p></td>
+<td class="text-center"><p>0.019</p></td>
+<td class="text-center"><p>0.073</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>INDUS</p></td>
+<td class="text-center"><p>0.021</p></td>
+<td class="text-center"><p>0.061</p></td>
+<td class="text-center"><p>0.334</p></td>
+<td class="text-center"><p>0.738</p></td>
+<td class="text-center"><p>-0.100</p></td>
+<td class="text-center"><p>0.141</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>CHAS</p></td>
+<td class="text-center"><p>2.687</p></td>
+<td class="text-center"><p>0.862</p></td>
+<td class="text-center"><p>3.118</p></td>
+<td class="text-center"><p>0.00193</p></td>
+<td class="text-center"><p>0.994</p></td>
+<td class="text-center"><p>4.380</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>NOX</p></td>
+<td class="text-center"><p>-17.767</p></td>
+<td class="text-center"><p>3.820</p></td>
+<td class="text-center"><p>-4.651</p></td>
+<td class="text-center"><p>4.25e-06</p></td>
+<td class="text-center"><p>-25.272</p></td>
+<td class="text-center"><p>-10.262</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>RM</p></td>
+<td class="text-center"><p>3.810</p></td>
+<td class="text-center"><p>0.418</p></td>
+<td class="text-center"><p>9.116</p></td>
+<td class="text-center"><p>1.98e-18</p></td>
+<td class="text-center"><p>2.989</p></td>
+<td class="text-center"><p>4.631</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>AGE</p></td>
+<td class="text-center"><p>0.001</p></td>
+<td class="text-center"><p>0.013</p></td>
+<td class="text-center"><p>0.052</p></td>
+<td class="text-center"><p>0.958</p></td>
+<td class="text-center"><p>-0.025</p></td>
+<td class="text-center"><p>0.027</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>DIS</p></td>
+<td class="text-center"><p>-1.476</p></td>
+<td class="text-center"><p>0.199</p></td>
+<td class="text-center"><p>-7.398</p></td>
+<td class="text-center"><p>6.01e-13</p></td>
+<td class="text-center"><p>-1.867</p></td>
+<td class="text-center"><p>-1.084</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>RAD</p></td>
+<td class="text-center"><p>0.306</p></td>
+<td class="text-center"><p>0.066</p></td>
+<td class="text-center"><p>4.613</p></td>
+<td class="text-center"><p>5.07e-06</p></td>
+<td class="text-center"><p>0.176</p></td>
+<td class="text-center"><p>0.436</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>TAX</p></td>
+<td class="text-center"><p>-0.012</p></td>
+<td class="text-center"><p>0.004</p></td>
+<td class="text-center"><p>-3.280</p></td>
+<td class="text-center"><p>0.00111</p></td>
+<td class="text-center"><p>-0.020</p></td>
+<td class="text-center"><p>-0.005</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>PTRATIO</p></td>
+<td class="text-center"><p>-0.953</p></td>
+<td class="text-center"><p>0.131</p></td>
+<td class="text-center"><p>-7.283</p></td>
+<td class="text-center"><p>1.31e-12</p></td>
+<td class="text-center"><p>-1.210</p></td>
+<td class="text-center"><p>-0.696</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>B</p></td>
+<td class="text-center"><p>0.009</p></td>
+<td class="text-center"><p>0.003</p></td>
+<td class="text-center"><p>3.467</p></td>
+<td class="text-center"><p>0.000573</p></td>
+<td class="text-center"><p>0.004</p></td>
+<td class="text-center"><p>0.015</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>LSTAT</p></td>
+<td class="text-center"><p>-0.525</p></td>
+<td class="text-center"><p>0.051</p></td>
+<td class="text-center"><p>-10.347</p></td>
+<td class="text-center"><p>7.78e-23</p></td>
+<td class="text-center"><p>-0.624</p></td>
+<td class="text-center"><p>-0.425</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Interpreting only the notable variables:</p>
+<ul class="simple">
+<li><p><strong>LSTAT (−0.525)</strong>
+Even after controlling for all other variables, a one-unit increase in LSTAT is associated with an average decrease of approximately 0.53 in MEDV.
+The effect is smaller than in simple regression (−0.95), because LSTAT shares explanatory power with other variables.</p></li>
+<li><p><strong>RM (+3.81)</strong>
+An increase of one room is associated with an approximately 3.8 increase in MEDV. This is the strongest positive effect even in multiple regression.</p></li>
+<li><p><strong>NOX (−17.77)</strong>
+Areas with higher pollution levels have substantially lower housing prices. Both the magnitude and significance of the coefficient are large.</p></li>
+<li><p><strong>PTRATIO (−0.95)</strong>
+Higher pupil-teacher ratios (worse educational conditions) are associated with lower housing prices.</p></li>
+<li><p><strong>CHAS (+2.69)</strong>
+Proximity to the river, holding other conditions equal, raises prices on average.</p></li>
+</ul>
+<p>On the other hand:</p>
+<ul class="simple">
+<li><p><strong>INDUS and AGE</strong> are no longer significant when other variables are included.
+→ Although simple correlations existed, other variables were actually accounting for those relationships.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="goodness-of-fit-interpretation">
+<h3>3. Goodness of Fit Interpretation<a class="headerlink" href="#goodness-of-fit-interpretation" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Metric</p></th>
+<th class="head text-center"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p><span class="math notranslate nohighlight">\(R^2\)</span></p></td>
+<td class="text-center"><p>0.741</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>Adj. <span class="math notranslate nohighlight">\(R^2\)</span></p></td>
+<td class="text-center"><p>0.734</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>Residual Std. Error</p></td>
+<td class="text-center"><p>4.745</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p>In simple regression (LSTAT only), <span class="math notranslate nohighlight">\(R^2 \approx 0.54\)</span>.
+In multiple regression, the explanatory power increased to <strong>approximately 74%</strong>.</p></li>
+<li><p>This demonstrates that considering multiple factors simultaneously explains housing prices better.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="residuals-vs-fitted-values-plot">
+<h3>4. Residuals vs Fitted Values Plot<a class="headerlink" href="#residuals-vs-fitted-values-plot" title="Link to this heading">#</a></h3>
+<p><img alt="Regression9" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-9.png" /></p>
+<ul class="simple">
+<li><p>Compared to simple regression, <strong>the structural pattern in the residuals has diminished</strong>.
+→ This signals that the model has improved with the addition of important explanatory variables.</p></li>
+<li><p>However, the pattern is not completely random, indicating that nonlinearity, heteroscedasticity, and the ceiling problem (MEDV = 50) still partially remain.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="key-takeaways">
+<h3>5. Key Takeaways<a class="headerlink" href="#key-takeaways" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Coefficients in multiple regression represent <strong>the effect “holding other conditions constant.”</strong></p></li>
+<li><p>LSTAT remains an important variable, but some of the effect observed in simple regression overlapped with other variables.</p></li>
+<li><p>Multiple regression substantially improves explanatory power, but interpretation must always keep in mind that these are <strong>controlled effects</strong>.</p></li>
+</ul>
+<hr class="docutils" />
+<p>Natural next topics:</p>
+<ul class="simple">
+<li><p>Multicollinearity (VIF) diagnostics</p></li>
+<li><p>Comparing variable importance using standardized coefficients</p></li>
+<li><p>Adding nonlinear terms (LSTAT², etc.)</p></li>
+</ul>
+</section>
+</section>
+<section id="multicollinearity-diagnostics">
+<h2><span style="color: blue;"><strong>5. Multicollinearity Diagnostics</strong></span><a class="headerlink" href="#multicollinearity-diagnostics" title="Link to this heading">#</a></h2>
+</section>
+<section id="id3">
+<h2><strong>ChatGPT Analysis</strong><a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p>Multicollinearity (VIF) diagnostics is a procedure to check whether the explanatory variables share so much information with each other that it becomes difficult to isolate each variable’s individual effect.</p>
+<hr class="docutils" />
+<section id="key-intuition">
+<h3>Key Intuition<a class="headerlink" href="#key-intuition" title="Link to this heading">#</a></h3>
+<p>In multiple regression, the coefficient <span class="math notranslate nohighlight">\(\hat\beta_j\)</span> of a variable <span class="math notranslate nohighlight">\(X_j\)</span> means “how much does <span class="math notranslate nohighlight">\(Y\)</span> change when only <span class="math notranslate nohighlight">\(X_j\)</span> increases by 1, holding other variables fixed.” But if <span class="math notranslate nohighlight">\(X_j\)</span> moves almost in lockstep with other variables (strong correlation), the situation where “only <span class="math notranslate nohighlight">\(X_j\)</span> changes” rarely exists in the data. Then there is insufficient information to determine the slope, causing the standard error of the coefficient to increase (greater uncertainty), and estimates become unstable even with the same data.</p>
+<p>The definition of VIF is:</p>
+<div class="math notranslate nohighlight">
+\[
+\text{VIF}_j=\frac{1}{1-R_j^2}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(R_j^2\)</span> is the R-squared from regressing <span class="math notranslate nohighlight">\(X_j\)</span> on all other explanatory variables.</p>
+<ul class="simple">
+<li><p>Large <span class="math notranslate nohighlight">\(R_j^2\)</span> = <span class="math notranslate nohighlight">\(X_j\)</span> is almost predicted by other variables = very little independent information</p></li>
+<li><p>As a result, the denominator <span class="math notranslate nohighlight">\(1-R_j^2\)</span> becomes small, making VIF large</p></li>
+<li><p>The larger the VIF, the larger the variance (standard error) of <span class="math notranslate nohighlight">\(\hat\beta_j\)</span> (variance is “inflated”)</p></li>
+</ul>
+</section>
+<section id="interpretation-guidelines-conventions">
+<h3>Interpretation Guidelines (Conventions)<a class="headerlink" href="#interpretation-guidelines-conventions" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>VIF ≈ 1: Virtually no problem</p></li>
+<li><p>VIF ≥ 5: Caution warranted</p></li>
+<li><p>VIF ≥ 10: Strong multicollinearity suspected (context-dependent)</p></li>
+</ul>
+</section>
+<section id="vif-diagnostic-results-descending-order">
+<h3>VIF Diagnostic Results (Descending Order)<a class="headerlink" href="#vif-diagnostic-results-descending-order" title="Link to this heading">#</a></h3>
+<p><img alt="Regression10" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/11-10.png" /></p>
+</section>
+<section id="intuitive-interpretation-what-is-happening-in-this-data">
+<h3>Intuitive Interpretation (What Is Happening in This Data)<a class="headerlink" href="#intuitive-interpretation-what-is-happening-in-this-data" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>TAX (9.01) and RAD (7.48) are the largest. This means “tax rate (TAX)” and “highway accessibility (RAD)” move almost as a bloc with other variables. Including both simultaneously makes it difficult to isolate each one’s “pure effect.”</p></li>
+<li><p>NOX–INDUS–DIS–AGE also have VIFs in the 3–4 range. Pollution (NOX), industrial areas (INDUS), distance to city center (DIS), and housing age (AGE) tend to move together with urban structure, sharing information with each other.</p></li>
+<li><p>CHAS is 1.07, nearly independent (not well predicted by other variables).</p></li>
+</ul>
+</section>
+<section id="vif-and-r-j-2-relationship-top-values">
+<h3>VIF and <span class="math notranslate nohighlight">\(R_j^2\)</span> Relationship (Top Values)<a class="headerlink" href="#vif-and-r-j-2-relationship-top-values" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Variable</p></th>
+<th class="head text-center"><p>VIF</p></th>
+<th class="head text-center"><p><span class="math notranslate nohighlight">\(R_j^2\)</span></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>TAX</p></td>
+<td class="text-center"><p>9.01</p></td>
+<td class="text-center"><p>0.889</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>RAD</p></td>
+<td class="text-center"><p>7.48</p></td>
+<td class="text-center"><p>0.866</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>NOX</p></td>
+<td class="text-center"><p>4.39</p></td>
+<td class="text-center"><p>0.772</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>INDUS</p></td>
+<td class="text-center"><p>3.99</p></td>
+<td class="text-center"><p>0.749</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>DIS</p></td>
+<td class="text-center"><p>3.96</p></td>
+<td class="text-center"><p>0.747</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For example, TAX has <span class="math notranslate nohighlight">\(R_j^2=0.889\)</span>, meaning “TAX is 88.9% explained by the other variables,” which is why VIF rises to 9. In other words, TAX contributes little independent information.</p>
+</section>
+<section id="why-this-matters-problems-that-arise-in-practice">
+<h3>Why This Matters (Problems That Arise in Practice)<a class="headerlink" href="#why-this-matters-problems-that-arise-in-practice" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Prediction performance itself may be fine. Multicollinearity does not necessarily ruin prediction.</p></li>
+<li><p>However, interpretation (each variable’s effect) and inference (significance, confidence intervals) become unstable.</p>
+<ul>
+<li><p>Standard errors increase, potentially inflating p-values (making results appear non-significant).</p></li>
+<li><p>Coefficient signs may flip, contradicting intuition.</p></li>
+<li><p>Removing one variable or slightly changing the data can substantially alter coefficients.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="next-step-options">
+<h3>Next Step Options<a class="headerlink" href="#next-step-options" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Remove or replace one of TAX and RAD, then compare whether coefficient stability improves</p></li>
+<li><p>Compare variable importance using standardized coefficients (or partial <span class="math notranslate nohighlight">\(R^2\)</span>)</p></li>
+<li><p>Switch to regularized regression such as Ridge, which is robust to collinearity</p></li>
+</ul>
+<p>If desired, we can show a table comparing coefficients when TAX and RAD are included simultaneously versus when one is removed, to directly demonstrate how collinearity destabilizes coefficient interpretation.</p>
+</section>
+</section>
+<section id="standardized-coefficients">
+<h2><span style="color: blue;"><strong>6. Standardized Coefficients</strong></span><a class="headerlink" href="#standardized-coefficients" title="Link to this heading">#</a></h2>
+</section>
+<section id="id4">
+<h2><strong>ChatGPT Analysis</strong><a class="headerlink" href="#id4" title="Link to this heading">#</a></h2>
+<p>Comparing variable importance using standardized coefficients means <strong>placing variables with different units on the same footing to see which has a stronger influence</strong>.</p>
+<hr class="docutils" />
+<section id="what-are-standardized-coefficients">
+<h3>What Are Standardized Coefficients?<a class="headerlink" href="#what-are-standardized-coefficients" title="Link to this heading">#</a></h3>
+<p>The original regression coefficients are highly dependent on the unit of measurement:</p>
+<ul class="simple">
+<li><p>RM: “1 additional room”</p></li>
+<li><p>NOX: “0.01 increase in pollution concentration”</p></li>
+<li><p>TAX: “1 unit increase in tax”</p></li>
+</ul>
+<p>These coefficients <strong>cannot be directly compared in magnitude because their units differ</strong>.</p>
+<p>Standardized coefficients are constructed as follows:</p>
+<ol class="arabic simple">
+<li><p>Transform each explanatory variable to have mean 0 and standard deviation 1</p></li>
+<li><p>Also transform the dependent variable (MEDV) to mean 0 and standard deviation 1</p></li>
+<li><p>The regression coefficients obtained in this state = standardized coefficients (<span class="math notranslate nohighlight">\(\beta\)</span>)</p></li>
+</ol>
+<p>Thus, standardized coefficients have the following interpretation:</p>
+<blockquote>
+<div><p>When the variable changes by <strong>1 standard deviation</strong>,
+how many <strong>standard deviations</strong> does MEDV change?</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="variable-importance-table-based-on-standardized-coefficients">
+<h3>Variable Importance Table Based on Standardized Coefficients<a class="headerlink" href="#variable-importance-table-based-on-standardized-coefficients" title="Link to this heading">#</a></h3>
+<p>| Variable | Standardized Coef. (<span class="math notranslate nohighlight">\(\beta\)</span>) | <span class="math notranslate nohighlight">\(|\beta|\)</span> |
+|:–:|:–:|:–:|
+| LSTAT | -0.407 | 0.407 |
+| DIS | -0.338 | 0.338 |
+| RM | 0.291 | 0.291 |
+| RAD | 0.290 | 0.290 |
+| TAX | -0.226 | 0.226 |
+| PTRATIO | -0.224 | 0.224 |
+| NOX | -0.224 | 0.224 |
+| ZN | 0.118 | 0.118 |
+| CRIM | -0.101 | 0.101 |
+| B | 0.092 | 0.092 |
+| CHAS | 0.074 | 0.074 |
+| INDUS | 0.015 | 0.015 |
+| AGE | 0.002 | 0.002 |</p>
+<p>(Larger <span class="math notranslate nohighlight">\(|\beta|\)</span> indicates relatively greater importance)</p>
+</section>
+<hr class="docutils" />
+<section id="intuitive-interpretation">
+<h3>Intuitive Interpretation<a class="headerlink" href="#intuitive-interpretation" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>LSTAT is the most important</strong>
+→ “Holding other variables constant,” variation in LSTAT has the greatest impact on housing price variation.</p></li>
+<li><p><strong>DIS, RM, and RAD</strong> also have large effects.
+→ Distance, number of rooms, and highway accessibility are key pillars in price formation.</p></li>
+<li><p><strong>INDUS and AGE</strong> have almost no effect.
+→ Once other variables are already controlled, these variables add virtually no additional explanatory power.</p></li>
+</ul>
+<p>An important caveat:</p>
+<blockquote>
+<div><p>Standardized coefficients are a tool for comparing <strong>‘which appears more important,’</strong>
+not numbers that tell us about <strong>causal magnitude</strong>.</p>
+</div></blockquote>
+</section>
+<hr class="docutils" />
+<section id="one-sentence-summary">
+<h3>One-Sentence Summary<a class="headerlink" href="#one-sentence-summary" title="Link to this heading">#</a></h3>
+<p>Standardized coefficients are:</p>
+<blockquote>
+<div><p>“A measure that puts all variables on the same unit scale (standard deviations)
+and shows which variable shakes housing prices the most.”</p>
+</div></blockquote>
+</section>
+</section>
+<section id="log-transformed-regression-analysis">
+<h2><span style="color: blue;"><strong>7. Log-Transformed Regression Analysis</strong></span><a class="headerlink" href="#log-transformed-regression-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="id5">
+<h2><strong>ChatGPT Analysis</strong><a class="headerlink" href="#id5" title="Link to this heading">#</a></h2>
+<p>Below, we first explain <strong>the meaning of why we take logarithms</strong>, then present the <strong>coefficient estimates table and interpretation</strong> of the log-transformed regression.</p>
+<hr class="docutils" />
+<section id="the-meaning-of-taking-logarithms-of-appropriate-variables-intuition">
+<h3>1. The Meaning of Taking Logarithms of Appropriate Variables (Intuition)<a class="headerlink" href="#the-meaning-of-taking-logarithms-of-appropriate-variables-intuition" title="Link to this heading">#</a></h3>
+<p>Log transformation is not a “trick to force linear regression to work,” but rather a <strong>method for translating relationships that are more natural in reality into a model</strong>. There are three key reasons.</p>
+<ol class="arabic simple">
+<li><p><strong>To enable interpretation in terms of proportional change</strong>
+Housing prices often move in terms of “what percentage increase” rather than “<span class="math notranslate nohighlight">\(10,000 increase.&quot;
+Using \)</span>\log(\text{MEDV})$ allows us to interpret the effect of explanatory variables as <strong>% changes</strong>.</p></li>
+<li><p><strong>To straighten nonlinear relationships</strong>
+Variables like LSTAT and CRIM, whose impact diminishes as values increase,
+show curved relationships in raw data but become closer to linear after taking logarithms.</p></li>
+<li><p><strong>To mitigate heteroscedasticity and the influence of extreme values</strong>
+This reduces the problem of a few large values dominating the regression
+and alleviates the pattern of errors growing with price levels.</p></li>
+</ol>
+<p>Accordingly, here we take logarithms of:</p>
+<ul class="simple">
+<li><p>MEDV, LSTAT, CRIM, NOX, DIS, TAX — <strong>positive, highly skewed variables</strong></p></li>
+<li><p>RM and PTRATIO are left in level (untransformed).</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="log-transformed-regression-model">
+<h3>2. Log-Transformed Regression Model<a class="headerlink" href="#log-transformed-regression-model" title="Link to this heading">#</a></h3>
+<p>The model is:</p>
+<div class="math notranslate nohighlight">
+\[
+\log(\text{MEDV}) =
+\beta_0
++ \beta_1 \log(\text{LSTAT})
++ \beta_2 \text{RM}
++ \beta_3 \text{PTRATIO}
++ \beta_4 \log(\text{CRIM})
++ \beta_5 \log(\text{NOX})
++ \beta_6 \log(\text{DIS})
++ \beta_7 \text{CHAS}
++ \epsilon
+\]</div>
+</section>
+<hr class="docutils" />
+<section id="coefficient-estimates-table">
+<h3>3. Coefficient Estimates Table<a class="headerlink" href="#coefficient-estimates-table" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-center"><p>Variable</p></th>
+<th class="head text-center"><p>Estimate</p></th>
+<th class="head text-center"><p>Std. Error</p></th>
+<th class="head text-center"><p>t-value</p></th>
+<th class="head text-center"><p>p-value</p></th>
+<th class="head text-center"><p>95% CI (Lower)</p></th>
+<th class="head text-center"><p>95% CI (Upper)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-center"><p>const</p></td>
+<td class="text-center"><p>3.982</p></td>
+<td class="text-center"><p>0.193</p></td>
+<td class="text-center"><p>20.607</p></td>
+<td class="text-center"><p>1.09e-68</p></td>
+<td class="text-center"><p>3.603</p></td>
+<td class="text-center"><p>4.362</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>L_LSTAT</p></td>
+<td class="text-center"><p>-0.403</p></td>
+<td class="text-center"><p>0.026</p></td>
+<td class="text-center"><p>-15.659</p></td>
+<td class="text-center"><p>3.14e-45</p></td>
+<td class="text-center"><p>-0.453</p></td>
+<td class="text-center"><p>-0.352</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>RM</p></td>
+<td class="text-center"><p>0.080</p></td>
+<td class="text-center"><p>0.018</p></td>
+<td class="text-center"><p>4.433</p></td>
+<td class="text-center"><p>1.15e-05</p></td>
+<td class="text-center"><p>0.045</p></td>
+<td class="text-center"><p>0.116</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>PTRATIO</p></td>
+<td class="text-center"><p>-0.029</p></td>
+<td class="text-center"><p>0.005</p></td>
+<td class="text-center"><p>-5.748</p></td>
+<td class="text-center"><p>1.57e-08</p></td>
+<td class="text-center"><p>-0.039</p></td>
+<td class="text-center"><p>-0.019</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>L_CRIM</p></td>
+<td class="text-center"><p>-0.028</p></td>
+<td class="text-center"><p>0.008</p></td>
+<td class="text-center"><p>-3.574</p></td>
+<td class="text-center"><p>0.000386</p></td>
+<td class="text-center"><p>-0.044</p></td>
+<td class="text-center"><p>-0.013</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>L_NOX</p></td>
+<td class="text-center"><p>-0.334</p></td>
+<td class="text-center"><p>0.108</p></td>
+<td class="text-center"><p>-3.103</p></td>
+<td class="text-center"><p>0.00202</p></td>
+<td class="text-center"><p>-0.545</p></td>
+<td class="text-center"><p>-0.122</p></td>
+</tr>
+<tr class="row-even"><td class="text-center"><p>L_DIS</p></td>
+<td class="text-center"><p>-0.169</p></td>
+<td class="text-center"><p>0.034</p></td>
+<td class="text-center"><p>-4.924</p></td>
+<td class="text-center"><p>1.15e-06</p></td>
+<td class="text-center"><p>-0.236</p></td>
+<td class="text-center"><p>-0.101</p></td>
+</tr>
+<tr class="row-odd"><td class="text-center"><p>CHAS</p></td>
+<td class="text-center"><p>0.132</p></td>
+<td class="text-center"><p>0.037</p></td>
+<td class="text-center"><p>3.538</p></td>
+<td class="text-center"><p>0.000441</p></td>
+<td class="text-center"><p>0.059</p></td>
+<td class="text-center"><p>0.205</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Goodness of fit:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(R^2 = 0.744\)</span>, Adj. <span class="math notranslate nohighlight">\(R^2 = 0.740\)</span></p></li>
+<li><p>The explanatory power is similar to or slightly more stable than the untransformed multiple regression.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="coefficient-interpretation-key-points">
+<h3>4. Coefficient Interpretation (Key Points)<a class="headerlink" href="#coefficient-interpretation-key-points" title="Link to this heading">#</a></h3>
+<section id="loglog-variables-elasticity">
+<h4>(1) Log–log variables: <strong>Elasticity</strong><a class="headerlink" href="#loglog-variables-elasticity" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>LSTAT (−0.403)</strong>
+→ A <strong>1% increase</strong> in LSTAT is associated with an <strong>approximately 0.40% decrease</strong> in MEDV.
+→ A much more natural and stable interpretation than simple linear regression.</p></li>
+<li><p><strong>CRIM (−0.028)</strong>
+→ A 1% increase in crime rate is associated with approximately a 0.03% decrease in housing prices.</p></li>
+<li><p><strong>NOX (−0.334)</strong>
+→ A 1% increase in pollution is associated with approximately a 0.33% decrease in prices.</p></li>
+<li><p><strong>DIS (−0.169)</strong>
+→ A 1% increase in distance to employment centers is associated with approximately a 0.17% decrease in prices.</p></li>
+</ul>
+</section>
+<section id="loglevel-variables-semi-elasticity">
+<h4>(2) Log–level variables: <strong>Semi-elasticity</strong><a class="headerlink" href="#loglevel-variables-semi-elasticity" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>RM (0.080)</strong>
+→ An increase of 1 room is associated with an <strong>approximately 8% increase</strong> in housing prices.</p></li>
+<li><p><strong>PTRATIO (−0.029)</strong>
+→ A 1-unit increase in the pupil-teacher ratio is associated with an <strong>approximately 2.9% decrease</strong> in prices.</p></li>
+</ul>
+</section>
+<section id="dummy-variable">
+<h4>(3) Dummy variable<a class="headerlink" href="#dummy-variable" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>CHAS (0.132)</strong>
+→ Riverside tracts are
+$<span class="math notranslate nohighlight">\(\exp(0.132)-1 \approx 14.1\%\)</span>$
+<strong>approximately 14% more expensive</strong> than non-riverside tracts.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="id6">
+<h3>5. Summary<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<p>Log-transformed regression:</p>
+<ul class="simple">
+<li><p>Reframes the relationship from “how much does it change” to <strong>“by what percentage does it change”</strong></p></li>
+<li><p>Mitigates nonlinearity and heteroscedasticity problems</p></li>
+<li><p>Translates coefficient interpretation into the intuitive language of <strong>elasticity</strong>.</p></li>
+</ul>
+<p>These results show that:</p>
+<blockquote>
+<div><p>LSTAT, RM, PTRATIO, and NOX
+remain key determinants of housing prices even on the log scale.</p>
+</div></blockquote>
+<p>Good topics to follow up with:</p>
+<ul class="simple">
+<li><p>Comparing residuals: log model vs. raw-data model</p></li>
+<li><p>Model comparison: log–log vs. polynomial (LSTAT²)</p></li>
+<li><p>Why “% change” matters in policy interpretation</p></li>
+</ul>
+</section>
+</section>
+<section id="appendix-python-code">
+<h2><strong>Appendix: Python Code</strong><a class="headerlink" href="#appendix-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/selva86/datasets/master/BostonHousing.csv&quot;</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+<span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>CRIM</th>
+      <th>ZN</th>
+      <th>INDUS</th>
+      <th>CHAS</th>
+      <th>NOX</th>
+      <th>RM</th>
+      <th>AGE</th>
+      <th>DIS</th>
+      <th>RAD</th>
+      <th>TAX</th>
+      <th>PTRATIO</th>
+      <th>B</th>
+      <th>LSTAT</th>
+      <th>MEDV</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.00632</td>
+      <td>18.0</td>
+      <td>2.31</td>
+      <td>0</td>
+      <td>0.538</td>
+      <td>6.575</td>
+      <td>65.2</td>
+      <td>4.0900</td>
+      <td>1</td>
+      <td>296</td>
+      <td>15.3</td>
+      <td>396.90</td>
+      <td>4.98</td>
+      <td>24.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.02731</td>
+      <td>0.0</td>
+      <td>7.07</td>
+      <td>0</td>
+      <td>0.469</td>
+      <td>6.421</td>
+      <td>78.9</td>
+      <td>4.9671</td>
+      <td>2</td>
+      <td>242</td>
+      <td>17.8</td>
+      <td>396.90</td>
+      <td>9.14</td>
+      <td>21.6</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.02729</td>
+      <td>0.0</td>
+      <td>7.07</td>
+      <td>0</td>
+      <td>0.469</td>
+      <td>7.185</td>
+      <td>61.1</td>
+      <td>4.9671</td>
+      <td>2</td>
+      <td>242</td>
+      <td>17.8</td>
+      <td>392.83</td>
+      <td>4.03</td>
+      <td>34.7</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.03237</td>
+      <td>0.0</td>
+      <td>2.18</td>
+      <td>0</td>
+      <td>0.458</td>
+      <td>6.998</td>
+      <td>45.8</td>
+      <td>6.0622</td>
+      <td>3</td>
+      <td>222</td>
+      <td>18.7</td>
+      <td>394.63</td>
+      <td>2.94</td>
+      <td>33.4</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.06905</td>
+      <td>0.0</td>
+      <td>2.18</td>
+      <td>0</td>
+      <td>0.458</td>
+      <td>7.147</td>
+      <td>54.2</td>
+      <td>6.0622</td>
+      <td>3</td>
+      <td>222</td>
+      <td>18.7</td>
+      <td>396.90</td>
+      <td>5.33</td>
+      <td>36.2</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>501</th>
+      <td>0.06263</td>
+      <td>0.0</td>
+      <td>11.93</td>
+      <td>0</td>
+      <td>0.573</td>
+      <td>6.593</td>
+      <td>69.1</td>
+      <td>2.4786</td>
+      <td>1</td>
+      <td>273</td>
+      <td>21.0</td>
+      <td>391.99</td>
+      <td>9.67</td>
+      <td>22.4</td>
+    </tr>
+    <tr>
+      <th>502</th>
+      <td>0.04527</td>
+      <td>0.0</td>
+      <td>11.93</td>
+      <td>0</td>
+      <td>0.573</td>
+      <td>6.120</td>
+      <td>76.7</td>
+      <td>2.2875</td>
+      <td>1</td>
+      <td>273</td>
+      <td>21.0</td>
+      <td>396.90</td>
+      <td>9.08</td>
+      <td>20.6</td>
+    </tr>
+    <tr>
+      <th>503</th>
+      <td>0.06076</td>
+      <td>0.0</td>
+      <td>11.93</td>
+      <td>0</td>
+      <td>0.573</td>
+      <td>6.976</td>
+      <td>91.0</td>
+      <td>2.1675</td>
+      <td>1</td>
+      <td>273</td>
+      <td>21.0</td>
+      <td>396.90</td>
+      <td>5.64</td>
+      <td>23.9</td>
+    </tr>
+    <tr>
+      <th>504</th>
+      <td>0.10959</td>
+      <td>0.0</td>
+      <td>11.93</td>
+      <td>0</td>
+      <td>0.573</td>
+      <td>6.794</td>
+      <td>89.3</td>
+      <td>2.3889</td>
+      <td>1</td>
+      <td>273</td>
+      <td>21.0</td>
+      <td>393.45</td>
+      <td>6.48</td>
+      <td>22.0</td>
+    </tr>
+    <tr>
+      <th>505</th>
+      <td>0.04741</td>
+      <td>0.0</td>
+      <td>11.93</td>
+      <td>0</td>
+      <td>0.573</td>
+      <td>6.030</td>
+      <td>80.8</td>
+      <td>2.5050</td>
+      <td>1</td>
+      <td>273</td>
+      <td>21.0</td>
+      <td>396.90</td>
+      <td>7.88</td>
+      <td>11.9</td>
+    </tr>
+  </tbody>
+</table>
+<p>506 rows × 14 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ==============</span>
+<span class="c1"># Boston Housing</span>
+<span class="c1"># ==============</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.graphics.gofplots</span><span class="w"> </span><span class="kn">import</span> <span class="n">qqplot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statsmodels.stats.outliers_influence</span><span class="w"> </span><span class="kn">import</span> <span class="n">variance_inflation_factor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pandas.plotting</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter_matrix</span>
+
+<span class="c1"># ------------------------------------------------------------</span>
+<span class="c1"># 1) Descriptive statistics</span>
+<span class="c1"># ------------------------------------------------------------</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Descriptive Statistics ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Descriptive Statistics ===
+
+             CRIM          ZN       INDUS        CHAS         NOX          RM  \
+count  506.000000  506.000000  506.000000  506.000000  506.000000  506.000000   
+mean     3.613524   11.363636   11.136779    0.069170    0.554695    6.284634   
+std      8.601545   23.322453    6.860353    0.253994    0.115878    0.702617   
+min      0.006320    0.000000    0.460000    0.000000    0.385000    3.561000   
+25%      0.082045    0.000000    5.190000    0.000000    0.449000    5.885500   
+50%      0.256510    0.000000    9.690000    0.000000    0.538000    6.208500   
+75%      3.677083   12.500000   18.100000    0.000000    0.624000    6.623500   
+max     88.976200  100.000000   27.740000    1.000000    0.871000    8.780000   
+
+              AGE         DIS         RAD         TAX     PTRATIO           B  \
+count  506.000000  506.000000  506.000000  506.000000  506.000000  506.000000   
+mean    68.574901    3.795043    9.549407  408.237154   18.455534  356.674032   
+std     28.148861    2.105710    8.707259  168.537116    2.164946   91.294864   
+min      2.900000    1.129600    1.000000  187.000000   12.600000    0.320000   
+25%     45.025000    2.100175    4.000000  279.000000   17.400000  375.377500   
+50%     77.500000    3.207450    5.000000  330.000000   19.050000  391.440000   
+75%     94.075000    5.188425   24.000000  666.000000   20.200000  396.225000   
+max    100.000000   12.126500   24.000000  711.000000   22.000000  396.900000   
+
+            LSTAT        MEDV  
+count  506.000000  506.000000  
+mean    12.653063   22.532806  
+std      7.141062    9.197104  
+min      1.730000    5.000000  
+25%      6.950000   17.025000  
+50%     11.360000   21.200000  
+75%     16.955000   25.000000  
+max     37.970000   50.000000  
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------</span>
+<span class="c1"># 2) Correlation matrix</span>
+<span class="c1"># ------------------------------------------------------------</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Correlation Matrix ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Correlation Matrix ===
+
+             CRIM        ZN     INDUS      CHAS       NOX        RM       AGE  \
+CRIM     1.000000 -0.200469  0.406583 -0.055892  0.420972 -0.219247  0.352734   
+ZN      -0.200469  1.000000 -0.533828 -0.042697 -0.516604  0.311991 -0.569537   
+INDUS    0.406583 -0.533828  1.000000  0.062938  0.763651 -0.391676  0.644779   
+CHAS    -0.055892 -0.042697  0.062938  1.000000  0.091203  0.091251  0.086518   
+NOX      0.420972 -0.516604  0.763651  0.091203  1.000000 -0.302188  0.731470   
+RM      -0.219247  0.311991 -0.391676  0.091251 -0.302188  1.000000 -0.240265   
+AGE      0.352734 -0.569537  0.644779  0.086518  0.731470 -0.240265  1.000000   
+DIS     -0.379670  0.664408 -0.708027 -0.099176 -0.769230  0.205246 -0.747881   
+RAD      0.625505 -0.311948  0.595129 -0.007368  0.611441 -0.209847  0.456022   
+TAX      0.582764 -0.314563  0.720760 -0.035587  0.668023 -0.292048  0.506456   
+PTRATIO  0.289946 -0.391679  0.383248 -0.121515  0.188933 -0.355501  0.261515   
+B       -0.385064  0.175520 -0.356977  0.048788 -0.380051  0.128069 -0.273534   
+LSTAT    0.455621 -0.412995  0.603800 -0.053929  0.590879 -0.613808  0.602339   
+MEDV    -0.388305  0.360445 -0.483725  0.175260 -0.427321  0.695360 -0.376955   
+
+              DIS       RAD       TAX   PTRATIO         B     LSTAT      MEDV  
+CRIM    -0.379670  0.625505  0.582764  0.289946 -0.385064  0.455621 -0.388305  
+ZN       0.664408 -0.311948 -0.314563 -0.391679  0.175520 -0.412995  0.360445  
+INDUS   -0.708027  0.595129  0.720760  0.383248 -0.356977  0.603800 -0.483725  
+CHAS    -0.099176 -0.007368 -0.035587 -0.121515  0.048788 -0.053929  0.175260  
+NOX     -0.769230  0.611441  0.668023  0.188933 -0.380051  0.590879 -0.427321  
+RM       0.205246 -0.209847 -0.292048 -0.355501  0.128069 -0.613808  0.695360  
+AGE     -0.747881  0.456022  0.506456  0.261515 -0.273534  0.602339 -0.376955  
+DIS      1.000000 -0.494588 -0.534432 -0.232471  0.291512 -0.496996  0.249929  
+RAD     -0.494588  1.000000  0.910228  0.464741 -0.444413  0.488676 -0.381626  
+TAX     -0.534432  0.910228  1.000000  0.460853 -0.441808  0.543993 -0.468536  
+PTRATIO -0.232471  0.464741  0.460853  1.000000 -0.177383  0.374044 -0.507787  
+B        0.291512 -0.444413 -0.441808 -0.177383  1.000000 -0.366087  0.333461  
+LSTAT   -0.496996  0.488676  0.543993  0.374044 -0.366087  1.000000 -0.737663  
+MEDV     0.249929 -0.381626 -0.468536 -0.507787  0.333461 -0.737663  1.000000  
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------</span>
+<span class="c1"># 3) Scatter plot matrix</span>
+<span class="c1"># ------------------------------------------------------------</span>
+<span class="n">subset_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;MEDV&#39;</span><span class="p">,</span><span class="s1">&#39;LSTAT&#39;</span><span class="p">,</span><span class="s1">&#39;RM&#39;</span><span class="p">,</span><span class="s1">&#39;PTRATIO&#39;</span><span class="p">,</span><span class="s1">&#39;NOX&#39;</span><span class="p">,</span><span class="s1">&#39;CRIM&#39;</span><span class="p">,</span><span class="s1">&#39;DIS&#39;</span><span class="p">,</span><span class="s1">&#39;TAX&#39;</span><span class="p">]</span>
+<span class="n">scatter_matrix</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">subset_cols</span><span class="p">],</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">),</span> <span class="n">diagonal</span><span class="o">=</span><span class="s1">&#39;hist&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;Scatter Plot Matrix (selected variables)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.98</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c5cf7d7398b317a40e120d9c8d368caa7820522bf7119e1e9fac58d558f84305.png" src="../_images/c5cf7d7398b317a40e120d9c8d368caa7820522bf7119e1e9fac58d558f84305.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------</span>
+<span class="c1"># 4) Simple regression: MEDV ~ LSTAT</span>
+<span class="c1"># ------------------------------------------------------------</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;MEDV&quot;</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;LSTAT&quot;</span><span class="p">]])</span>
+
+<span class="n">model_simple</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Simple Regression: MEDV ~ LSTAT ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_simple</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Simple Regression: MEDV ~ LSTAT ===
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   MEDV   R-squared:                       0.544
+Model:                            OLS   Adj. R-squared:                  0.543
+Method:                 Least Squares   F-statistic:                     601.6
+Date:                Mon, 30 Mar 2026   Prob (F-statistic):           5.08e-88
+Time:                        15:00:10   Log-Likelihood:                -1641.5
+No. Observations:                 506   AIC:                             3287.
+Df Residuals:                     504   BIC:                             3295.
+Df Model:                           1                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         34.5538      0.563     61.415      0.000      33.448      35.659
+LSTAT         -0.9500      0.039    -24.528      0.000      -1.026      -0.874
+==============================================================================
+Omnibus:                      137.043   Durbin-Watson:                   0.892
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              291.373
+Skew:                           1.453   Prob(JB):                     5.36e-64
+Kurtosis:                       5.319   Cond. No.                         29.7
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Residual diagnostics</span>
+<span class="n">infl</span> <span class="o">=</span> <span class="n">model_simple</span><span class="o">.</span><span class="n">get_influence</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">model_simple</span><span class="o">.</span><span class="n">fittedvalues</span><span class="p">,</span> <span class="n">model_simple</span><span class="o">.</span><span class="n">resid</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Fitted values&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Residuals&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Residuals vs Fitted (MEDV ~ LSTAT)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">qqplot</span><span class="p">(</span><span class="n">model_simple</span><span class="o">.</span><span class="n">resid</span><span class="p">,</span> <span class="n">line</span><span class="o">=</span><span class="s2">&quot;45&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Normal Q-Q (Residuals)&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/250322547d8ea6fdc7a4c000441b953931b095e52be88b69bef0dbbd0a46f654.png" src="../_images/250322547d8ea6fdc7a4c000441b953931b095e52be88b69bef0dbbd0a46f654.png" />
+<img alt="../_images/75a5a041694483a8e89fd82b3dcd2648e78022a2e0091312b8668d84e5978eb8.png" src="../_images/75a5a041694483a8e89fd82b3dcd2648e78022a2e0091312b8668d84e5978eb8.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------</span>
+<span class="c1"># 5) Multiple regression: MEDV ~ all covariates</span>
+<span class="c1"># ------------------------------------------------------------</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MEDV&quot;</span><span class="p">]))</span>
+<span class="n">model_multi</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Multiple Regression: MEDV ~ all covariates ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_multi</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Multiple Regression: MEDV ~ all covariates ===
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                   MEDV   R-squared:                       0.741
+Model:                            OLS   Adj. R-squared:                  0.734
+Method:                 Least Squares   F-statistic:                     108.1
+Date:                Mon, 30 Mar 2026   Prob (F-statistic):          6.72e-135
+Time:                        15:00:10   Log-Likelihood:                -1498.8
+No. Observations:                 506   AIC:                             3026.
+Df Residuals:                     492   BIC:                             3085.
+Df Model:                          13                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const         36.4595      5.103      7.144      0.000      26.432      46.487
+CRIM          -0.1080      0.033     -3.287      0.001      -0.173      -0.043
+ZN             0.0464      0.014      3.382      0.001       0.019       0.073
+INDUS          0.0206      0.061      0.334      0.738      -0.100       0.141
+CHAS           2.6867      0.862      3.118      0.002       0.994       4.380
+NOX          -17.7666      3.820     -4.651      0.000     -25.272     -10.262
+RM             3.8099      0.418      9.116      0.000       2.989       4.631
+AGE            0.0007      0.013      0.052      0.958      -0.025       0.027
+DIS           -1.4756      0.199     -7.398      0.000      -1.867      -1.084
+RAD            0.3060      0.066      4.613      0.000       0.176       0.436
+TAX           -0.0123      0.004     -3.280      0.001      -0.020      -0.005
+PTRATIO       -0.9527      0.131     -7.283      0.000      -1.210      -0.696
+B              0.0093      0.003      3.467      0.001       0.004       0.015
+LSTAT         -0.5248      0.051    -10.347      0.000      -0.624      -0.425
+==============================================================================
+Omnibus:                      178.041   Durbin-Watson:                   1.078
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              783.126
+Skew:                           1.521   Prob(JB):                    8.84e-171
+Kurtosis:                       8.281   Cond. No.                     1.51e+04
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The condition number is large, 1.51e+04. This might indicate that there are
+strong multicollinearity or other numerical problems.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------</span>
+<span class="c1"># 6) Multicollinearity: VIF</span>
+<span class="c1"># ------------------------------------------------------------</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Variance Inflation Factors (VIF) ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">X_vif</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;MEDV&quot;</span><span class="p">])</span>
+<span class="n">X_vif_const</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X_vif</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">X_vif_const</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
+    <span class="n">vif</span> <span class="o">=</span> <span class="n">variance_inflation_factor</span><span class="p">(</span><span class="n">X_vif_const</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">col</span><span class="si">:</span><span class="s2">&gt;10s</span><span class="si">}</span><span class="s2"> : </span><span class="si">{</span><span class="n">vif</span><span class="si">:</span><span class="s2">6.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Variance Inflation Factors (VIF) ===
+
+     const : 585.27
+      CRIM :   1.79
+        ZN :   2.30
+     INDUS :   3.99
+      CHAS :   1.07
+       NOX :   4.39
+        RM :   1.93
+       AGE :   3.10
+       DIS :   3.96
+       RAD :   7.48
+       TAX :   9.01
+   PTRATIO :   1.80
+         B :   1.35
+     LSTAT :   2.94
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------</span>
+<span class="c1"># 7) Standardized coefficients</span>
+<span class="c1"># ------------------------------------------------------------</span>
+<span class="n">X_std</span> <span class="o">=</span> <span class="p">(</span><span class="n">X_vif</span> <span class="o">-</span> <span class="n">X_vif</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">X_vif</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">y_std</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">/</span> <span class="n">y</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">model_std</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y_std</span><span class="p">,</span> <span class="n">X_std</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Standardized Regression (no intercept) ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_std</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Standardized Regression (no intercept) ===
+
+                                 OLS Regression Results                                
+=======================================================================================
+Dep. Variable:                   MEDV   R-squared (uncentered):                   0.741
+Model:                            OLS   Adj. R-squared (uncentered):              0.734
+Method:                 Least Squares   F-statistic:                              108.3
+Date:                Mon, 30 Mar 2026   Prob (F-statistic):                   3.46e-135
+Time:                        15:00:10   Log-Likelihood:                         -376.55
+No. Observations:                 506   AIC:                                      779.1
+Df Residuals:                     493   BIC:                                      834.0
+Df Model:                          13                                                  
+Covariance Type:            nonrobust                                                  
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+CRIM          -0.1010      0.031     -3.290      0.001      -0.161      -0.041
+ZN             0.1177      0.035      3.385      0.001       0.049       0.186
+INDUS          0.0153      0.046      0.335      0.738      -0.075       0.105
+CHAS           0.0742      0.024      3.122      0.002       0.027       0.121
+NOX           -0.2238      0.048     -4.656      0.000      -0.318      -0.129
+RM             0.2911      0.032      9.125      0.000       0.228       0.354
+AGE            0.0021      0.040      0.052      0.958      -0.077       0.081
+DIS           -0.3378      0.046     -7.406      0.000      -0.427      -0.248
+RAD            0.2897      0.063      4.618      0.000       0.166       0.413
+TAX           -0.2260      0.069     -3.283      0.001      -0.361      -0.091
+PTRATIO       -0.2243      0.031     -7.290      0.000      -0.285      -0.164
+B              0.0924      0.027      3.470      0.001       0.040       0.145
+LSTAT         -0.4074      0.039    -10.358      0.000      -0.485      -0.330
+==============================================================================
+Omnibus:                      178.041   Durbin-Watson:                   1.078
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              783.126
+Skew:                           1.521   Prob(JB):                    8.84e-171
+Kurtosis:                       8.281   Cond. No.                         9.82
+==============================================================================
+
+Notes:
+[1] R² is computed without centering (uncentered) since the model does not contain a constant.
+[2] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ------------------------------------------------------------</span>
+<span class="c1"># 8) Log-transformed regression</span>
+<span class="c1"># ------------------------------------------------------------</span>
+<span class="n">df_log</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;MEDV&quot;</span><span class="p">,</span> <span class="s2">&quot;CRIM&quot;</span><span class="p">,</span> <span class="s2">&quot;NOX&quot;</span><span class="p">,</span> <span class="s2">&quot;DIS&quot;</span><span class="p">,</span> <span class="s2">&quot;LSTAT&quot;</span><span class="p">]:</span>
+    <span class="n">df_log</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;L_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">df_log</span><span class="p">[</span><span class="n">col</span><span class="p">])</span>
+
+<span class="n">y_log</span> <span class="o">=</span> <span class="n">df_log</span><span class="p">[</span><span class="s2">&quot;L_MEDV&quot;</span><span class="p">]</span>
+<span class="n">X_log</span> <span class="o">=</span> <span class="n">df_log</span><span class="p">[[</span>
+    <span class="s2">&quot;L_LSTAT&quot;</span><span class="p">,</span>   <span class="c1"># log-log</span>
+    <span class="s2">&quot;RM&quot;</span><span class="p">,</span>        <span class="c1"># level-log</span>
+    <span class="s2">&quot;PTRATIO&quot;</span><span class="p">,</span>   <span class="c1"># level-log</span>
+    <span class="s2">&quot;L_CRIM&quot;</span><span class="p">,</span>    <span class="c1"># log-log</span>
+    <span class="s2">&quot;L_NOX&quot;</span><span class="p">,</span>     <span class="c1"># log-log</span>
+    <span class="s2">&quot;L_DIS&quot;</span><span class="p">,</span>     <span class="c1"># log-log</span>
+    <span class="s2">&quot;CHAS&quot;</span>       <span class="c1"># dummy</span>
+<span class="p">]]</span>
+
+<span class="n">X_log</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X_log</span><span class="p">)</span>
+<span class="n">model_log</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">OLS</span><span class="p">(</span><span class="n">y_log</span><span class="p">,</span> <span class="n">X_log</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">=== Log-transformed Regression: log(MEDV) ===</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model_log</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=== Log-transformed Regression: log(MEDV) ===
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                 L_MEDV   R-squared:                       0.744
+Model:                            OLS   Adj. R-squared:                  0.740
+Method:                 Least Squares   F-statistic:                     206.3
+Date:                Mon, 30 Mar 2026   Prob (F-statistic):          1.00e-142
+Time:                        15:00:10   Log-Likelihood:                 79.486
+No. Observations:                 506   AIC:                            -143.0
+Df Residuals:                     498   BIC:                            -109.2
+Df Model:                           7                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P&gt;|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+const          3.9825      0.193     20.607      0.000       3.603       4.362
+L_LSTAT       -0.4028      0.026    -15.659      0.000      -0.453      -0.352
+RM             0.0801      0.018      4.433      0.000       0.045       0.116
+PTRATIO       -0.0288      0.005     -5.748      0.000      -0.039      -0.019
+L_CRIM        -0.0284      0.008     -3.574      0.000      -0.044      -0.013
+L_NOX         -0.3337      0.108     -3.103      0.002      -0.545      -0.122
+L_DIS         -0.1686      0.034     -4.924      0.000      -0.236      -0.101
+CHAS           0.1320      0.037      3.538      0.000       0.059       0.205
+==============================================================================
+Omnibus:                       47.821   Durbin-Watson:                   0.913
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              162.394
+Skew:                          -0.373   Prob(JB):                     5.45e-36
+Kurtosis:                       5.673   Cond. No.                         419.
+==============================================================================
+
+Notes:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="10_Exploratory_Factor_Analysis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 10. Exploratory Factor Analysis</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="12_Comprehensive_Property_Tax_and_Rent.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-upload"><span style="color: blue;"><strong>1. Data Upload</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-explanation"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dataset-overview">1. Dataset Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-descriptions">2. Variable Descriptions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analytical-perspective">3. Analytical Perspective</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-features-of-the-data">4. Key Features of the Data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">5. Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics-correlations-and-scatter-plot-matrix"><span style="color: blue;"><strong>2. Summary Statistics, Correlations, and Scatter Plot Matrix</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-statistics">1. Summary Statistics</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-observations">Key Observations</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-between-variables">2. Correlation Between Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-with-medv-sorted-by-absolute-value">Correlation with MEDV (sorted by absolute value)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-interpretations">Key Interpretations</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#correlation-matrix">Correlation Matrix</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scatter-plot-matrix">3. Scatter Plot Matrix</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#key-observations-what-to-look-for-in-this-plot">Key Observations (what to look for in this plot)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#simple-linear-regression"><span style="color: blue;"><strong>3. Simple Linear Regression</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimated-regression-coefficients">1. Estimated Regression Coefficients</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goodness-of-fit-summary">2. Goodness of Fit Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#scatter-plot-with-regression-line">3. Scatter Plot with Regression Line</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residual-diagnostics">4. Residual Diagnostics</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#residuals-vs-fitted">(1) Residuals vs Fitted</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#normal-q-q">(2) Normal Q-Q</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#scale-location">(3) Scale-Location</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#leverage-vs-standardized-residuals-influential-points">(4) Leverage vs Standardized Residuals, Influential Points</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-issues-observed-in-lstat-only-simple-linear-regression">Summary: Issues Observed in LSTAT-Only Simple Linear Regression</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression-analysis"><span style="color: blue;"><strong>4. Multiple Regression Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-analysis"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-specification">1. Model Specification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#regression-coefficient-summary-key-variables">2. Regression Coefficient Summary (Key Variables)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression-medv-all-explanatory-variables-ols-coefficient-table">Multiple Regression: MEDV ~ All Explanatory Variables (OLS) Coefficient Table</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#goodness-of-fit-interpretation">3. Goodness of Fit Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#residuals-vs-fitted-values-plot">4. Residuals vs Fitted Values Plot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-takeaways">5. Key Takeaways</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multicollinearity-diagnostics"><span style="color: blue;"><strong>5. Multicollinearity Diagnostics</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-intuition">Key Intuition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation-guidelines-conventions">Interpretation Guidelines (Conventions)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vif-diagnostic-results-descending-order">VIF Diagnostic Results (Descending Order)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intuitive-interpretation-what-is-happening-in-this-data">Intuitive Interpretation (What Is Happening in This Data)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#vif-and-r-j-2-relationship-top-values">VIF and <span class="math notranslate nohighlight">\(R_j^2\)</span> Relationship (Top Values)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#why-this-matters-problems-that-arise-in-practice">Why This Matters (Problems That Arise in Practice)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#next-step-options">Next Step Options</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#standardized-coefficients"><span style="color: blue;"><strong>6. Standardized Coefficients</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id4"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-are-standardized-coefficients">What Are Standardized Coefficients?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-importance-table-based-on-standardized-coefficients">Variable Importance Table Based on Standardized Coefficients</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intuitive-interpretation">Intuitive Interpretation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-sentence-summary">One-Sentence Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#log-transformed-regression-analysis"><span style="color: blue;"><strong>7. Log-Transformed Regression Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id5"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-meaning-of-taking-logarithms-of-appropriate-variables-intuition">1. The Meaning of Taking Logarithms of Appropriate Variables (Intuition)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#log-transformed-regression-model">2. Log-Transformed Regression Model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficient-estimates-table">3. Coefficient Estimates Table</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coefficient-interpretation-key-points">4. Coefficient Interpretation (Key Points)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loglog-variables-elasticity">(1) Log–log variables: <strong>Elasticity</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loglevel-variables-semi-elasticity">(2) Log–level variables: <strong>Semi-elasticity</strong></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dummy-variable">(3) Dummy variable</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">5. Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

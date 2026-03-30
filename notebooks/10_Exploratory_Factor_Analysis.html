@@ -1,0 +1,1379 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 10. Exploratory Factor Analysis &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/10_Exploratory_Factor_Analysis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 11. Boston Housing Price Analysis" href="11_Boston_Housing_Price_Analysis.html" />
+    <link rel="prev" title="Ch 9. Survey Analysis" href="09_Survey_Analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/10_Exploratory_Factor_Analysis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/10_Exploratory_Factor_Analysis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 10. Exploratory Factor Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-explanation"><strong>Gemini’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">1. Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-descriptions">2. Variable Descriptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passenger-demographics">Passenger Demographics</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flight-information">Flight Information</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#service-satisfaction-ratings">Service Satisfaction Ratings</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#delay-information">Delay Information</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-notes">3. Data Notes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploratory-factor-analysis"><span style="color: blue;"><strong>2. Exploratory Factor Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-analysis"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-exploratory-factor-analysis">1. What Is Exploratory Factor Analysis?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#results-summary">2. Results Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-1-in-flight-comfort-entertainment">Factor 1: In-flight Comfort &amp; Entertainment</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-2-booking-accessibility">Factor 2: Booking &amp; Accessibility</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-3-staff-service">Factor 3: Staff Service</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-4-online-boarding-focus">Factor 4: Online Boarding Focus</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-and-implications">3. Conclusions and Implications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-analysis"><strong>ChatGPT’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#number-of-factors-selection">1) Number of Factors Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rotated-loadings-varimax">2) Rotated Loadings (Varimax)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-interpretation-labeling">3) Factor Interpretation (Labeling)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanatory-power-common-variance-basis">4) Explanatory Power (Common Variance Basis)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><span style="color: blue;"><strong>3. What Is Exploratory Factor Analysis?</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-explanation"><strong>ChatGPT’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-factor-analysis-purpose">1) What Is Factor Analysis? (Purpose)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-is-it-used">2) When Is It Used?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-concept-intuition">3) Basic Concept (Intuition)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-procedure-methodological-flow">4) Analysis Procedure (Methodological Flow)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#check-correlation-structure">(1) Check Correlation Structure</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#determine-number-of-factors">(2) Determine Number of Factors</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-extraction">(3) Factor Extraction</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rotation">(4) Rotation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">(5) Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-get-from-the-results">5) What You Get from the Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-analysis-vs-pca-commonly-confused">6) Factor Analysis vs. PCA (Commonly Confused)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-line-summary">7) One-Line Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-10-exploratory-factor-analysis">
+<h1><strong>Ch 10. Exploratory Factor Analysis</strong><a class="headerlink" href="#ch-10-exploratory-factor-analysis" title="Link to this heading">#</a></h1>
+<section id="data-input">
+<h2><span style="color: blue;"><strong>1. Data Input</strong></span><a class="headerlink" href="#data-input" title="Link to this heading">#</a></h2>
+<p><img alt="Survey" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/10-1.png" /></p>
+<p>Source: <a class="reference external" href="https://www.kaggle.com/datasets/teejmahal20/airline-passenger-satisfaction">Kaggle: Airline Passenger Satisfaction</a></p>
+</section>
+<section id="gemini-s-explanation">
+<h2><strong>Gemini’s Explanation</strong><a class="headerlink" href="#gemini-s-explanation" title="Link to this heading">#</a></h2>
+<p>This dataset contains airline passenger satisfaction survey data. It includes each passenger’s demographic information, flight details, and satisfaction ratings for various services, and can be used for a classification problem to predict whether a passenger was satisfied.</p>
+<hr class="docutils" />
+<p>The key characteristics of the data are as follows.</p>
+<section id="data-structure">
+<h3>1. Data Structure<a class="headerlink" href="#data-structure" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Total observations:</strong> 103,904</p></li>
+<li><p><strong>Number of variables (columns):</strong> 25</p></li>
+<li><p><strong>Target variable:</strong> <code class="docutils literal notranslate"><span class="pre">satisfaction</span></code> (binary classification: ‘neutral or dissatisfied’ or ‘satisfied’)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="variable-descriptions">
+<h3>2. Variable Descriptions<a class="headerlink" href="#variable-descriptions" title="Link to this heading">#</a></h3>
+<section id="passenger-demographics">
+<h4>Passenger Demographics<a class="headerlink" href="#passenger-demographics" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Gender</span></code>: Gender (Male, Female)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Customer</span> <span class="pre">Type</span></code>: Customer type (Loyal Customer, disloyal Customer)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Age</span></code>: Passenger age (ranges from 7 to 85)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="flight-information">
+<h4>Flight Information<a class="headerlink" href="#flight-information" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Type</span> <span class="pre">of</span> <span class="pre">Travel</span></code>: Travel purpose (Business travel, Personal Travel)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Class</span></code>: Seat class (Business, Eco, Eco Plus)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Flight</span> <span class="pre">Distance</span></code>: Flight distance</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="service-satisfaction-ratings">
+<h4>Service Satisfaction Ratings<a class="headerlink" href="#service-satisfaction-ratings" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>14 service items rated on a 0–5 scale.</p></li>
+<li><p>Includes <code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">wifi</span> <span class="pre">service</span></code>, <code class="docutils literal notranslate"><span class="pre">Food</span> <span class="pre">and</span> <span class="pre">drink</span></code>, <code class="docutils literal notranslate"><span class="pre">Seat</span> <span class="pre">comfort</span></code>, <code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">entertainment</span></code>, <code class="docutils literal notranslate"><span class="pre">On-board</span> <span class="pre">service</span></code>, <code class="docutils literal notranslate"><span class="pre">Leg</span> <span class="pre">room</span> <span class="pre">service</span></code>, <code class="docutils literal notranslate"><span class="pre">Cleanliness</span></code>, etc.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="delay-information">
+<h4>Delay Information<a class="headerlink" href="#delay-information" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Departure</span> <span class="pre">Delay</span> <span class="pre">in</span> <span class="pre">Minutes</span></code>: Departure delay (minutes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Arrival</span> <span class="pre">Delay</span> <span class="pre">in</span> <span class="pre">Minutes</span></code>: Arrival delay (minutes)</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="data-notes">
+<h3>3. Data Notes<a class="headerlink" href="#data-notes" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">Arrival</span> <span class="pre">Delay</span> <span class="pre">in</span> <span class="pre">Minutes</span></code> variable contains 310 missing values (NaN). Preprocessing such as removal or imputation (mean/median) may be needed.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">Unnamed:</span> <span class="pre">0</span></code> are simple identifiers and are generally excluded from modeling.</p></li>
+<li><p>A score of 0 among service satisfaction ratings likely indicates ‘not rated’ and requires verification.</p></li>
+</ul>
+</section>
+</section>
+<section id="exploratory-factor-analysis">
+<h2><span style="color: blue;"><strong>2. Exploratory Factor Analysis</strong></span><a class="headerlink" href="#exploratory-factor-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="gemini-s-analysis">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#gemini-s-analysis" title="Link to this heading">#</a></h2>
+<section id="what-is-exploratory-factor-analysis">
+<h3>1. What Is Exploratory Factor Analysis?<a class="headerlink" href="#what-is-exploratory-factor-analysis" title="Link to this heading">#</a></h3>
+<p>Exploratory Factor Analysis (EFA) is a statistical technique that analyzes the correlations among numerous variables (here, 14 service satisfaction items) and groups them into a smaller number of latent factors. It is primarily used for dimension reduction and identifying the underlying structure of data.</p>
+<ul class="simple">
+<li><p><strong>Purpose:</strong> Simplify complex data and identify unobserved fundamental causes (factors) to facilitate interpretation.</p></li>
+<li><p><strong>Principle:</strong> Variables with high inter-correlations are likely to belong to the same factor.</p></li>
+<li><p><strong>Key concepts:</strong></p>
+<ul>
+<li><p><strong>Factor Loading:</strong> Indicates the degree of correlation between each variable and a factor; a larger absolute value implies stronger association with that factor.</p></li>
+<li><p><strong>Rotation:</strong> Rotates the factor axes so that variables load more clearly onto specific factors, improving interpretability. The most commonly used method is orthogonal rotation (Varimax).</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="results-summary">
+<h3>2. Results Summary<a class="headerlink" href="#results-summary" title="Link to this heading">#</a></h3>
+<p>EFA was performed on the data, and based on Kaiser’s criterion (eigenvalue &gt; 1), <strong>a total of 4 factors</strong> were extracted. Each factor shows strong associations with the following service items (based on absolute loading ≥ 0.4).</p>
+<p><img alt="Eigenvalue" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/10-2.png" /></p>
+<section id="factor-1-in-flight-comfort-entertainment">
+<h4>Factor 1: In-flight Comfort &amp; Entertainment<a class="headerlink" href="#factor-1-in-flight-comfort-entertainment" title="Link to this heading">#</a></h4>
+<p>This factor relates to the physical environment and enjoyment that passengers directly experience while in the cabin.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Cleanliness</span></code> (-0.84)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">entertainment</span></code> (-0.80)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Food</span> <span class="pre">and</span> <span class="pre">drink</span></code> (-0.78)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Seat</span> <span class="pre">comfort</span></code> (-0.74)</p></li>
+</ul>
+</section>
+<section id="factor-2-booking-accessibility">
+<h4>Factor 2: Booking &amp; Accessibility<a class="headerlink" href="#factor-2-booking-accessibility" title="Link to this heading">#</a></h4>
+<p>Represents the convenience of the process from ticket booking to reaching the boarding gate.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Ease</span> <span class="pre">of</span> <span class="pre">Online</span> <span class="pre">booking</span></code> (-0.89)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">wifi</span> <span class="pre">service</span></code> (-0.74)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Gate</span> <span class="pre">location</span></code> (-0.56)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Departure/Arrival</span> <span class="pre">time</span> <span class="pre">convenient</span></code> (-0.52)</p></li>
+</ul>
+</section>
+<section id="factor-3-staff-service">
+<h4>Factor 3: Staff Service<a class="headerlink" href="#factor-3-staff-service" title="Link to this heading">#</a></h4>
+<p>Items related to interactions with crew and service attitude are grouped together.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Inflight</span> <span class="pre">service</span></code> (-0.80)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Baggage</span> <span class="pre">handling</span></code> (-0.76)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">On-board</span> <span class="pre">service</span></code> (-0.69)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Leg</span> <span class="pre">room</span> <span class="pre">service</span></code> (-0.47)</p></li>
+</ul>
+</section>
+<section id="factor-4-online-boarding-focus">
+<h4>Factor 4: Online Boarding Focus<a class="headerlink" href="#factor-4-online-boarding-focus" title="Link to this heading">#</a></h4>
+<p>Notably, the <code class="docutils literal notranslate"><span class="pre">Online</span> <span class="pre">boarding</span></code> item shows a very high loading (-0.86) on its own and is classified as a separate factor. This suggests that the online check-in experience is an independent satisfaction determinant, distinct from other services.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="conclusions-and-implications">
+<h3>3. Conclusions and Implications<a class="headerlink" href="#conclusions-and-implications" title="Link to this heading">#</a></h3>
+<p>Through this analysis, 14 complex service items can be summarized into 4 core dimensions: <strong>‘In-flight Comfort,’ ‘Booking Accessibility,’ ‘Staff Service,’ and ‘Online Boarding.’</strong></p>
+<p>Airlines can monitor service quality along these 4 dimensions and manage them as indexed scores for more efficient customer satisfaction improvement strategies. For example, if the ‘Staff Service’ factor score is low, strengthen crew training; if ‘Booking Accessibility’ is the issue, improve the app/web system.</p>
+</section>
+</section>
+<section id="chatgpt-s-analysis">
+<h2><strong>ChatGPT’s Analysis</strong><a class="headerlink" href="#chatgpt-s-analysis" title="Link to this heading">#</a></h2>
+<p>Below are the results of performing Exploratory Factor Analysis (EFA) on the 14 service rating items (0–5 scale) from the uploaded <code class="docutils literal notranslate"><span class="pre">train.csv</span></code>, using a correlation matrix–based approach (principal component factor extraction) with Varimax rotation. (With a sample of 100K+, a correlation matrix–based EFA provides a faster and more stable view of the factor structure than directly fitting a maximum likelihood FA.)</p>
+<section id="number-of-factors-selection">
+<h3>1) Number of Factors Selection<a class="headerlink" href="#number-of-factors-selection" title="Link to this heading">#</a></h3>
+<p>The eigenvalues of the correlation matrix for the 14 service rating variables (in descending order) are approximately:</p>
+<ul class="simple">
+<li><p>1: 3.80</p></li>
+<li><p>2: 2.36</p></li>
+<li><p>3: 2.17</p></li>
+<li><p>4: 1.06</p></li>
+<li><p>5: 0.95 …</p></li>
+</ul>
+<p>By Kaiser’s criterion (eigenvalue &gt; 1), 4 factors are indicated. Parallel analysis also confirms that 4 factors are reasonable, as the 4th eigenvalue exceeds the random baseline (95th percentile).</p>
+</section>
+<section id="rotated-loadings-varimax">
+<h3>2) Rotated Loadings (Varimax)<a class="headerlink" href="#rotated-loadings-varimax" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Loading signs are arbitrary; for interpretive convenience, factors are aligned in the positive (+) direction.</p></li>
+<li><p>Below are the rotated loadings, rounded to three decimal places.</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head text-right"><p>F1</p></th>
+<th class="head text-right"><p>F2</p></th>
+<th class="head text-right"><p>F3</p></th>
+<th class="head text-right"><p>F4</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Cleanliness</p></td>
+<td class="text-right"><p>0.886</p></td>
+<td class="text-right"><p>0.037</p></td>
+<td class="text-right"><p>-0.015</p></td>
+<td class="text-right"><p>0.101</p></td>
+</tr>
+<tr class="row-odd"><td><p>Food and drink</p></td>
+<td class="text-right"><p>0.853</p></td>
+<td class="text-right"><p>-0.049</p></td>
+<td class="text-right"><p>0.048</p></td>
+<td class="text-right"><p>0.018</p></td>
+</tr>
+<tr class="row-even"><td><p>Seat comfort</p></td>
+<td class="text-right"><p>0.823</p></td>
+<td class="text-right"><p>0.018</p></td>
+<td class="text-right"><p>-0.071</p></td>
+<td class="text-right"><p>0.206</p></td>
+</tr>
+<tr class="row-odd"><td><p>Inflight entertainment</p></td>
+<td class="text-right"><p>0.802</p></td>
+<td class="text-right"><p>0.422</p></td>
+<td class="text-right"><p>0.037</p></td>
+<td class="text-right"><p>0.052</p></td>
+</tr>
+<tr class="row-even"><td><p>Inflight service</p></td>
+<td class="text-right"><p>0.074</p></td>
+<td class="text-right"><p>0.841</p></td>
+<td class="text-right"><p>0.049</p></td>
+<td class="text-right"><p>-0.014</p></td>
+</tr>
+<tr class="row-odd"><td><p>Baggage handling</p></td>
+<td class="text-right"><p>0.070</p></td>
+<td class="text-right"><p>0.824</p></td>
+<td class="text-right"><p>0.046</p></td>
+<td class="text-right"><p>0.003</p></td>
+</tr>
+<tr class="row-even"><td><p>On-board service</p></td>
+<td class="text-right"><p>0.118</p></td>
+<td class="text-right"><p>0.774</p></td>
+<td class="text-right"><p>-0.020</p></td>
+<td class="text-right"><p>0.084</p></td>
+</tr>
+<tr class="row-odd"><td><p>Leg room service</p></td>
+<td class="text-right"><p>0.047</p></td>
+<td class="text-right"><p>0.595</p></td>
+<td class="text-right"><p>-0.043</p></td>
+<td class="text-right"><p>0.195</p></td>
+</tr>
+<tr class="row-even"><td><p>Gate location</p></td>
+<td class="text-right"><p>0.013</p></td>
+<td class="text-right"><p>-0.024</p></td>
+<td class="text-right"><p>0.836</p></td>
+<td class="text-right"><p>0.032</p></td>
+</tr>
+<tr class="row-odd"><td><p>Departure/Arrival time convenient</p></td>
+<td class="text-right"><p>-0.010</p></td>
+<td class="text-right"><p>0.085</p></td>
+<td class="text-right"><p>0.751</p></td>
+<td class="text-right"><p>0.130</p></td>
+</tr>
+<tr class="row-even"><td><p>Ease of Online booking</p></td>
+<td class="text-right"><p>-0.052</p></td>
+<td class="text-right"><p>0.002</p></td>
+<td class="text-right"><p>0.594</p></td>
+<td class="text-right"><p>0.675</p></td>
+</tr>
+<tr class="row-odd"><td><p>Inflight wifi service</p></td>
+<td class="text-right"><p>0.079</p></td>
+<td class="text-right"><p>0.091</p></td>
+<td class="text-right"><p>0.467</p></td>
+<td class="text-right"><p>0.714</p></td>
+</tr>
+<tr class="row-even"><td><p>Online boarding</p></td>
+<td class="text-right"><p>0.298</p></td>
+<td class="text-right"><p>0.032</p></td>
+<td class="text-right"><p>-0.114</p></td>
+<td class="text-right"><p>0.832</p></td>
+</tr>
+<tr class="row-odd"><td><p>Checkin service</p></td>
+<td class="text-right"><p>0.103</p></td>
+<td class="text-right"><p>0.346</p></td>
+<td class="text-right"><p>-0.194</p></td>
+<td class="text-right"><p>0.299</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="factor-interpretation-labeling">
+<h3>3) Factor Interpretation (Labeling)<a class="headerlink" href="#factor-interpretation-labeling" title="Link to this heading">#</a></h3>
+<p>Typically considering loadings ≥ 0.4 as “strong,” the factors cluster cleanly as follows:</p>
+<ul class="simple">
+<li><p>F1: Comfort &amp; Amenities</p>
+<ul>
+<li><p>Cleanliness, Food and drink, Seat comfort, Inflight entertainment load heavily</p></li>
+</ul>
+</li>
+<li><p>F2: Service Operations</p>
+<ul>
+<li><p>Inflight service, Baggage handling, On-board service, Leg room service load heavily</p></li>
+</ul>
+</li>
+<li><p>F3: Travel Convenience (Airport/Logistics/Timing)</p>
+<ul>
+<li><p>Gate location, Departure/Arrival time convenient, Ease of Online booking (partial) load here</p></li>
+</ul>
+</li>
+<li><p>F4: Digital/Self-Service Experience</p>
+<ul>
+<li><p>Online boarding, Inflight wifi service, Ease of Online booking load heavily</p></li>
+</ul>
+</li>
+</ul>
+<p>(Note: <code class="docutils literal notranslate"><span class="pre">Ease</span> <span class="pre">of</span> <span class="pre">Online</span> <span class="pre">booking</span></code> cross-loads substantially on both F3 and F4. This naturally reads as online booking being both a “convenience” and a “digital experience.”)</p>
+</section>
+<section id="explanatory-power-common-variance-basis">
+<h3>4) Explanatory Power (Common Variance Basis)<a class="headerlink" href="#explanatory-power-common-variance-basis" title="Link to this heading">#</a></h3>
+<p>Based on the ratio of each factor’s sum of squared loadings to 14 (total variables) after rotation:</p>
+<ul class="simple">
+<li><p>F1: 21.2%</p></li>
+<li><p>F2: 19.0%</p></li>
+<li><p>F3: 13.6%</p></li>
+<li><p>F4: 13.3%</p></li>
+<li><p>Total: approximately 67.1%</p></li>
+</ul>
+<p>Summarizing the structure of 14 service rating items into 4 latent factors explains about two-thirds of the common variance.</p>
+<hr class="docutils" />
+<p>If desired, the following can also be done immediately:</p>
+<ul class="simple">
+<li><p>(1) Logistic regression with <code class="docutils literal notranslate"><span class="pre">satisfaction</span></code> as the dependent variable and the 4 factor scores as predictors (“which factor drives satisfaction how much?”)</p></li>
+<li><p>(2) Customer segmentation (clustering) using factor scores</p></li>
+<li><p>(3) Handling cross-loading items (e.g., oblique rotation such as oblimin, or item restructuring)</p></li>
+</ul>
+</section>
+</section>
+<section id="id1">
+<h2><span style="color: blue;"><strong>3. What Is Exploratory Factor Analysis?</strong></span><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+</section>
+<section id="chatgpt-s-explanation">
+<h2><strong>ChatGPT’s Explanation</strong><a class="headerlink" href="#chatgpt-s-explanation" title="Link to this heading">#</a></h2>
+<section id="what-is-factor-analysis-purpose">
+<h3>1) What Is Factor Analysis? (Purpose)<a class="headerlink" href="#what-is-factor-analysis-purpose" title="Link to this heading">#</a></h3>
+<p>Factor Analysis is <strong>a method for summarizing many variables into a few ‘hidden common factors.’</strong></p>
+<p>The core idea is:</p>
+<ul class="simple">
+<li><p>If multiple variables <strong>move similarly together</strong>,</p></li>
+<li><p>There is a common <strong>unseen cause (latent factor)</strong> behind them.</p></li>
+</ul>
+<p>For example:</p>
+<ul class="simple">
+<li><p>Seat comfort</p></li>
+<li><p>Cabin cleanliness</p></li>
+<li><p>Food satisfaction</p></li>
+</ul>
+<p>If these values tend to increase together
+→ We can interpret this as a single factor called “in-flight comfort.”</p>
+<p>The purposes are:</p>
+<ol class="arabic simple">
+<li><p><strong>Dimension reduction</strong>: Organize many variables into a few factors</p></li>
+<li><p><strong>Structure understanding</strong>: Discover hidden structure in data</p></li>
+<li><p><strong>Index construction</strong>: Combine multiple items into a single score (e.g., satisfaction index)</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="when-is-it-used">
+<h3>2) When Is It Used?<a class="headerlink" href="#when-is-it-used" title="Link to this heading">#</a></h3>
+<p>Factor analysis is especially common in:</p>
+<ul class="simple">
+<li><p>Survey data (satisfaction, attitudes, psychology)</p></li>
+<li><p>Service quality evaluation</p></li>
+<li><p>Customer experience analysis</p></li>
+<li><p>Psychology, marketing, and social sciences</p></li>
+</ul>
+<p>The condition is straightforward:</p>
+<ul class="simple">
+<li><p>Variables must be <strong>correlated with each other</strong>.</p></li>
+<li><p>If they are independent, there is no reason to group them into factors.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="basic-concept-intuition">
+<h3>3) Basic Concept (Intuition)<a class="headerlink" href="#basic-concept-intuition" title="Link to this heading">#</a></h3>
+<p>Factor analysis assumes the following structure:</p>
+<p>Each variable = common factor + unique factor</p>
+<p>In equation form:</p>
+<div class="math notranslate nohighlight">
+\[
+X_j = \lambda_{j1}F_1 + \lambda_{j2}F_2 + \cdots + \epsilon_j
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(F\)</span>: Common factors (latent factors)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\lambda\)</span>: Factor loadings (degree of association)</p></li>
+<li><p><span class="math notranslate nohighlight">\(\epsilon\)</span>: Unique component of that variable (error)</p></li>
+</ul>
+<p>Interpretation is simple:</p>
+<ul class="simple">
+<li><p>Large loading → Well represents that factor’s character</p></li>
+<li><p>e.g., Seat comfort loading 0.8 on “comfort factor”
+→ Seat comfort is a variable that well explains the comfort dimension</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="analysis-procedure-methodological-flow">
+<h3>4) Analysis Procedure (Methodological Flow)<a class="headerlink" href="#analysis-procedure-methodological-flow" title="Link to this heading">#</a></h3>
+<p>Factor analysis typically proceeds through the following steps.</p>
+<section id="check-correlation-structure">
+<h4>(1) Check Correlation Structure<a class="headerlink" href="#check-correlation-structure" title="Link to this heading">#</a></h4>
+<p>Verify whether correlations exist among variables.</p>
+</section>
+<hr class="docutils" />
+<section id="determine-number-of-factors">
+<h4>(2) Determine Number of Factors<a class="headerlink" href="#determine-number-of-factors" title="Link to this heading">#</a></h4>
+<p>Common criteria:</p>
+<ul class="simple">
+<li><p>Eigenvalue &gt; 1 (Kaiser’s criterion)</p></li>
+<li><p>Scree plot (elbow point)</p></li>
+<li><p>Parallel analysis (most recommended)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="factor-extraction">
+<h4>(3) Factor Extraction<a class="headerlink" href="#factor-extraction" title="Link to this heading">#</a></h4>
+<p>Common methods:</p>
+<ul class="simple">
+<li><p>Principal factor method</p></li>
+<li><p>Maximum Likelihood</p></li>
+</ul>
+<p>At this stage, only the “directions of the factors” are identified.</p>
+</section>
+<hr class="docutils" />
+<section id="rotation">
+<h4>(4) Rotation<a class="headerlink" href="#rotation" title="Link to this heading">#</a></h4>
+<p>The most important step.</p>
+<p>Purpose:
+→ <strong>Make interpretation easier</strong></p>
+<p>Common rotations:</p>
+<ul class="simple">
+<li><p>Varimax: Assumes independence between factors (most widely used)</p></li>
+<li><p>Oblimin: Allows correlations between factors</p></li>
+</ul>
+<p>Before rotation: All variables load modestly on all factors
+After rotation: Each variable loads heavily on only specific factors
+→ Structure becomes clearer</p>
+</section>
+<hr class="docutils" />
+<section id="interpretation">
+<h4>(5) Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h4>
+<p>For example:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>F1</p></th>
+<th class="head"><p>F2</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Seat comfort</p></td>
+<td><p>0.8</p></td>
+<td><p>0.1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Food</p></td>
+<td><p>0.7</p></td>
+<td><p>0.2</p></td>
+</tr>
+<tr class="row-even"><td><p>Crew courtesy</p></td>
+<td><p>0.1</p></td>
+<td><p>0.8</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>→ F1 = “Cabin Environment”
+→ F2 = “Service”</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="what-you-get-from-the-results">
+<h3>5) What You Get from the Results<a class="headerlink" href="#what-you-get-from-the-results" title="Link to this heading">#</a></h3>
+<p>Factor analysis yields:</p>
+<ol class="arabic simple">
+<li><p><strong>Factor structure</strong></p>
+<ul class="simple">
+<li><p>The hidden dimensions of the data</p></li>
+</ul>
+</li>
+<li><p><strong>Factor scores</strong></p>
+<ul class="simple">
+<li><p>Each observation’s “latent trait score”</p></li>
+<li><p>Can be used subsequently in regression, clustering, etc.</p></li>
+</ul>
+</li>
+</ol>
+<p>Example:</p>
+<ul class="simple">
+<li><p>Each customer’s “service satisfaction factor score”</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="factor-analysis-vs-pca-commonly-confused">
+<h3>6) Factor Analysis vs. PCA (Commonly Confused)<a class="headerlink" href="#factor-analysis-vs-pca-commonly-confused" title="Link to this heading">#</a></h3>
+<p>Key difference:</p>
+<ul class="simple">
+<li><p>PCA: Aims to explain variance (mathematical dimension reduction)</p></li>
+<li><p>Factor Analysis: <strong>Aims to explain latent structure</strong></p></li>
+</ul>
+<p>In other words:</p>
+<p>PCA → Data compression
+FA → Meaningful structure discovery</p>
+</section>
+<hr class="docutils" />
+<section id="one-line-summary">
+<h3>7) One-Line Summary<a class="headerlink" href="#one-line-summary" title="Link to this heading">#</a></h3>
+<p>Factor analysis is <strong>“a method for discovering the few hidden concepts behind many observed variables.”</strong></p>
+<hr class="docutils" />
+<p>If desired, the following can also be briefly explained:</p>
+<ul class="simple">
+<li><p>Criteria for good factor analysis results (KMO, Bartlett’s test)</p></li>
+<li><p>Real data examples of “well-done vs. poorly-done factor analysis”</p></li>
+<li><p>How to connect factor analysis to business decision-making in satisfaction analysis (practical perspective)</p></li>
+</ul>
+</section>
+</section>
+<section id="reference-python-code">
+<h2><strong>Reference: Python Code</strong><a class="headerlink" href="#reference-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Data loading</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># Load dataframe</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../Data/train.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># Inspect data</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Data info:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Data info:
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 103904 entries, 0 to 103903
+Data columns (total 25 columns):
+ #   Column                             Non-Null Count   Dtype  
+---  ------                             --------------   -----  
+ 0   Unnamed: 0                         103904 non-null  int64  
+ 1   id                                 103904 non-null  int64  
+ 2   Gender                             103904 non-null  object 
+ 3   Customer Type                      103904 non-null  object 
+ 4   Age                                103904 non-null  int64  
+ 5   Type of Travel                     103904 non-null  object 
+ 6   Class                              103904 non-null  object 
+ 7   Flight Distance                    103904 non-null  int64  
+ 8   Inflight wifi service              103904 non-null  int64  
+ 9   Departure/Arrival time convenient  103904 non-null  int64  
+ 10  Ease of Online booking             103904 non-null  int64  
+ 11  Gate location                      103904 non-null  int64  
+ 12  Food and drink                     103904 non-null  int64  
+ 13  Online boarding                    103904 non-null  int64  
+ 14  Seat comfort                       103904 non-null  int64  
+ 15  Inflight entertainment             103904 non-null  int64  
+ 16  On-board service                   103904 non-null  int64  
+ 17  Leg room service                   103904 non-null  int64  
+ 18  Baggage handling                   103904 non-null  int64  
+ 19  Checkin service                    103904 non-null  int64  
+ 20  Inflight service                   103904 non-null  int64  
+ 21  Cleanliness                        103904 non-null  int64  
+ 22  Departure Delay in Minutes         103904 non-null  int64  
+ 23  Arrival Delay in Minutes           103594 non-null  float64
+ 24  satisfaction                       103904 non-null  object 
+dtypes: float64(1), int64(19), object(5)
+memory usage: 19.8+ MB
+None
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Exploratory Factor Analysis</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">FactorAnalysis</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+
+<span class="c1"># 1. Data preprocessing</span>
+<span class="c1"># Select survey item columns</span>
+<span class="n">survey_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Inflight wifi service&#39;</span><span class="p">,</span> <span class="s1">&#39;Departure/Arrival time convenient&#39;</span><span class="p">,</span> <span class="s1">&#39;Ease of Online booking&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;Gate location&#39;</span><span class="p">,</span> <span class="s1">&#39;Food and drink&#39;</span><span class="p">,</span> <span class="s1">&#39;Online boarding&#39;</span><span class="p">,</span> <span class="s1">&#39;Seat comfort&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;Inflight entertainment&#39;</span><span class="p">,</span> <span class="s1">&#39;On-board service&#39;</span><span class="p">,</span> <span class="s1">&#39;Leg room service&#39;</span><span class="p">,</span> 
+               <span class="s1">&#39;Baggage handling&#39;</span><span class="p">,</span> <span class="s1">&#39;Checkin service&#39;</span><span class="p">,</span> <span class="s1">&#39;Inflight service&#39;</span><span class="p">,</span> <span class="s1">&#39;Cleanliness&#39;</span><span class="p">]</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">survey_cols</span><span class="p">]</span>
+
+<span class="c1"># Handle missing values (0 may mean &#39;not rated&#39;, but treated as a valid response here.</span>
+<span class="c1"># If 0 represents missing, consider mean imputation or exclusion.</span>
+<span class="c1"># In this dataset, 0 is sometimes interpreted as &#39;Not Applicable&#39;.</span>
+<span class="c1"># For factor analysis, we proceed as-is; standardization is key.)</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="n">X_scaled</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># 2. Determine optimal number of factors (Scree Plot &amp; Eigenvalues)</span>
+<span class="c1"># Compute eigenvalues of the correlation matrix</span>
+<span class="n">corr_matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">X_scaled</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">eigenvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvals</span><span class="p">(</span><span class="n">corr_matrix</span><span class="p">)</span>
+<span class="c1"># Sort in descending order</span>
+<span class="n">eigenvalues</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eigenvalues (top):&quot;</span><span class="p">,</span> <span class="n">eigenvalues</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+
+<span class="c1"># Scree Plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">eigenvalues</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">eigenvalues</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Scree Plot&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Number of Factors&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Eigenvalue&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>  <span class="c1"># Kaiser&#39;s criterion</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Determine number of factors by Kaiser&#39;s criterion (Eigenvalue &gt; 1)</span>
+<span class="n">n_factors</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">eigenvalues</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Optimal number of factors (Eigenvalue &gt; 1): </span><span class="si">{</span><span class="n">n_factors</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># 3. Perform Factor Analysis</span>
+<span class="c1"># Use rotation=&#39;varimax&#39; to improve interpretability</span>
+<span class="n">fa</span> <span class="o">=</span> <span class="n">FactorAnalysis</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">n_factors</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="s1">&#39;varimax&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">fa</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_scaled</span><span class="p">)</span>
+
+<span class="c1"># Factor Loadings</span>
+<span class="n">fa_components</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">fa</span><span class="o">.</span><span class="n">components_</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">survey_cols</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Factor </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_factors</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Factor Loadings:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">fa_components</span><span class="p">)</span>
+
+<span class="c1"># Visualization (Heatmap)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">fa_components</span><span class="p">,</span> <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;RdBu_r&#39;</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Factor Loadings (Varimax Rotation)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Eigenvalues (top): [3.80011677 2.36198598 2.16589224 1.06327401 0.95093123 0.7003355
+ 0.53995637 0.51465504 0.46947475 0.36866001]
+</pre></div>
+</div>
+<img alt="../_images/d231441c6b01ac53e5dc98d1fbbfd84f5af2ddcd8fb0683c7cbbf135a2edeb2f.png" src="../_images/d231441c6b01ac53e5dc98d1fbbfd84f5af2ddcd8fb0683c7cbbf135a2edeb2f.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimal number of factors (Eigenvalue &gt; 1): 4
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Factor Loadings:
+                                   Factor 1  Factor 2  Factor 3  Factor 4
+Inflight wifi service             -0.118254 -0.740117 -0.106329 -0.258091
+Departure/Arrival time convenient  0.008928 -0.518830 -0.051124  0.082549
+Ease of Online booking             0.017820 -0.892371 -0.007709 -0.196152
+Gate location                     -0.012638 -0.560164  0.032955  0.177689
+Food and drink                    -0.779936 -0.040708  0.045720 -0.036453
+Online boarding                   -0.250417 -0.269587 -0.047991 -0.857874
+Seat comfort                      -0.741534  0.008281 -0.010308 -0.271377
+Inflight entertainment            -0.804211 -0.052037 -0.417944 -0.058155
+On-board service                  -0.132656 -0.020589 -0.690041 -0.096536
+Leg room service                  -0.097972 -0.092149 -0.473165 -0.068422
+Baggage handling                  -0.082763 -0.037304 -0.756995 -0.018552
+Checkin service                   -0.100021  0.027725 -0.251406 -0.206449
+Inflight service                  -0.085198 -0.033099 -0.799829 -0.004999
+Cleanliness                       -0.844403 -0.005068 -0.019302 -0.138584
+</pre></div>
+</div>
+<img alt="../_images/c115948981fbdbaf8b303082e9e7a6a9087bf412bb45fc5143e322b6163fedb3.png" src="../_images/c115948981fbdbaf8b303082e9e7a6a9087bf412bb45fc5143e322b6163fedb3.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">service_cols</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;Inflight wifi service&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Departure/Arrival time convenient&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Ease of Online booking&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Gate location&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Food and drink&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Online boarding&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Seat comfort&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Inflight entertainment&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;On-board service&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Leg room service&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Baggage handling&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Checkin service&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Inflight service&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Cleanliness&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">service_cols</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="c1"># Standardize</span>
+<span class="n">Xz</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span> <span class="o">/</span> <span class="n">X</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ddof</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Correlation matrix</span>
+<span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">Xz</span><span class="p">,</span> <span class="n">rowvar</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># Eigendecomposition</span>
+<span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">eigvals</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">eigvals</span><span class="p">,</span> <span class="n">eigvecs</span> <span class="o">=</span> <span class="n">eigvals</span><span class="p">[</span><span class="n">idx</span><span class="p">],</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span>
+
+<span class="c1"># Number of factors</span>
+<span class="n">k</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="c1"># Factor loadings (principal component factor extraction)</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">eigvecs</span><span class="p">[:,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">eigvals</span><span class="p">[:</span><span class="n">k</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">varimax</span><span class="p">(</span><span class="n">Phi</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+    <span class="n">p</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="n">Phi</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">Rm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">q</span><span class="p">):</span>
+        <span class="n">d_old</span> <span class="o">=</span> <span class="n">d</span>
+        <span class="n">Lam</span> <span class="o">=</span> <span class="n">Phi</span> <span class="o">@</span> <span class="n">Rm</span>
+        <span class="n">u</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">vh</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">svd</span><span class="p">(</span>
+            <span class="n">Phi</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="p">(</span><span class="n">Lam</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="p">(</span><span class="n">gamma</span> <span class="o">/</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="n">Lam</span> <span class="o">@</span> <span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">Lam</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">Lam</span><span class="p">)))</span>
+        <span class="p">)</span>
+        <span class="n">Rm</span> <span class="o">=</span> <span class="n">u</span> <span class="o">@</span> <span class="n">vh</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">d_old</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">d</span> <span class="o">/</span> <span class="n">d_old</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">tol</span><span class="p">:</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="n">Phi</span> <span class="o">@</span> <span class="n">Rm</span>
+
+<span class="n">L_rot</span> <span class="o">=</span> <span class="n">varimax</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+
+<span class="c1"># Sort factors by SS loadings</span>
+<span class="n">ss</span> <span class="o">=</span> <span class="p">(</span><span class="n">L_rot</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">ss</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">L_rot</span> <span class="o">=</span> <span class="n">L_rot</span><span class="p">[:,</span> <span class="n">order</span><span class="p">]</span>
+<span class="n">ss</span> <span class="o">=</span> <span class="n">ss</span><span class="p">[</span><span class="n">order</span><span class="p">]</span>
+
+<span class="n">loading</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">L_rot</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">service_cols</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;F</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">)])</span>
+
+<span class="c1"># Align signs for interpretive convenience</span>
+<span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">loading</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">loading</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">loading</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Eigenvalues (top):&quot;</span><span class="p">,</span> <span class="n">eigvals</span><span class="p">[:</span><span class="mi">10</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">SS loadings:&quot;</span><span class="p">,</span> <span class="n">ss</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">SS/14:&quot;</span><span class="p">,</span> <span class="n">ss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">service_cols</span><span class="p">),</span> <span class="s2">&quot;sum:&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">ss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">service_cols</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">loading</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Eigenvalues (top): [3.80011677 2.36198598 2.16589224 1.06327401 0.95093123 0.7003355
+ 0.53995637 0.51465504 0.46947475 0.36866001]
+
+SS loadings: [2.96894813 2.65727725 1.89930116 1.86574246]
+
+SS/14: [0.21206772 0.18980552 0.13566437 0.13326732] sum: 0.6708049285312284
+
+                                      F1     F2     F3     F4
+Inflight wifi service              0.079  0.091  0.467  0.714
+Departure/Arrival time convenient -0.010  0.085  0.751  0.130
+Ease of Online booking            -0.052  0.002  0.594  0.675
+Gate location                      0.013 -0.024  0.836  0.032
+Food and drink                     0.853 -0.049  0.048  0.018
+Online boarding                    0.298  0.032 -0.114  0.832
+Seat comfort                       0.823  0.018 -0.071  0.206
+Inflight entertainment             0.802  0.422  0.037  0.052
+On-board service                   0.118  0.774 -0.020  0.084
+Leg room service                   0.047  0.595 -0.043  0.195
+Baggage handling                   0.070  0.824  0.046  0.003
+Checkin service                    0.103  0.346 -0.194  0.299
+Inflight service                   0.074  0.841  0.049 -0.014
+Cleanliness                        0.886  0.037 -0.015  0.101
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="09_Survey_Analysis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 9. Survey Analysis</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="11_Boston_Housing_Price_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 11. Boston Housing Price Analysis</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-explanation"><strong>Gemini’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">1. Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-descriptions">2. Variable Descriptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#passenger-demographics">Passenger Demographics</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flight-information">Flight Information</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#service-satisfaction-ratings">Service Satisfaction Ratings</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#delay-information">Delay Information</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-notes">3. Data Notes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exploratory-factor-analysis"><span style="color: blue;"><strong>2. Exploratory Factor Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-analysis"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-exploratory-factor-analysis">1. What Is Exploratory Factor Analysis?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#results-summary">2. Results Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-1-in-flight-comfort-entertainment">Factor 1: In-flight Comfort &amp; Entertainment</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-2-booking-accessibility">Factor 2: Booking &amp; Accessibility</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-3-staff-service">Factor 3: Staff Service</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-4-online-boarding-focus">Factor 4: Online Boarding Focus</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions-and-implications">3. Conclusions and Implications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-analysis"><strong>ChatGPT’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#number-of-factors-selection">1) Number of Factors Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rotated-loadings-varimax">2) Rotated Loadings (Varimax)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-interpretation-labeling">3) Factor Interpretation (Labeling)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explanatory-power-common-variance-basis">4) Explanatory Power (Common Variance Basis)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><span style="color: blue;"><strong>3. What Is Exploratory Factor Analysis?</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-s-explanation"><strong>ChatGPT’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-factor-analysis-purpose">1) What Is Factor Analysis? (Purpose)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-is-it-used">2) When Is It Used?</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-concept-intuition">3) Basic Concept (Intuition)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-procedure-methodological-flow">4) Analysis Procedure (Methodological Flow)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#check-correlation-structure">(1) Check Correlation Structure</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#determine-number-of-factors">(2) Determine Number of Factors</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-extraction">(3) Factor Extraction</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#rotation">(4) Rotation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">(5) Interpretation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-you-get-from-the-results">5) What You Get from the Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#factor-analysis-vs-pca-commonly-confused">6) Factor Analysis vs. PCA (Commonly Confused)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-line-summary">7) One-Line Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1817 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 20. Panel Data Analysis &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/20_Panel_Data_Analysis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 21. Bone Density Test Interpretation" href="21_Bone_Density_Test_Interpretation.html" />
+    <link rel="prev" title="Ch 19. Learning Deep Learning" href="19_Learning_Deep_Learning.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/20_Panel_Data_Analysis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/20_Panel_Data_Analysis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 20. Panel Data Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-analysis"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">1. Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-variable-descriptions">2. Key Variable Descriptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dependent-variable-wage-related">(1) Dependent Variable (Wage-Related)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#human-capital-variables">(2) Human Capital Variables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tenure-and-labor-market-status">(3) Tenure and Labor Market Status</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#demographic-variables">(4) Demographic Variables</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#significance-for-analysis">3. Significance for Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wage-determination-model">(1) Wage Determination Model</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#applicable-panel-models">(2) Applicable Panel Models</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#purpose-of-data-usage-key-points">4. Purpose of Data Usage (Key Points)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-summary-statistics"><span style="color: blue;"><strong>2. Variable Summary Statistics</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-summary">Data Structure Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Variable Summary Statistics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wage-determinant-analysis"><span style="color: blue;"><strong>3. Wage Determinant Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-specification">1. Model Specification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-results">2. Estimation Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pooled-ols-clustered-se-by-entity">(1) Pooled OLS (clustered SE by entity)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-effects-entity-fe-clustered-se-by-entity">(2) Fixed Effects (entity FE, clustered SE by entity)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#random-effects-clustered-se-by-entity">(3) Random Effects (clustered SE by entity)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-comparison-summary">3. Model Comparison Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hausman-test-fe-vs-re">4. Hausman Test (FE vs RE)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-line-summary">5. One-Line Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intuitive-understanding-of-panel-data-models"><span style="color: blue;"><strong>4. Intuitive Understanding of Panel Data Models</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-explanation"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pooled-ols">1. Pooled OLS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-effects-model-fe">2. Fixed Effects Model (FE)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-effects-model-re">3. Random Effects Model (RE)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intuitive-difference-between-fe-and-re">4. Intuitive Difference Between FE and RE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hausman-test">5. Hausman Test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#all-at-once-summary-intuition">6. All-at-Once Summary (Intuition)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-20-panel-data-analysis">
+<h1><strong>Ch 20. Panel Data Analysis</strong><a class="headerlink" href="#ch-20-panel-data-analysis" title="Link to this heading">#</a></h1>
+<section id="data-input">
+<h2><span style="color: blue;"><strong>1. Data Input</strong></span><a class="headerlink" href="#data-input" title="Link to this heading">#</a></h2>
+<p><img alt="Panel1" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/20-1.png" /></p>
+<p>Source: <a class="reference external" href="http://qed.econ.queensu.ca/jae/1998-v13.2/vella-verbeek/">Journal of Applied Econometrics Data Archive (Vella and Verbeek, 1998)</a></p>
+</section>
+<section id="chatgpt-analysis">
+<h2><strong>ChatGPT Analysis</strong><a class="headerlink" href="#chatgpt-analysis" title="Link to this heading">#</a></h2>
+<p>Below is an overview of the structure and variables of the uploaded <code class="docutils literal notranslate"><span class="pre">wage_panel.csv</span></code> data. This data is in <strong>panel data</strong> format, tracking individuals over multiple time periods, and is frequently used for analyzing wage determinants.</p>
+<hr class="docutils" />
+<section id="data-structure">
+<h3>1. Data Structure<a class="headerlink" href="#data-structure" title="Link to this heading">#</a></h3>
+<p>This data is a <strong>balanced panel</strong> that repeatedly observes <strong>individuals (person)</strong> over <strong>multiple years (year)</strong>.</p>
+<ul class="simple">
+<li><p>Unit of observation: Person-year</p></li>
+<li><p>Panel identifiers:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">nr</span></code>: Individual ID</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">year</span></code>: Observation year</p></li>
+</ul>
+</li>
+<li><p>Characteristics:</p>
+<ul>
+<li><p>The same individual appears repeatedly across multiple time periods</p></li>
+<li><p>Enables simultaneous analysis of individual-specific characteristics (ability, disposition, etc.) and time-varying factors</p></li>
+</ul>
+</li>
+</ul>
+<p>Panel data format:
+$<span class="math notranslate nohighlight">\(
+i = 1, \dots, N \quad (\text{individuals}), \quad
+t = 1, \dots, T \quad (\text{years})
+\)</span>$</p>
+</section>
+<hr class="docutils" />
+<section id="key-variable-descriptions">
+<h3>2. Key Variable Descriptions<a class="headerlink" href="#key-variable-descriptions" title="Link to this heading">#</a></h3>
+<section id="dependent-variable-wage-related">
+<h4>(1) Dependent Variable (Wage-Related)<a class="headerlink" href="#dependent-variable-wage-related" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">lwage</span></code>: Log wage</p>
+<ul>
+<li><p>Log of hourly wage</p></li>
+<li><p>Interpretation: Coefficients approximately represent <strong>percentage changes</strong></p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="human-capital-variables">
+<h4>(2) Human Capital Variables<a class="headerlink" href="#human-capital-variables" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">educ</span></code>: Years of schooling</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exper</span></code>: Total years of labor market experience</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expersq</span></code>: Experience squared</p>
+<ul>
+<li><p>Captures <strong>nonlinearity</strong> (diminishing returns) in the experience effect</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="tenure-and-labor-market-status">
+<h4>(3) Tenure and Labor Market Status<a class="headerlink" href="#tenure-and-labor-market-status" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tenure</span></code>: Years at current job</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tenursq</span></code>: Tenure squared</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">union</span></code>: Union membership (1 = member)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hours</span></code>: Annual hours worked</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="demographic-variables">
+<h4>(4) Demographic Variables<a class="headerlink" href="#demographic-variables" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">black</span></code>: Black (1 = yes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hisp</span></code>: Hispanic (1 = yes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">married</span></code>: Married (1 = yes)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">south</span></code>: Southern region residence (1 = south)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">urban</span></code>: Urban residence (1 = urban)</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="significance-for-analysis">
+<h3>3. Significance for Analysis<a class="headerlink" href="#significance-for-analysis" title="Link to this heading">#</a></h3>
+<p>This data is suitable for the following econometric analyses.</p>
+<section id="wage-determination-model">
+<h4>(1) Wage Determination Model<a class="headerlink" href="#wage-determination-model" title="Link to this heading">#</a></h4>
+<div class="math notranslate nohighlight">
+\[
+\log(wage_{it}) = \beta_0 + \beta_1 educ_i + \beta_2 exper_{it} + \beta_3 tenure_{it} + \alpha_i + u_{it}
+\]</div>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\alpha_i\)</span>: Individual-specific effect (unobservable factors such as ability, diligence, etc.)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="applicable-panel-models">
+<h4>(2) Applicable Panel Models<a class="headerlink" href="#applicable-panel-models" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>Pooled OLS</p></li>
+<li><p>Fixed Effects (FE)</p></li>
+<li><p>Random Effects (RE)</p></li>
+<li><p>Hausman test</p></li>
+</ul>
+<p>In particular:</p>
+<ul class="simple">
+<li><p><strong>Time-invariant</strong> variables like <code class="docutils literal notranslate"><span class="pre">educ</span></code> are eliminated in FE</p></li>
+<li><p><strong>Time-varying</strong> variables like <code class="docutils literal notranslate"><span class="pre">exper</span></code> and <code class="docutils literal notranslate"><span class="pre">tenure</span></code> are identified in FE</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="purpose-of-data-usage-key-points">
+<h3>4. Purpose of Data Usage (Key Points)<a class="headerlink" href="#purpose-of-data-usage-key-points" title="Link to this heading">#</a></h3>
+<p>This data is used to answer the following questions:</p>
+<ul class="simple">
+<li><p>How much does education increase wages?</p></li>
+<li><p>How do the wage effects of experience and tenure differ?</p></li>
+<li><p>How do results change when individual-specific ability is controlled for?</p></li>
+<li><p>Which model is more appropriate: FE or RE?</p></li>
+</ul>
+<hr class="docutils" />
+<p>If needed, the following can also be provided:</p>
+<ul class="simple">
+<li><p>Variable summary statistics</p></li>
+<li><p>Panel structure verification code</p></li>
+<li><p>FE/RE estimation results interpretation</p></li>
+<li><p>Hausman test results explanation</p></li>
+</ul>
+</section>
+</section>
+<section id="variable-summary-statistics">
+<h2><span style="color: blue;"><strong>2. Variable Summary Statistics</strong></span><a class="headerlink" href="#variable-summary-statistics" title="Link to this heading">#</a></h2>
+</section>
+<section id="id1">
+<h2><strong>ChatGPT Analysis</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<section id="data-structure-summary">
+<h3>Data Structure Summary<a class="headerlink" href="#data-structure-summary" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Observations N = 4,360</p></li>
+<li><p>Number of individuals (entities) = 545</p></li>
+<li><p>Number of time periods = 8</p></li>
+<li><p>Panel index: (<code class="docutils literal notranslate"><span class="pre">nr</span></code>, <code class="docutils literal notranslate"><span class="pre">year</span></code>)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="id2">
+<h3>Variable Summary Statistics<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>(Identifiers <code class="docutils literal notranslate"><span class="pre">nr</span></code>, <code class="docutils literal notranslate"><span class="pre">year</span></code> excluded)</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-right"><p>count</p></th>
+<th class="head text-right"><p>mean</p></th>
+<th class="head text-right"><p>std</p></th>
+<th class="head text-right"><p>min</p></th>
+<th class="head text-right"><p>25%</p></th>
+<th class="head text-right"><p>50%</p></th>
+<th class="head text-right"><p>75%</p></th>
+<th class="head text-right"><p>max</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>black</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>0.116</p></td>
+<td class="text-right"><p>0.320</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.00</p></td>
+<td class="text-right"><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>exper</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>6.515</p></td>
+<td class="text-right"><p>2.826</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>4.0</p></td>
+<td class="text-right"><p>6.0</p></td>
+<td class="text-right"><p>9.00</p></td>
+<td class="text-right"><p>18.0</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>hisp</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>0.156</p></td>
+<td class="text-right"><p>0.363</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.00</p></td>
+<td class="text-right"><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>hours</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>2191.257</p></td>
+<td class="text-right"><p>566.352</p></td>
+<td class="text-right"><p>120.0</p></td>
+<td class="text-right"><p>2040.0</p></td>
+<td class="text-right"><p>2080.0</p></td>
+<td class="text-right"><p>2414.25</p></td>
+<td class="text-right"><p>4992.0</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>married</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>0.439</p></td>
+<td class="text-right"><p>0.496</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>1.00</p></td>
+<td class="text-right"><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>educ</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>12.589</p></td>
+<td class="text-right"><p>2.620</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>12.0</p></td>
+<td class="text-right"><p>12.0</p></td>
+<td class="text-right"><p>15.00</p></td>
+<td class="text-right"><p>18.0</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>union</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>0.218</p></td>
+<td class="text-right"><p>0.413</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>0.00</p></td>
+<td class="text-right"><p>1.0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>lwage</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>1.566</p></td>
+<td class="text-right"><p>0.394</p></td>
+<td class="text-right"><p>-1.0</p></td>
+<td class="text-right"><p>1.3</p></td>
+<td class="text-right"><p>1.6</p></td>
+<td class="text-right"><p>1.83</p></td>
+<td class="text-right"><p>3.0</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>expersq</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>50.384</p></td>
+<td class="text-right"><p>37.430</p></td>
+<td class="text-right"><p>0.0</p></td>
+<td class="text-right"><p>16.0</p></td>
+<td class="text-right"><p>36.0</p></td>
+<td class="text-right"><p>81.00</p></td>
+<td class="text-right"><p>324.0</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>occupation</p></td>
+<td class="text-right"><p>4360.0</p></td>
+<td class="text-right"><p>6.663</p></td>
+<td class="text-right"><p>3.083</p></td>
+<td class="text-right"><p>1.0</p></td>
+<td class="text-right"><p>5.0</p></td>
+<td class="text-right"><p>6.0</p></td>
+<td class="text-right"><p>8.00</p></td>
+<td class="text-right"><p>9.0</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Interpretation notes:</p>
+<ul class="simple">
+<li><p>Since <code class="docutils literal notranslate"><span class="pre">lwage</span></code> is log wage, regression coefficients can be approximately interpreted as percentage changes</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">exper</span></code> and <code class="docutils literal notranslate"><span class="pre">expersq</span></code> together allows verification of whether the marginal effect of experience is diminishing (concave)</p></li>
+</ul>
+</section>
+</section>
+<section id="wage-determinant-analysis">
+<h2><span style="color: blue;"><strong>3. Wage Determinant Analysis</strong></span><a class="headerlink" href="#wage-determinant-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="id3">
+<h2><strong>ChatGPT Analysis</strong><a class="headerlink" href="#id3" title="Link to this heading">#</a></h2>
+<p><strong><code class="docutils literal notranslate"><span class="pre">linearmodels</span></code> Panel Analysis Results</strong></p>
+<ul class="simple">
+<li><p>Package used: <code class="docutils literal notranslate"><span class="pre">linearmodels</span></code></p></li>
+<li><p>Standard errors: Clustered by entity (<code class="docutils literal notranslate"><span class="pre">nr</span></code>)</p></li>
+</ul>
+<hr class="docutils" />
+<section id="model-specification">
+<h3>1. Model Specification<a class="headerlink" href="#model-specification" title="Link to this heading">#</a></h3>
+<p>Dependent variable: <code class="docutils literal notranslate"><span class="pre">lwage</span></code></p>
+<p>Explanatory variables (common): <code class="docutils literal notranslate"><span class="pre">educ</span></code>, <code class="docutils literal notranslate"><span class="pre">exper</span></code>, <code class="docutils literal notranslate"><span class="pre">expersq</span></code>, <code class="docutils literal notranslate"><span class="pre">union</span></code>, <code class="docutils literal notranslate"><span class="pre">married</span></code>, <code class="docutils literal notranslate"><span class="pre">black</span></code>, <code class="docutils literal notranslate"><span class="pre">hisp</span></code> + constant</p>
+<ul class="simple">
+<li><p>Pooled OLS: Ignores panel structure, pools all data and runs OLS</p></li>
+<li><p>Fixed Effects (FE): Controls for individual fixed effects (time-invariant individual factors)</p></li>
+<li><p>Random Effects (RE): Treats individual effects as a random component and estimates in GLS form</p></li>
+</ul>
+<p>In FE, variables that do not vary within an individual are not identified.</p>
+<ul class="simple">
+<li><p>In this data, <code class="docutils literal notranslate"><span class="pre">educ</span></code>, <code class="docutils literal notranslate"><span class="pre">black</span></code>, <code class="docutils literal notranslate"><span class="pre">hisp</span></code> do not vary over time (at the individual level) and are automatically dropped in FE.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="estimation-results">
+<h3>2. Estimation Results<a class="headerlink" href="#estimation-results" title="Link to this heading">#</a></h3>
+<section id="pooled-ols-clustered-se-by-entity">
+<h4>(1) Pooled OLS (clustered SE by entity)<a class="headerlink" href="#pooled-ols-clustered-se-by-entity" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-right"><p>coef</p></th>
+<th class="head text-right"><p>std_err</p></th>
+<th class="head text-right"><p>t</p></th>
+<th class="head text-right"><p>p</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>const</p></td>
+<td class="text-right"><p>-0.0347</p></td>
+<td class="text-right"><p>0.1200</p></td>
+<td class="text-right"><p>-0.289</p></td>
+<td class="text-right"><p>0.7724</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>educ</p></td>
+<td class="text-right"><p>0.0994</p></td>
+<td class="text-right"><p>0.0092</p></td>
+<td class="text-right"><p>10.802</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>exper</p></td>
+<td class="text-right"><p>0.0892</p></td>
+<td class="text-right"><p>0.0124</p></td>
+<td class="text-right"><p>7.173</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>expersq</p></td>
+<td class="text-right"><p>-0.0028</p></td>
+<td class="text-right"><p>0.0009</p></td>
+<td class="text-right"><p>-3.275</p></td>
+<td class="text-right"><p>0.0011</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>union</p></td>
+<td class="text-right"><p>0.1801</p></td>
+<td class="text-right"><p>0.0276</p></td>
+<td class="text-right"><p>6.534</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>married</p></td>
+<td class="text-right"><p>0.1077</p></td>
+<td class="text-right"><p>0.0261</p></td>
+<td class="text-right"><p>4.131</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>black</p></td>
+<td class="text-right"><p>-0.1438</p></td>
+<td class="text-right"><p>0.0501</p></td>
+<td class="text-right"><p>-2.873</p></td>
+<td class="text-right"><p>0.0041</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>hisp</p></td>
+<td class="text-right"><p>0.0157</p></td>
+<td class="text-right"><p>0.0392</p></td>
+<td class="text-right"><p>0.401</p></td>
+<td class="text-right"><p>0.6886</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Interpretation summary</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">educ</span></code> is positive (+) and significant: A one-year increase in education is associated with an increase in log wage</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">exper</span></code> is positive (+), <code class="docutils literal notranslate"><span class="pre">expersq</span></code> is negative (−): The experience effect increases but at a diminishing rate</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">union</span></code> and <code class="docutils literal notranslate"><span class="pre">married</span></code> are positive (+) and significant</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">black</span></code> is negative (−) and significant; <code class="docutils literal notranslate"><span class="pre">hisp</span></code> is not significant (in this specification)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="fixed-effects-entity-fe-clustered-se-by-entity">
+<h4>(2) Fixed Effects (entity FE, clustered SE by entity)<a class="headerlink" href="#fixed-effects-entity-fe-clustered-se-by-entity" title="Link to this heading">#</a></h4>
+<p>Variables dropped in FE: <code class="docutils literal notranslate"><span class="pre">educ</span></code>, <code class="docutils literal notranslate"><span class="pre">black</span></code>, <code class="docutils literal notranslate"><span class="pre">hisp</span></code></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-right"><p>coef</p></th>
+<th class="head text-right"><p>std_err</p></th>
+<th class="head text-right"><p>t</p></th>
+<th class="head text-right"><p>p</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>const</p></td>
+<td class="text-right"><p>1.0649</p></td>
+<td class="text-right"><p>0.0366</p></td>
+<td class="text-right"><p>29.095</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>exper</p></td>
+<td class="text-right"><p>0.1168</p></td>
+<td class="text-right"><p>0.0107</p></td>
+<td class="text-right"><p>10.916</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>expersq</p></td>
+<td class="text-right"><p>-0.0043</p></td>
+<td class="text-right"><p>0.0007</p></td>
+<td class="text-right"><p>-6.274</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>union</p></td>
+<td class="text-right"><p>0.0821</p></td>
+<td class="text-right"><p>0.0228</p></td>
+<td class="text-right"><p>3.599</p></td>
+<td class="text-right"><p>0.0003</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>married</p></td>
+<td class="text-right"><p>0.0453</p></td>
+<td class="text-right"><p>0.0210</p></td>
+<td class="text-right"><p>2.159</p></td>
+<td class="text-right"><p>0.0309</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Interpretation summary</strong></p>
+<ul class="simple">
+<li><p>Even after controlling for time-invariant individual characteristics, the <code class="docutils literal notranslate"><span class="pre">exper</span></code> (+) and <code class="docutils literal notranslate"><span class="pre">expersq</span></code> (−) pattern becomes stronger</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">union</span></code> effect is smaller than in pooled: suggests possible upward bias in pooled due to confounding with individual characteristics</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">married</span></code> effect is also smaller than in pooled: suggests correlation between marital status and time-invariant individual characteristics</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="random-effects-clustered-se-by-entity">
+<h4>(3) Random Effects (clustered SE by entity)<a class="headerlink" href="#random-effects-clustered-se-by-entity" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-right"><p>coef</p></th>
+<th class="head text-right"><p>std_err</p></th>
+<th class="head text-right"><p>t</p></th>
+<th class="head text-right"><p>p</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>const</p></td>
+<td class="text-right"><p>-0.1075</p></td>
+<td class="text-right"><p>0.1151</p></td>
+<td class="text-right"><p>-0.934</p></td>
+<td class="text-right"><p>0.3504</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>educ</p></td>
+<td class="text-right"><p>0.1012</p></td>
+<td class="text-right"><p>0.0089</p></td>
+<td class="text-right"><p>11.395</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>exper</p></td>
+<td class="text-right"><p>0.1121</p></td>
+<td class="text-right"><p>0.0105</p></td>
+<td class="text-right"><p>10.638</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>expersq</p></td>
+<td class="text-right"><p>-0.0041</p></td>
+<td class="text-right"><p>0.0007</p></td>
+<td class="text-right"><p>-6.035</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>union</p></td>
+<td class="text-right"><p>0.1074</p></td>
+<td class="text-right"><p>0.0209</p></td>
+<td class="text-right"><p>5.142</p></td>
+<td class="text-right"><p>0.0000</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>married</p></td>
+<td class="text-right"><p>0.0628</p></td>
+<td class="text-right"><p>0.0190</p></td>
+<td class="text-right"><p>3.309</p></td>
+<td class="text-right"><p>0.0009</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>black</p></td>
+<td class="text-right"><p>-0.1441</p></td>
+<td class="text-right"><p>0.0503</p></td>
+<td class="text-right"><p>-2.865</p></td>
+<td class="text-right"><p>0.0042</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>hisp</p></td>
+<td class="text-right"><p>0.0202</p></td>
+<td class="text-right"><p>0.0399</p></td>
+<td class="text-right"><p>0.505</p></td>
+<td class="text-right"><p>0.6136</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Interpretation summary</strong></p>
+<ul class="simple">
+<li><p>RE can estimate time-invariant variables such as <code class="docutils literal notranslate"><span class="pre">educ</span></code></p></li>
+<li><p>Coefficient magnitudes generally fall between FE and pooled values</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="model-comparison-summary">
+<h3>3. Model Comparison Summary<a class="headerlink" href="#model-comparison-summary" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p></p></th>
+<th class="head text-right"><p>Pooled OLS</p></th>
+<th class="head text-right"><p>Fixed Effects</p></th>
+<th class="head text-right"><p>Random Effects</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p>N</p></td>
+<td class="text-right"><p>4360</p></td>
+<td class="text-right"><p>4360</p></td>
+<td class="text-right"><p>4360</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Entities</p></td>
+<td class="text-right"><p>545</p></td>
+<td class="text-right"><p>545</p></td>
+<td class="text-right"><p>545</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Time periods</p></td>
+<td class="text-right"><p>8</p></td>
+<td class="text-right"><p>8</p></td>
+<td class="text-right"><p>8</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>R²</p></td>
+<td class="text-right"><p>0.1866</p></td>
+<td class="text-right"><p>NA</p></td>
+<td class="text-right"><p>0.1782</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>R²_within</p></td>
+<td class="text-right"><p>NA</p></td>
+<td class="text-right"><p>0.1780</p></td>
+<td class="text-right"><p>NA</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>R²_overall</p></td>
+<td class="text-right"><p>NA</p></td>
+<td class="text-right"><p>0.0565</p></td>
+<td class="text-right"><p>NA</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="hausman-test-fe-vs-re">
+<h3>4. Hausman Test (FE vs RE)<a class="headerlink" href="#hausman-test-fe-vs-re" title="Link to this heading">#</a></h3>
+<p><strong>Test idea</strong></p>
+<ul class="simple">
+<li><p>Null hypothesis <span class="math notranslate nohighlight">\(H_0\)</span>: Individual effects and explanatory variables are independent, so RE is a consistent estimator</p></li>
+<li><p>Alternative hypothesis <span class="math notranslate nohighlight">\(H_1\)</span>: Not independent, so RE is inconsistent and FE is safer</p></li>
+</ul>
+<p>The test is calculated using the common coefficients between FE and RE (<code class="docutils literal notranslate"><span class="pre">exper</span></code>, <code class="docutils literal notranslate"><span class="pre">expersq</span></code>, <code class="docutils literal notranslate"><span class="pre">union</span></code>, <code class="docutils literal notranslate"><span class="pre">married</span></code>).</p>
+<p><strong>Results</strong></p>
+<p><strong>(Clustered covariance)</strong></p>
+<ul class="simple">
+<li><p>Chi-square statistic = 16.1453</p></li>
+<li><p>Degrees of freedom df = 4</p></li>
+<li><p>p-value = 0.00283023</p></li>
+</ul>
+<p><strong>(Non-robust covariance)</strong></p>
+<ul class="simple">
+<li><p>Chi-square statistic = 31.5736</p></li>
+<li><p>Degrees of freedom df = 4</p></li>
+<li><p>p-value = 2.33805e-06</p></li>
+</ul>
+<p><strong>Conclusion</strong></p>
+<ul class="simple">
+<li><p>Since the p-value is very small, <span class="math notranslate nohighlight">\(H_0\)</span> is rejected</p></li>
+<li><p>In this specification, it is natural to conclude that the RE independence assumption is violated, and it is practically reasonable to prefer FE.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="one-line-summary">
+<h3>5. One-Line Summary<a class="headerlink" href="#one-line-summary" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Pooled OLS cannot control for time-invariant individual characteristics, so it may overestimate coefficients such as <code class="docutils literal notranslate"><span class="pre">union</span></code> and <code class="docutils literal notranslate"><span class="pre">married</span></code></p></li>
+<li><p>Moving to FE reveals the pure within-individual effect after removing individual-specific factors, and the Hausman test also supports FE</p></li>
+</ul>
+</section>
+</section>
+<section id="intuitive-understanding-of-panel-data-models">
+<h2><span style="color: blue;"><strong>4. Intuitive Understanding of Panel Data Models</strong></span><a class="headerlink" href="#intuitive-understanding-of-panel-data-models" title="Link to this heading">#</a></h2>
+</section>
+<section id="chatgpt-explanation">
+<h2><strong>ChatGPT Explanation</strong><a class="headerlink" href="#chatgpt-explanation" title="Link to this heading">#</a></h2>
+<p>Panel data consists of repeated observations of the same individuals (or firms, regions, etc.) across multiple time periods. The core issue is this:</p>
+<blockquote>
+<div><p>Each individual has invisible inherent characteristics (ability, diligence, disposition, etc.) that may be correlated with the explanatory variables. The model differs depending on how these “hidden individual differences” are handled.</p>
+</div></blockquote>
+<p>Consider the following example:</p>
+<ul class="simple">
+<li><p>Objective: Analyzing factors that affect wages</p></li>
+<li><p>Explanatory variables: Education, experience, union membership, etc.</p></li>
+<li><p>Problem: Some people are inherently more capable. This capability is unobserved but affects both wages and may also be related to education level.</p></li>
+</ul>
+<p>Let us denote this unobservable individual characteristic as <span class="math notranslate nohighlight">\(\alpha_i\)</span>. The overall structure can be thought of as:</p>
+<div class="math notranslate nohighlight">
+\[
+y_{it} = \beta X_{it} + \alpha_i + u_{it}
+\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(i\)</span>: individual</p></li>
+<li><p><span class="math notranslate nohighlight">\(t\)</span>: time</p></li>
+<li><p><span class="math notranslate nohighlight">\(\alpha_i\)</span>: individual-specific characteristic (does not change over time)</p></li>
+</ul>
+<p>How <span class="math notranslate nohighlight">\(\alpha_i\)</span> is treated is the key distinction.</p>
+<hr class="docutils" />
+<section id="pooled-ols">
+<h3>1. Pooled OLS<a class="headerlink" href="#pooled-ols" title="Link to this heading">#</a></h3>
+<p><strong>Idea</strong></p>
+<p>Pool all data together and run standard OLS.</p>
+<p>That is:</p>
+<ul class="simple">
+<li><p>Ignore individual distinctions</p></li>
+<li><p>Ignore time distinctions</p></li>
+<li><p>Just a simple regression with more observations</p></li>
+</ul>
+<p><strong>Intuition</strong></p>
+<p>This is equivalent to assuming “everyone starts from the same baseline.”</p>
+<p><strong>Problem</strong></p>
+<p>If individual ability <span class="math notranslate nohighlight">\(\alpha_i\)</span>:</p>
+<ul class="simple">
+<li><p>Affects wages, and</p></li>
+<li><p>Is also related to variables like education,</p></li>
+</ul>
+<p>→ Explanatory variables and the error term are correlated
+→ OLS bias occurs</p>
+<p><strong>Example</strong></p>
+<p>Higher-ability individuals tend to get more education and earn higher wages.
+OLS may overestimate the education effect.</p>
+<p><strong>When to use?</strong></p>
+<ul class="simple">
+<li><p>When individual differences are unimportant</p></li>
+<li><p>Or when one believes individual effects are independent of explanatory variables</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="fixed-effects-model-fe">
+<h3>2. Fixed Effects Model (FE)<a class="headerlink" href="#fixed-effects-model-fe" title="Link to this heading">#</a></h3>
+<p><strong>Idea</strong></p>
+<p>Allow each individual to have their own unique baseline.</p>
+<p>That is:</p>
+<ul class="simple">
+<li><p>Acknowledge that the average level differs across individuals</p></li>
+<li><p>But assume that difference does not change over time</p></li>
+</ul>
+<p><strong>Intuition</strong></p>
+<p>“Do not compare across individuals; only look at changes within the same individual.”</p>
+<p><strong>Example</strong></p>
+<p>A’s wage change vs. A’s experience change
+B’s wage change vs. B’s experience change</p>
+<p>→ Fixed characteristics such as individual ability are automatically removed.</p>
+<p>Mathematically, this is done by subtracting individual means:</p>
+<div class="math notranslate nohighlight">
+\[
+(y_{it} - \bar{y}_i) = \beta (X_{it} - \bar{X}_i) + (u_{it} - \bar{u}_i)
+\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(\alpha_i\)</span> disappears.</p>
+<p><strong>Advantages</strong></p>
+<ul class="simple">
+<li><p>No problem even if unobserved individual characteristics are correlated with explanatory variables</p></li>
+<li><p>Safer for causal interpretation</p></li>
+</ul>
+<p><strong>Disadvantages</strong></p>
+<ul class="simple">
+<li><p>Cannot estimate the effect of time-invariant variables
+(e.g., if sex, race, or education do not change, their effects cannot be estimated)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="random-effects-model-re">
+<h3>3. Random Effects Model (RE)<a class="headerlink" href="#random-effects-model-re" title="Link to this heading">#</a></h3>
+<p><strong>Idea</strong></p>
+<p>Instead of removing individual effects, treat them as a “random variable.”</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha_i \sim \text{random}
+\]</div>
+<p><strong>Key Assumption</strong></p>
+<div class="math notranslate nohighlight">
+\[
+\alpha_i \text{ and } X_{it} \text{ are independent}
+\]</div>
+<p><strong>Intuition</strong></p>
+<p>“Differences exist across individuals, but those differences are pure random noise unrelated to the explanatory variables.”</p>
+<p>If this assumption is correct:</p>
+<ul class="simple">
+<li><p>Between-individual information + within-individual information can both be used
+→ More efficient than FE (smaller standard errors)</p></li>
+</ul>
+<p><strong>Advantages</strong></p>
+<ul class="simple">
+<li><p>Can estimate time-invariant variables (e.g., sex, education)</p></li>
+<li><p>Efficient</p></li>
+</ul>
+<p><strong>Disadvantages</strong></p>
+<ul class="simple">
+<li><p>If <span class="math notranslate nohighlight">\(\alpha_i\)</span> is correlated with explanatory variables
+→ Severe bias occurs</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="intuitive-difference-between-fe-and-re">
+<h3>4. Intuitive Difference Between FE and RE<a class="headerlink" href="#intuitive-difference-between-fe-and-re" title="Link to this heading">#</a></h3>
+<p><strong>FE’s perspective</strong></p>
+<p>“Each individual has hidden characteristics that may be related to the explanatory variables. Let’s safely remove them.”</p>
+<p><strong>RE’s perspective</strong></p>
+<p>“Differences exist across individuals, but they are random and unrelated to the explanatory variables. No need to remove them.”</p>
+<p><strong>Key Question</strong></p>
+<p>Is the individual effect <span class="math notranslate nohighlight">\(\alpha_i\)</span> correlated with the explanatory variables?</p>
+</section>
+<hr class="docutils" />
+<section id="hausman-test">
+<h3>5. Hausman Test<a class="headerlink" href="#hausman-test" title="Link to this heading">#</a></h3>
+<p>This is a method to statistically test this question.</p>
+<p><strong>Idea</strong></p>
+<ul class="simple">
+<li><p>FE is always a consistent estimator (weaker assumptions)</p></li>
+<li><p>RE is more efficient if its assumptions hold</p></li>
+<li><p>If the assumptions are violated, RE is biased</p></li>
+</ul>
+<p>Therefore:</p>
+<p>If RE is correct
+→ FE and RE results should be similar</p>
+<p><strong>Test logic</strong></p>
+<p>Null hypothesis <span class="math notranslate nohighlight">\(H_0\)</span>:
+RE is valid
+(Individual effects and explanatory variables are independent)</p>
+<p>Alternative hypothesis <span class="math notranslate nohighlight">\(H_1\)</span>:
+RE is invalid
+(FE should be used)</p>
+<p><strong>Results interpretation</strong></p>
+<ul class="simple">
+<li><p>Small p-value → FE and RE differ substantially → RE assumption violated → Choose FE</p></li>
+<li><p>Large p-value → No significant difference → RE can be used</p></li>
+</ul>
+<p><strong>Intuition</strong></p>
+<p>A test that asks: “Is it okay to use RE?”</p>
+</section>
+<hr class="docutils" />
+<section id="all-at-once-summary-intuition">
+<h3>6. All-at-Once Summary (Intuition)<a class="headerlink" href="#all-at-once-summary-intuition" title="Link to this heading">#</a></h3>
+<p><strong>Pooled OLS</strong>
+→ Ignores individual differences</p>
+<p><strong>Fixed Effects</strong>
+→ Each individual has unique characteristics, and these may be related to X → Remove them</p>
+<p><strong>Random Effects</strong>
+→ Individual differences exist but are random effects unrelated to X → Use them efficiently</p>
+<p><strong>Hausman</strong>
+→ Tests whether RE’s independence assumption holds
+→ If it fails, use FE</p>
+<hr class="docutils" />
+<p>As a practical rule of thumb:</p>
+<ul class="simple">
+<li><p>If the goal is causal interpretation with panel data → Think FE first</p></li>
+<li><p>If the effect of time-invariant variables is needed → Consider RE</p></li>
+<li><p>Then make the final judgment with the Hausman test</p></li>
+</ul>
+<p>If desired, I can also provide an intuitive explanation of “why coefficients often become smaller in FE.”</p>
+</section>
+</section>
+<section id="appendix-python-code">
+<h2><strong>Appendix: Python Code</strong><a class="headerlink" href="#appendix-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># =========================================</span>
+<span class="c1"># Common setup: Load data + Set panel index</span>
+<span class="c1"># =========================================</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">linearmodels.panel</span><span class="w"> </span><span class="kn">import</span> <span class="n">PooledOLS</span><span class="p">,</span> <span class="n">PanelOLS</span><span class="p">,</span> <span class="n">RandomEffects</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">linearmodels.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">wage_panel</span>
+
+<span class="c1"># 1) Load data</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">wage_panel</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># 2) Set panel index: (individual ID=nr, year=year)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s2">&quot;nr&quot;</span><span class="p">,</span> <span class="s2">&quot;year&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+
+<span class="c1"># 3) (Optional) To view only numeric columns:</span>
+<span class="c1"># num_cols = df.select_dtypes(include=[np.number]).columns</span>
+<span class="c1"># df[num_cols].head()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># =========================================</span>
+<span class="c1"># (1) Variable summary statistics</span>
+<span class="c1"># =========================================</span>
+
+<span class="c1"># Identifiers (nr, year) are already in the index, not in columns.</span>
+<span class="c1"># Generate summary statistics for numeric variables suitable for regression (may include missing values).</span>
+<span class="c1"># (Optionally, select specific variables for summary_cols.)</span>
+
+<span class="n">summary_cols</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span>  <span class="c1"># Summarize all columns</span>
+<span class="c1"># summary_cols = [&quot;lwage&quot;, &quot;educ&quot;, &quot;exper&quot;, &quot;expersq&quot;, &quot;union&quot;, &quot;married&quot;, &quot;black&quot;, &quot;hisp&quot;, &quot;hours&quot;]  # Example</span>
+
+<span class="n">summary</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">summary_cols</span><span class="p">]</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># count, mean, std, min, 25%, 50%, 75%, max</span>
+
+<span class="c1"># Display</span>
+<span class="n">summary</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>count</th>
+      <th>mean</th>
+      <th>std</th>
+      <th>min</th>
+      <th>25%</th>
+      <th>50%</th>
+      <th>75%</th>
+      <th>max</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>black</th>
+      <td>4360.0</td>
+      <td>0.115596</td>
+      <td>0.319777</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.00000</td>
+    </tr>
+    <tr>
+      <th>exper</th>
+      <td>4360.0</td>
+      <td>6.514679</td>
+      <td>2.825873</td>
+      <td>0.000000</td>
+      <td>4.000000</td>
+      <td>6.000000</td>
+      <td>9.000000</td>
+      <td>18.00000</td>
+    </tr>
+    <tr>
+      <th>hisp</th>
+      <td>4360.0</td>
+      <td>0.155963</td>
+      <td>0.362862</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.00000</td>
+    </tr>
+    <tr>
+      <th>hours</th>
+      <td>4360.0</td>
+      <td>2191.257339</td>
+      <td>566.352301</td>
+      <td>120.000000</td>
+      <td>2040.000000</td>
+      <td>2080.000000</td>
+      <td>2414.250000</td>
+      <td>4992.00000</td>
+    </tr>
+    <tr>
+      <th>married</th>
+      <td>4360.0</td>
+      <td>0.438991</td>
+      <td>0.496321</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>1.00000</td>
+    </tr>
+    <tr>
+      <th>educ</th>
+      <td>4360.0</td>
+      <td>11.766972</td>
+      <td>1.746181</td>
+      <td>3.000000</td>
+      <td>11.000000</td>
+      <td>12.000000</td>
+      <td>12.000000</td>
+      <td>16.00000</td>
+    </tr>
+    <tr>
+      <th>union</th>
+      <td>4360.0</td>
+      <td>0.244037</td>
+      <td>0.429564</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.00000</td>
+    </tr>
+    <tr>
+      <th>lwage</th>
+      <td>4360.0</td>
+      <td>1.649147</td>
+      <td>0.532609</td>
+      <td>-3.579079</td>
+      <td>1.350717</td>
+      <td>1.671143</td>
+      <td>1.991086</td>
+      <td>4.05186</td>
+    </tr>
+    <tr>
+      <th>expersq</th>
+      <td>4360.0</td>
+      <td>50.424771</td>
+      <td>40.781991</td>
+      <td>0.000000</td>
+      <td>16.000000</td>
+      <td>36.000000</td>
+      <td>81.000000</td>
+      <td>324.00000</td>
+    </tr>
+    <tr>
+      <th>occupation</th>
+      <td>4360.0</td>
+      <td>4.988532</td>
+      <td>2.319978</td>
+      <td>1.000000</td>
+      <td>4.000000</td>
+      <td>5.000000</td>
+      <td>6.000000</td>
+      <td>9.00000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># =========================================</span>
+<span class="c1"># (2) Pooled OLS / Fixed Effects / Random Effects estimation (revised)</span>
+<span class="c1"># =========================================</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statsmodels.api</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">linearmodels.panel</span><span class="w"> </span><span class="kn">import</span> <span class="n">PooledOLS</span><span class="p">,</span> <span class="n">PanelOLS</span><span class="p">,</span> <span class="n">RandomEffects</span>
+
+<span class="c1"># Specify dependent/explanatory variables</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;lwage&quot;</span><span class="p">]</span>
+
+<span class="n">X_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;educ&quot;</span><span class="p">,</span> <span class="s2">&quot;exper&quot;</span><span class="p">,</span> <span class="s2">&quot;expersq&quot;</span><span class="p">,</span> <span class="s2">&quot;union&quot;</span><span class="p">,</span> <span class="s2">&quot;married&quot;</span><span class="p">,</span> <span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;hisp&quot;</span><span class="p">]</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">X_cols</span><span class="p">]</span>
+
+<span class="c1"># Add constant (Pooled/RE typically include a constant)</span>
+<span class="n">X_const</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="c1"># -------------------------</span>
+<span class="c1"># 2-1) Pooled OLS</span>
+<span class="c1"># -------------------------</span>
+<span class="n">pooled_mod</span> <span class="o">=</span> <span class="n">PooledOLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_const</span><span class="p">)</span>
+<span class="n">pooled_res</span> <span class="o">=</span> <span class="n">pooled_mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">cov_type</span><span class="o">=</span><span class="s2">&quot;clustered&quot;</span><span class="p">,</span> <span class="n">cluster_entity</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Clustered SE by entity</span>
+
+<span class="c1"># -------------------------</span>
+<span class="c1"># 2-2) Fixed Effects (entity FE) - Method A (recommended): auto-drop absorbed variables</span>
+<span class="c1"># -------------------------</span>
+<span class="c1"># drop_absorbed=True automatically removes time-invariant variables like educ/black/hisp.</span>
+<span class="n">fe_mod</span> <span class="o">=</span> <span class="n">PanelOLS</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">,</span> <span class="n">entity_effects</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop_absorbed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">fe_res</span> <span class="o">=</span> <span class="n">fe_mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">cov_type</span><span class="o">=</span><span class="s2">&quot;clustered&quot;</span><span class="p">,</span> <span class="n">cluster_entity</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># -------------------------</span>
+<span class="c1"># 2-3) Random Effects</span>
+<span class="c1"># -------------------------</span>
+<span class="n">re_mod</span> <span class="o">=</span> <span class="n">RandomEffects</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X_const</span><span class="p">)</span>
+<span class="n">re_res</span> <span class="o">=</span> <span class="n">re_mod</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">cov_type</span><span class="o">=</span><span class="s2">&quot;clustered&quot;</span><span class="p">,</span> <span class="n">cluster_entity</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># -------------------------</span>
+<span class="c1"># Organize results in table format</span>
+<span class="c1"># -------------------------</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">tidy_table</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+        <span class="s2">&quot;coef&quot;</span><span class="p">:</span> <span class="n">res</span><span class="o">.</span><span class="n">params</span><span class="p">,</span>
+        <span class="s2">&quot;std_err&quot;</span><span class="p">:</span> <span class="n">res</span><span class="o">.</span><span class="n">std_errors</span><span class="p">,</span>
+        <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="n">res</span><span class="o">.</span><span class="n">tstats</span><span class="p">,</span>
+        <span class="s2">&quot;p&quot;</span><span class="p">:</span> <span class="n">res</span><span class="o">.</span><span class="n">pvalues</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+<span class="n">tbl_pooled</span> <span class="o">=</span> <span class="n">tidy_table</span><span class="p">(</span><span class="n">pooled_res</span><span class="p">)</span>
+<span class="n">tbl_fe</span> <span class="o">=</span> <span class="n">tidy_table</span><span class="p">(</span><span class="n">fe_res</span><span class="p">)</span>
+<span class="n">tbl_re</span> <span class="o">=</span> <span class="n">tidy_table</span><span class="p">(</span><span class="n">re_res</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Pooled OLS</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tbl_pooled</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Fixed Effects (drop_absorbed=True)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tbl_fe</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Random Effects</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tbl_re</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">())</span>
+
+<span class="c1"># Check which variables remain in FE (estimated coefficients)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Coefficients remaining in FE:&quot;</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">fe_res</span><span class="o">.</span><span class="n">params</span><span class="o">.</span><span class="n">index</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span># Pooled OLS
+
+|         |        coef |     std_err |         t |           p |
+|:--------|------------:|------------:|----------:|------------:|
+| const   | -0.0347056  | 0.120007    | -0.289196 | 0.772445    |
+| educ    |  0.0993878  | 0.00920092  | 10.8019   | 0           |
+| exper   |  0.0891791  | 0.012433    |  7.17276  | 8.59757e-13 |
+| expersq | -0.00284866 | 0.000869894 | -3.27472  | 0.00106596  |
+| union   |  0.180073   | 0.0275582   |  6.53428  | 7.12703e-11 |
+| married |  0.107666   | 0.0260601   |  4.13143  | 3.6728e-05  |
+| black   | -0.143842   | 0.0500713   | -2.87274  | 0.00408901  |
+| hisp    |  0.015698   | 0.0391666   |  0.400801 | 0.688587    |
+
+# Fixed Effects (drop_absorbed=True)
+
+|         |        coef |     std_err |        t |           p |
+|:--------|------------:|------------:|---------:|------------:|
+| exper   |  0.116847   | 0.0107031   | 10.917   | 0           |
+| expersq | -0.00430089 | 0.000685462 | -6.27444 | 3.9016e-10  |
+| union   |  0.0820871  | 0.0228057   |  3.59942 | 0.000322987 |
+| married |  0.0453033  | 0.0209849   |  2.15886 | 0.0309234   |
+
+# Random Effects
+
+|         |        coef |     std_err |         t |           p |
+|:--------|------------:|------------:|----------:|------------:|
+| const   | -0.107455   | 0.115069    | -0.93383  | 0.350443    |
+| educ    |  0.101224   | 0.00888312  | 11.3951   | 0           |
+| exper   |  0.112116   | 0.0105389   | 10.6383   | 0           |
+| expersq | -0.00406868 | 0.000674162 | -6.03517  | 1.72005e-09 |
+| union   |  0.107396   | 0.0208842   |  5.14243  | 2.83117e-07 |
+| married |  0.0628065  | 0.0189815   |  3.30883  | 0.000944476 |
+| black   | -0.144131   | 0.0503019   | -2.86531  | 0.004186    |
+| hisp    |  0.0201501  | 0.0398977   |  0.505046 | 0.613552    |
+
+Coefficients remaining in FE: [&#39;exper&#39;, &#39;expersq&#39;, &#39;union&#39;, &#39;married&#39;]
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C:\Users\pilsu\AppData\Local\Temp\ipykernel_47040\56583708.py:30: AbsorbingEffectWarning: 
+Variables have been fully absorbed and have removed from the regression:
+
+educ, black, hisp
+
+  fe_res = fe_mod.fit(cov_type=&quot;clustered&quot;, cluster_entity=True)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># =========================================</span>
+<span class="c1"># (3) Hausman Test (FE vs RE)</span>
+<span class="c1"># =========================================</span>
+<span class="c1"># Concept:</span>
+<span class="c1"># - H0: Individual effects and explanatory variables are independent -&gt; RE is consistent</span>
+<span class="c1"># - H1: Not independent -&gt; RE is inconsistent, prefer FE</span>
+<span class="c1">#</span>
+<span class="c1"># Calculation (standard form):</span>
+<span class="c1">#   diff = b_FE - b_RE</span>
+<span class="c1">#   V = Var(b_FE) - Var(b_RE)</span>
+<span class="c1">#   H = diff&#39; * V^{-1} * diff  ~ chi2(k)</span>
+<span class="c1">#</span>
+<span class="c1"># Note:</span>
+<span class="c1"># - With clustered (robust) covariance, V may be non-invertible/non-positive-definite.</span>
+<span class="c1"># - In such cases, recalculating with non-robust covariance is a common approach.</span>
+<span class="c1"># =========================================</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy.linalg</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">la</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">stats</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">hausman_test</span><span class="p">(</span><span class="n">fe_res</span><span class="p">,</span> <span class="n">re_res</span><span class="p">,</span> <span class="n">common_only</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="c1"># 1) Identify common coefficient names</span>
+    <span class="n">b_fe</span> <span class="o">=</span> <span class="n">fe_res</span><span class="o">.</span><span class="n">params</span>
+    <span class="n">b_re</span> <span class="o">=</span> <span class="n">re_res</span><span class="o">.</span><span class="n">params</span>
+
+    <span class="k">if</span> <span class="n">common_only</span><span class="p">:</span>
+        <span class="n">common</span> <span class="o">=</span> <span class="n">b_fe</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">b_re</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">common</span> <span class="o">=</span> <span class="n">b_fe</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">b_re</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+
+    <span class="c1"># 2) Extract common coefficients only</span>
+    <span class="n">b_fe_c</span> <span class="o">=</span> <span class="n">b_fe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">common</span><span class="p">]</span>
+    <span class="n">b_re_c</span> <span class="o">=</span> <span class="n">b_re</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">common</span><span class="p">]</span>
+
+    <span class="c1"># 3) Extract common portion from covariance matrices</span>
+    <span class="n">V_fe</span> <span class="o">=</span> <span class="n">fe_res</span><span class="o">.</span><span class="n">cov</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">common</span><span class="p">,</span> <span class="n">common</span><span class="p">]</span>
+    <span class="n">V_re</span> <span class="o">=</span> <span class="n">re_res</span><span class="o">.</span><span class="n">cov</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">common</span><span class="p">,</span> <span class="n">common</span><span class="p">]</span>
+
+    <span class="c1"># 4) Calculate Hausman statistic</span>
+    <span class="n">diff</span> <span class="o">=</span> <span class="p">(</span><span class="n">b_fe_c</span> <span class="o">-</span> <span class="n">b_re_c</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="p">(</span><span class="n">V_fe</span> <span class="o">-</span> <span class="n">V_re</span><span class="p">)</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+    <span class="c1"># Use inverse (or pseudo-inverse)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">V_inv</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">la</span><span class="o">.</span><span class="n">LinAlgError</span><span class="p">:</span>
+        <span class="n">V_inv</span> <span class="o">=</span> <span class="n">la</span><span class="o">.</span><span class="n">pinv</span><span class="p">(</span><span class="n">V</span><span class="p">)</span>
+
+    <span class="n">stat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">diff</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">V_inv</span> <span class="o">@</span> <span class="n">diff</span><span class="p">)</span>
+    <span class="n">df_h</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">common</span><span class="p">)</span>
+    <span class="n">pval</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">stats</span><span class="o">.</span><span class="n">chi2</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">df_h</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;stat&quot;</span><span class="p">:</span> <span class="n">stat</span><span class="p">,</span>
+        <span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="n">df_h</span><span class="p">,</span>
+        <span class="s2">&quot;pvalue&quot;</span><span class="p">:</span> <span class="n">pval</span><span class="p">,</span>
+        <span class="s2">&quot;common_params&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">common</span><span class="p">)</span>
+    <span class="p">}</span>
+
+<span class="c1"># 1) First attempt Hausman with clustered SE results</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">hausman_test</span><span class="p">(</span><span class="n">fe_res</span><span class="p">,</span> <span class="n">re_res</span><span class="p">,</span> <span class="n">common_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hausman test (clustered cov) results&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+
+<span class="c1"># 2) (Optional) If clustered cov results seem unstable,</span>
+<span class="c1">#    refit with non-robust (default) covariance and recalculate Hausman.</span>
+<span class="c1">#    Example below.</span>
+
+<span class="n">fe_res_nr</span> <span class="o">=</span> <span class="n">fe_mod</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>  <span class="c1"># Default (non-robust) covariance</span>
+<span class="n">re_res_nr</span> <span class="o">=</span> <span class="n">re_mod</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>  <span class="c1"># Default (non-robust) covariance</span>
+
+<span class="n">h_nr</span> <span class="o">=</span> <span class="n">hausman_test</span><span class="p">(</span><span class="n">fe_res_nr</span><span class="p">,</span> <span class="n">re_res_nr</span><span class="p">,</span> <span class="n">common_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Hausman test (non-robust cov) results&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">h_nr</span><span class="p">)</span>
+
+<span class="c1"># 3) Pretty-print as markdown table:</span>
+<span class="n">hausman_tbl</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;chi2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">h</span><span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">]],</span> <span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">h</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]],</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">h</span><span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">]]}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Hausman (clustered)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">hausman_tbl</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+<span class="n">hausman_tbl_nr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;chi2&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">h_nr</span><span class="p">[</span><span class="s2">&quot;stat&quot;</span><span class="p">]],</span> <span class="s2">&quot;df&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">h_nr</span><span class="p">[</span><span class="s2">&quot;df&quot;</span><span class="p">]],</span> <span class="s2">&quot;pvalue&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">h_nr</span><span class="p">[</span><span class="s2">&quot;pvalue&quot;</span><span class="p">]]}</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"># Hausman (non-robust)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">hausman_tbl_nr</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Hausman test (clustered cov) results
+{&#39;stat&#39;: 16.145323927833108, &#39;df&#39;: 4, &#39;pvalue&#39;: 0.0028302329625596867, &#39;common_params&#39;: [&#39;exper&#39;, &#39;expersq&#39;, &#39;union&#39;, &#39;married&#39;]}
+
+Hausman test (non-robust cov) results
+{&#39;stat&#39;: 31.573567767145832, &#39;df&#39;: 4, &#39;pvalue&#39;: 2.3380531072314525e-06, &#39;common_params&#39;: [&#39;exper&#39;, &#39;expersq&#39;, &#39;union&#39;, &#39;married&#39;]}
+
+# Hausman (clustered)
+
+|    chi2 |   df |     pvalue |
+|--------:|-----:|-----------:|
+| 16.1453 |    4 | 0.00283023 |
+
+# Hausman (non-robust)
+
+|    chi2 |   df |      pvalue |
+|--------:|-----:|------------:|
+| 31.5736 |    4 | 2.33805e-06 |
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="19_Learning_Deep_Learning.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 19. Learning Deep Learning</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="21_Bone_Density_Test_Interpretation.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 21. Bone Density Test Interpretation</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-analysis"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure">1. Data Structure</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-variable-descriptions">2. Key Variable Descriptions</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dependent-variable-wage-related">(1) Dependent Variable (Wage-Related)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#human-capital-variables">(2) Human Capital Variables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tenure-and-labor-market-status">(3) Tenure and Labor Market Status</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#demographic-variables">(4) Demographic Variables</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#significance-for-analysis">3. Significance for Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#wage-determination-model">(1) Wage Determination Model</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#applicable-panel-models">(2) Applicable Panel Models</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#purpose-of-data-usage-key-points">4. Purpose of Data Usage (Key Points)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-summary-statistics"><span style="color: blue;"><strong>2. Variable Summary Statistics</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-summary">Data Structure Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Variable Summary Statistics</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#wage-determinant-analysis"><span style="color: blue;"><strong>3. Wage Determinant Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id3"><strong>ChatGPT Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-specification">1. Model Specification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#estimation-results">2. Estimation Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pooled-ols-clustered-se-by-entity">(1) Pooled OLS (clustered SE by entity)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-effects-entity-fe-clustered-se-by-entity">(2) Fixed Effects (entity FE, clustered SE by entity)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#random-effects-clustered-se-by-entity">(3) Random Effects (clustered SE by entity)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-comparison-summary">3. Model Comparison Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hausman-test-fe-vs-re">4. Hausman Test (FE vs RE)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-line-summary">5. One-Line Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#intuitive-understanding-of-panel-data-models"><span style="color: blue;"><strong>4. Intuitive Understanding of Panel Data Models</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#chatgpt-explanation"><strong>ChatGPT Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pooled-ols">1. Pooled OLS</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed-effects-model-fe">2. Fixed Effects Model (FE)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#random-effects-model-re">3. Random Effects Model (RE)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intuitive-difference-between-fe-and-re">4. Intuitive Difference Between FE and RE</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hausman-test">5. Hausman Test</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#all-at-once-summary-intuition">6. All-at-Once Summary (Intuition)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

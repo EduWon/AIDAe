@@ -1,0 +1,1352 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 22. Kinematics &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/22_Kinematics';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 23. Soccer Match Data Analysis" href="23_Soccer_Match_Data_Analysis.html" />
+    <link rel="prev" title="Ch 21. Bone Density Test Interpretation" href="21_Bone_Density_Test_Interpretation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/22_Kinematics.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/22_Kinematics.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 22. Kinematics</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-video-upload-kinematic-analysis"><span style="color: blue;"><strong>Running Video Upload &amp; Kinematic Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-analysis-report"><strong>Claude’s Analysis Report</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-overview">1. Analysis Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#video-specifications">Video Specifications</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extracted-core-kinematic-variables">2. Extracted Core Kinematic Variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#displacement-velocity-variables">Displacement &amp; Velocity Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acceleration-variables">Acceleration Variables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#body-morphology-variables">Body Morphology Variables</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-statistics">3. Descriptive Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-movement-summary">4. Global Movement Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">5. Interpretation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#horizontal-velocity">5.1 Horizontal Velocity</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vertical-velocity">5.2 Vertical Velocity</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#resultant-speed">5.3 Resultant Speed</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acceleration">5.4 Acceleration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#head-vertical-oscillation-gait-cycle">5.5 Head Vertical Oscillation &amp; Gait Cycle</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">5.6 Body Morphology Variables</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations-recommendations">6. Limitations &amp; Recommendations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-22-kinematics">
+<h1><strong>Ch 22. Kinematics</strong><a class="headerlink" href="#ch-22-kinematics" title="Link to this heading">#</a></h1>
+<section id="running-video-upload-kinematic-analysis">
+<h2><span style="color: blue;"><strong>Running Video Upload &amp; Kinematic Analysis</strong></span><a class="headerlink" href="#running-video-upload-kinematic-analysis" title="Link to this heading">#</a></h2>
+<p>Video(”<a class="reference external" href="https://cdn.jsdelivr.net/gh/pilsunchoi/images4&#64;main/22-1.mp4">https://cdn.jsdelivr.net/gh/pilsunchoi/images4&#64;main/22-1.mp4</a>”)</p>
+<p>Source: CMU Motion Capture Database, <a class="reference external" href="https://mocap.cs.cmu.edu/subjects/35/35_17.mpg">35-17.mpg</a></p>
+</section>
+<section id="claude-s-analysis-report">
+<h2><strong>Claude’s Analysis Report</strong><a class="headerlink" href="#claude-s-analysis-report" title="Link to this heading">#</a></h2>
+<p><strong>Running Gait Kinematic Analysis Report</strong></p>
+<ul class="simple">
+<li><p><strong>Video file:</strong> 22-1.mp4</p></li>
+<li><p><strong>Analysis method:</strong> Background Subtraction + Contour Analysis (silhouette-based tracking)</p></li>
+</ul>
+<hr class="docutils" />
+<section id="analysis-overview">
+<h3>1. Analysis Overview<a class="headerlink" href="#analysis-overview" title="Link to this heading">#</a></h3>
+<p>This report presents the results of extracting core kinematic variables and computing basic descriptive statistics by applying computer-vision-based silhouette tracking to a running motion video (22-1.mp4) captured in an indoor laboratory environment.</p>
+<section id="video-specifications">
+<h4>Video Specifications<a class="headerlink" href="#video-specifications" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Resolution</p></td>
+<td><p>352 × 240 px</p></td>
+</tr>
+<tr class="row-odd"><td><p>Frame rate</p></td>
+<td><p>29.97 fps</p></td>
+</tr>
+<tr class="row-even"><td><p>Total frames</p></td>
+<td><p>189</p></td>
+</tr>
+<tr class="row-odd"><td><p>Total duration</p></td>
+<td><p>6.31 seconds</p></td>
+</tr>
+<tr class="row-even"><td><p>Body-detected frames</p></td>
+<td><p>51 / 189 (frames 73–123)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Effective analysis time</p></td>
+<td><p>2.436 s – 4.104 s (approximately 1.67 s)</p></td>
+</tr>
+<tr class="row-even"><td><p>Effective N for statistics</p></td>
+<td><p>49 (excluding 1st derivative missing values)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="extracted-core-kinematic-variables">
+<h3>2. Extracted Core Kinematic Variables<a class="headerlink" href="#extracted-core-kinematic-variables" title="Link to this heading">#</a></h3>
+<p>The following 10 kinematic variables were computed on a per-frame basis (Δt ≈ 0.0334 s).</p>
+</section>
+<section id="displacement-velocity-variables">
+<h3>Displacement &amp; Velocity Variables<a class="headerlink" href="#displacement-velocity-variables" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Symbol</p></th>
+<th class="head"><p>Computation Method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Horizontal velocity</p></td>
+<td><p>Vx</p></td>
+<td><p>1st derivative of center-of-mass X-coordinate (Δx / Δt)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vertical velocity</p></td>
+<td><p>Vy</p></td>
+<td><p>1st derivative of center-of-mass Y-coordinate (Δy / Δt)</p></td>
+</tr>
+<tr class="row-even"><td><p>Resultant speed</p></td>
+<td><p>Speed</p></td>
+<td><p>√(Vx² + Vy²)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Head vertical velocity</p></td>
+<td><p>Head Vy</p></td>
+<td><p>1st derivative of head (topmost point) Y-coordinate</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="acceleration-variables">
+<h4>Acceleration Variables<a class="headerlink" href="#acceleration-variables" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Symbol</p></th>
+<th class="head"><p>Computation Method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Horizontal acceleration</p></td>
+<td><p>ax</p></td>
+<td><p>1st derivative of Vx (ΔVx / Δt)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vertical acceleration</p></td>
+<td><p>ay</p></td>
+<td><p>1st derivative of Vy (ΔVy / Δt)</p></td>
+</tr>
+<tr class="row-even"><td><p>Resultant acceleration</p></td>
+<td><p></p></td>
+<td><p>a</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="body-morphology-variables">
+<h4>Body Morphology Variables<a class="headerlink" href="#body-morphology-variables" title="Link to this heading">#</a></h4>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Symbol</p></th>
+<th class="head"><p>Computation Method</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Body height</p></td>
+<td><p>Body Height</p></td>
+<td><p>Vertical distance from silhouette top to bottom (px)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Body width</p></td>
+<td><p>Body Width</p></td>
+<td><p>Horizontal distance from silhouette leftmost to rightmost (px)</p></td>
+</tr>
+<tr class="row-even"><td><p>Silhouette area</p></td>
+<td><p>Area</p></td>
+<td><p>Area of the largest contour (px²)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="descriptive-statistics">
+<h3>3. Descriptive Statistics<a class="headerlink" href="#descriptive-statistics" title="Link to this heading">#</a></h3>
+<p>Descriptive statistics computed for the effective frames (N = 49).</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head text-center"><p>N</p></th>
+<th class="head text-center"><p>Mean</p></th>
+<th class="head text-center"><p>SD</p></th>
+<th class="head text-center"><p>Min</p></th>
+<th class="head text-center"><p>Max</p></th>
+<th class="head text-center"><p>Range</p></th>
+<th class="head text-center"><p>Median</p></th>
+<th class="head text-center"><p>CV (%)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Horizontal velocity Vx (px/s)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>194.39</p></td>
+<td class="text-center"><p>137.10</p></td>
+<td class="text-center"><p>−76.40</p></td>
+<td class="text-center"><p>451.75</p></td>
+<td class="text-center"><p>528.16</p></td>
+<td class="text-center"><p>226.76</p></td>
+<td class="text-center"><p>70.5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Vertical velocity Vy (px/s)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>8.40</p></td>
+<td class="text-center"><p>231.11</p></td>
+<td class="text-center"><p>−990.27</p></td>
+<td class="text-center"><p>942.92</p></td>
+<td class="text-center"><p>1,933.20</p></td>
+<td class="text-center"><p>8.12</p></td>
+<td class="text-center"><p>2,751.1</p></td>
+</tr>
+<tr class="row-even"><td><p>Resultant speed (px/s)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>284.32</p></td>
+<td class="text-center"><p>168.32</p></td>
+<td class="text-center"><p>68.34</p></td>
+<td class="text-center"><p>990.57</p></td>
+<td class="text-center"><p>922.23</p></td>
+<td class="text-center"><p>281.08</p></td>
+<td class="text-center"><p>59.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Horizontal acceleration ax (px/s²)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>−91.38</p></td>
+<td class="text-center"><p>2,192.33</p></td>
+<td class="text-center"><p>−7,424.22</p></td>
+<td class="text-center"><p>5,277.40</p></td>
+<td class="text-center"><p>12,701.61</p></td>
+<td class="text-center"><p>−241.82</p></td>
+<td class="text-center"><p>2,399.2</p></td>
+</tr>
+<tr class="row-even"><td><p>Vertical acceleration ay (px/s²)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>84.00</p></td>
+<td class="text-center"><p>7,632.00</p></td>
+<td class="text-center"><p>−29,837.01</p></td>
+<td class="text-center"><p>22,343.82</p></td>
+<td class="text-center"><p>52,180.83</p></td>
+<td class="text-center"><p>65.57</p></td>
+<td class="text-center"><p>9,085.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Resultant acceleration</p></td>
+<td class="text-center"><p>a</p></td>
+<td class="text-center"><p>(px/s²)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>4,442.23</p></td>
+<td class="text-center"><p>6,551.72</p></td>
+<td class="text-center"><p>279.28</p></td>
+<td class="text-center"><p>29,965.31</p></td>
+<td class="text-center"><p>29,686.03</p></td>
+</tr>
+<tr class="row-even"><td><p>Head vertical velocity (px/s)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>−3.06</p></td>
+<td class="text-center"><p>645.99</p></td>
+<td class="text-center"><p>−3,716.28</p></td>
+<td class="text-center"><p>2,337.66</p></td>
+<td class="text-center"><p>6,053.95</p></td>
+<td class="text-center"><p>0.00</p></td>
+<td class="text-center"><p>21,123.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Body height (px)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>161.71</p></td>
+<td class="text-center"><p>55.90</p></td>
+<td class="text-center"><p>47.00</p></td>
+<td class="text-center"><p>212.00</p></td>
+<td class="text-center"><p>165.00</p></td>
+<td class="text-center"><p>189.00</p></td>
+<td class="text-center"><p>34.6</p></td>
+</tr>
+<tr class="row-even"><td><p>Body width (px)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>93.76</p></td>
+<td class="text-center"><p>29.35</p></td>
+<td class="text-center"><p>32.00</p></td>
+<td class="text-center"><p>131.00</p></td>
+<td class="text-center"><p>99.00</p></td>
+<td class="text-center"><p>103.00</p></td>
+<td class="text-center"><p>31.3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Silhouette area (px²)</p></td>
+<td class="text-center"><p>49</p></td>
+<td class="text-center"><p>7,671.89</p></td>
+<td class="text-center"><p>3,612.20</p></td>
+<td class="text-center"><p>679.00</p></td>
+<td class="text-center"><p>11,969.00</p></td>
+<td class="text-center"><p>11,290.00</p></td>
+<td class="text-center"><p>9,017.50</p></td>
+<td class="text-center"><p>47.1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="global-movement-summary">
+<h3>4. Global Movement Summary<a class="headerlink" href="#global-movement-summary" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Item</p></th>
+<th class="head"><p>Value</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Direction of movement</p></td>
+<td><p>Right → Left (screen-left to screen-right, horizontal displacement +323.5 px)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Total vertical displacement</p></td>
+<td><p>+14.5 px (negligible)</p></td>
+</tr>
+<tr class="row-even"><td><p>Total movement time</p></td>
+<td><p>1.668 seconds</p></td>
+</tr>
+<tr class="row-odd"><td><p>Average movement speed</p></td>
+<td><p>194.1 px/s</p></td>
+</tr>
+<tr class="row-even"><td><p>Number of vertical oscillation peaks</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Number of vertical oscillation valleys</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-even"><td><p>Mean peak-to-peak interval (stride period)</p></td>
+<td><p>0.309 s / stride</p></td>
+</tr>
+<tr class="row-odd"><td><p>Estimated stride frequency</p></td>
+<td><p>≈ 3.2 strides/s</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="interpretation">
+<h3>5. Interpretation<a class="headerlink" href="#interpretation" title="Link to this heading">#</a></h3>
+<p><img alt="Kinematics" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/22-2.png" /></p>
+<section id="horizontal-velocity">
+<h4>5.1 Horizontal Velocity<a class="headerlink" href="#horizontal-velocity" title="Link to this heading">#</a></h4>
+<p>The mean horizontal velocity is 194.39 px/s (SD = 137.10), with a coefficient of variation (CV) reaching 70.5%. This indicates substantial acceleration and deceleration as the subject enters and exits the frame. The median (226.76) exceeds the mean, indicating a negatively skewed distribution, which reflects the influence of low-speed segments during entry and exit. In the stable segment (3.0–3.8 s), a relatively constant horizontal velocity is maintained, suggesting an approximation to <strong>steady-state running</strong>.</p>
+</section>
+<section id="vertical-velocity">
+<h4>5.2 Vertical Velocity<a class="headerlink" href="#vertical-velocity" title="Link to this heading">#</a></h4>
+<p>The mean vertical velocity is 8.40 px/s, close to zero, but the SD is extremely large at 231.11 with a CV of 2,751.1%. This indicates <strong>strong periodic oscillation</strong> in the vertical direction during running. Positive and negative vertical velocities alternate, causing the mean to cancel out while the variance remains very large — a classic gait/running pattern. The symmetric range of Min (−990.27) and Max (942.92) shows that the ascending phase (takeoff/flight) and descending phase (landing) repeat at similar magnitudes.</p>
+</section>
+<section id="resultant-speed">
+<h4>5.3 Resultant Speed<a class="headerlink" href="#resultant-speed" title="Link to this heading">#</a></h4>
+<p>The mean resultant speed is 284.32 px/s (SD = 168.32, CV = 59.2%), higher than horizontal velocity due to the contribution of the vertical component. The median (281.08) is nearly identical to the mean, indicating a relatively symmetric distribution. The maximum (990.57) arose from sudden vertical movements (such as landing impact), with the instantaneous peak speed reaching approximately 3.5 times the mean.</p>
+</section>
+<section id="acceleration">
+<h4>5.4 Acceleration<a class="headerlink" href="#acceleration" title="Link to this heading">#</a></h4>
+<p>The mean resultant acceleration is 4,442.23 px/s², and the SD of vertical acceleration (7,632) is approximately 3.5 times greater than the SD of horizontal acceleration (2,192). This reflects the fact that <strong>vertical impact accelerations during landing and takeoff are much greater than those in the horizontal direction</strong> during running. The extreme values of vertical acceleration (Min = −29,837, Max = 22,344) can be interpreted as strong deceleration (negative) at landing and acceleration (positive) at takeoff, consistent with vertical ground reaction force (GRF) patterns.</p>
+</section>
+<section id="head-vertical-oscillation-gait-cycle">
+<h4>5.5 Head Vertical Oscillation &amp; Gait Cycle<a class="headerlink" href="#head-vertical-oscillation-gait-cycle" title="Link to this heading">#</a></h4>
+<p>Five peaks and five valleys were observed in the time series of head vertical position. The mean peak-to-peak interval is 0.309 s, corresponding to a stride frequency of approximately <strong>3.2 strides/s</strong>. Considering that running stride frequency typically ranges from 2.5 to 4.0 strides/s, the subject is estimated to have been running at a moderate to fast pace. The detrended pattern of vertical oscillation confirms regular oscillation of approximately ±20–30 px, reflecting the alternation of <strong>flight phase and stance phase</strong> characteristic of running.</p>
+</section>
+<section id="id1">
+<h4>5.6 Body Morphology Variables<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<p>The variation in body height (Mean = 161.71 px, CV = 34.6%) and width (Mean = 93.76 px, CV = 31.3%) is primarily attributable to two factors. First, during frame entry and exit, the partially visible silhouette reduces measured height and width. Second, <strong>limb opening and closing causes periodic changes in silhouette shape</strong> within the running cycle (height tends to be maximal during stance and decreases during flight). Silhouette area (Mean = 7,672 px², CV = 47.1%) follows a similar pattern, showing relatively consistent values of approximately 9,000–12,000 px² during the stable segment.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="limitations-recommendations">
+<h3>6. Limitations &amp; Recommendations<a class="headerlink" href="#limitations-recommendations" title="Link to this heading">#</a></h3>
+<p><strong>Pixel-unit analysis:</strong> Since measurements were computed in pixel units without spatial calibration (a known reference distance), conversion to absolute physical units such as m/s or m/s² is not possible. Using calibration markers in future work would enable actual velocity and acceleration computation.</p>
+<p><strong>2D analysis:</strong> Because this is a single-camera 2D video, movement in the depth direction (z-axis) is not captured. 3D kinematic analysis requires multi-view capture or depth sensors.</p>
+<p><strong>Silhouette-based tracking:</strong> Since the entire silhouette’s center of mass and contour were tracked rather than joint positions, detailed kinematic variables such as joint angles (knee angle, hip angle, etc.) and stride length are not included. Applying a pose estimation model would enable more precise analysis.</p>
+<p><strong>Low-resolution video:</strong> At 352×240 resolution, subtle 1–2 px inter-frame movements may manifest as quantization errors, which may have partially contributed to the high variability in acceleration variables.</p>
+<p><strong>Short effective segment:</strong> The body was detected in only approximately 1.67 seconds of the total 6.31-second video, limiting the statistical stability of gait cycle estimation. Securing a longer capture segment would improve the reliability of cycle analysis.</p>
+</section>
+</section>
+<section id="appendix-python-code">
+<h2><strong>Appendix: Python Code</strong><a class="headerlink" href="#appendix-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">=============================================================</span>
+<span class="sd"> Running Gait Kinematic Analysis</span>
+<span class="sd"> - Method: Background Subtraction + Contour Analysis</span>
+<span class="sd"> - Output: Core kinematic variable extraction → Descriptive statistics → Visualization</span>
+<span class="sd">=============================================================</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.signal</span><span class="w"> </span><span class="kn">import</span> <span class="n">detrend</span><span class="p">,</span> <span class="n">find_peaks</span>
+
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;font.family&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;DejaVu Sans&#39;</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.unicode_minus&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="c1"># =============================================================</span>
+<span class="c1"># ★ Video file path (modify to match your environment)</span>
+<span class="c1"># =============================================================</span>
+<span class="n">VIDEO_PATH</span> <span class="o">=</span> <span class="s1">&#39;../Data/22-1.mp4&#39;</span>
+
+
+<span class="c1"># =============================================================</span>
+<span class="c1"># PART 1. Load video and check basic information</span>
+<span class="c1"># =============================================================</span>
+
+<span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">VIDEO_PATH</span><span class="p">)</span>
+<span class="n">fps</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FPS</span><span class="p">)</span>                    <span class="c1"># Frame rate</span>
+<span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_WIDTH</span><span class="p">))</span>      <span class="c1"># Horizontal resolution</span>
+<span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_HEIGHT</span><span class="p">))</span>    <span class="c1"># Vertical resolution</span>
+<span class="n">total_frames</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">cap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">CAP_PROP_FRAME_COUNT</span><span class="p">))</span>  <span class="c1"># Total frame count</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">fps</span>                                      <span class="c1"># Inter-frame time interval</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;FPS: </span><span class="si">{</span><span class="n">fps</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">, Resolution: </span><span class="si">{</span><span class="n">width</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2">, &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;Total frames: </span><span class="si">{</span><span class="n">total_frames</span><span class="si">}</span><span class="s2">, Duration: </span><span class="si">{</span><span class="n">total_frames</span><span class="o">/</span><span class="n">fps</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+<span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+
+<span class="c1"># =============================================================</span>
+<span class="c1"># PART 2. Track body silhouette via background subtraction</span>
+<span class="c1"># =============================================================</span>
+
+<span class="c1"># Initialize MOG2 background subtractor</span>
+<span class="n">bg_sub</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">createBackgroundSubtractorMOG2</span><span class="p">(</span>
+    <span class="n">history</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">varThreshold</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">detectShadows</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># 1st pass: Learn background model from first 30 frames</span>
+<span class="n">cap_bg</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">VIDEO_PATH</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">total_frames</span><span class="p">)):</span>
+    <span class="n">ret</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap_bg</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ret</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="n">bg_sub</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+<span class="n">cap_bg</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+<span class="c1"># 2nd pass: Detect body and extract feature points from all frames</span>
+<span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="n">VIDEO_PATH</span><span class="p">)</span>
+<span class="n">kernel</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">getStructuringElement</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">MORPH_ELLIPSE</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>  <span class="c1"># Morphological operation kernel</span>
+<span class="n">all_data</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">frame_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total_frames</span><span class="p">):</span>
+    <span class="n">ret</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ret</span><span class="p">:</span>
+        <span class="k">break</span>
+
+    <span class="c1"># Generate foreground mask and remove noise</span>
+    <span class="n">fg_mask</span> <span class="o">=</span> <span class="n">bg_sub</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">learningRate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+    <span class="n">fg_mask</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">morphologyEx</span><span class="p">(</span><span class="n">fg_mask</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">MORPH_OPEN</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>   <span class="c1"># Opening (noise removal)</span>
+    <span class="n">fg_mask</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">morphologyEx</span><span class="p">(</span><span class="n">fg_mask</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">MORPH_CLOSE</span><span class="p">,</span> <span class="n">kernel</span><span class="p">)</span>  <span class="c1"># Closing (fill holes)</span>
+    <span class="n">fg_mask</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">dilate</span><span class="p">(</span><span class="n">fg_mask</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>           <span class="c1"># Dilation (strengthen connections)</span>
+
+    <span class="c1"># Contour detection</span>
+    <span class="n">contours</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findContours</span><span class="p">(</span>
+        <span class="n">fg_mask</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RETR_EXTERNAL</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CHAIN_APPROX_SIMPLE</span>
+    <span class="p">)</span>
+
+    <span class="n">row</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;frame&#39;</span><span class="p">:</span> <span class="n">frame_idx</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">frame_idx</span> <span class="o">*</span> <span class="n">dt</span><span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">contours</span><span class="p">:</span>
+        <span class="n">largest</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">contours</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">)</span>  <span class="c1"># Largest contour = body</span>
+        <span class="n">area</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">contourArea</span><span class="p">(</span><span class="n">largest</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">area</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>  <span class="c1"># Minimum area threshold</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">boundingRect</span><span class="p">(</span><span class="n">largest</span><span class="p">)</span>  <span class="c1"># Bounding box</span>
+
+            <span class="c1"># Compute centroid</span>
+            <span class="n">M</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">moments</span><span class="p">(</span><span class="n">largest</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;m00&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">cx</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;m10&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;m00&#39;</span><span class="p">]</span>
+                <span class="n">cy</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;m01&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">M</span><span class="p">[</span><span class="s1">&#39;m00&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">cx</span><span class="p">,</span> <span class="n">cy</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">h</span> <span class="o">/</span> <span class="mi">2</span>
+
+            <span class="c1"># Extract extreme points (head/feet/left/right)</span>
+            <span class="n">topmost</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">largest</span><span class="p">[</span><span class="n">largest</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">argmin</span><span class="p">()][</span><span class="mi">0</span><span class="p">])</span>     <span class="c1"># Topmost → head</span>
+            <span class="n">bottommost</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">largest</span><span class="p">[</span><span class="n">largest</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()][</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Bottommost → feet</span>
+            <span class="n">leftmost</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">largest</span><span class="p">[</span><span class="n">largest</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argmin</span><span class="p">()][</span><span class="mi">0</span><span class="p">])</span>    <span class="c1"># Leftmost</span>
+            <span class="n">rightmost</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">largest</span><span class="p">[</span><span class="n">largest</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argmax</span><span class="p">()][</span><span class="mi">0</span><span class="p">])</span>   <span class="c1"># Rightmost</span>
+
+            <span class="n">row</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s1">&#39;detected&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s1">&#39;bbox_x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span> <span class="s1">&#39;bbox_y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;bbox_w&#39;</span><span class="p">:</span> <span class="n">w</span><span class="p">,</span> <span class="s1">&#39;bbox_h&#39;</span><span class="p">:</span> <span class="n">h</span><span class="p">,</span>
+                <span class="s1">&#39;centroid_x&#39;</span><span class="p">:</span> <span class="n">cx</span><span class="p">,</span> <span class="s1">&#39;centroid_y&#39;</span><span class="p">:</span> <span class="n">cy</span><span class="p">,</span>
+                <span class="s1">&#39;area&#39;</span><span class="p">:</span> <span class="n">area</span><span class="p">,</span>
+                <span class="s1">&#39;head_x&#39;</span><span class="p">:</span> <span class="n">topmost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;head_y&#39;</span><span class="p">:</span> <span class="n">topmost</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s1">&#39;foot_x&#39;</span><span class="p">:</span> <span class="n">bottommost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;foot_y&#39;</span><span class="p">:</span> <span class="n">bottommost</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s1">&#39;left_x&#39;</span><span class="p">:</span> <span class="n">leftmost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;right_x&#39;</span><span class="p">:</span> <span class="n">rightmost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s1">&#39;body_height&#39;</span><span class="p">:</span> <span class="n">bottommost</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">topmost</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>  <span class="c1"># Body height</span>
+                <span class="s1">&#39;body_width&#39;</span><span class="p">:</span> <span class="n">rightmost</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">leftmost</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>   <span class="c1"># Body width</span>
+            <span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">row</span><span class="p">[</span><span class="s1">&#39;detected&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">row</span><span class="p">[</span><span class="s1">&#39;detected&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">all_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+
+<span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+
+<span class="c1"># =============================================================</span>
+<span class="c1"># PART 3. Compute kinematic variables</span>
+<span class="c1"># =============================================================</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_data</span><span class="p">)</span>
+<span class="n">detected</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;detected&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Person detected in </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">detected</span><span class="p">)</span><span class="si">}</span><span class="s2"> / </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="si">}</span><span class="s2"> frames&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Detection range: frame </span><span class="si">{</span><span class="n">detected</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">detected</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Time range: </span><span class="si">{</span><span class="n">detected</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s to </span><span class="si">{</span><span class="n">detected</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
+
+<span class="c1"># Displacement (inter-frame position change)</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;disp_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;disp_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+
+<span class="c1"># Velocity (displacement / time interval, px/s)</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;disp_x&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span>   <span class="c1"># Horizontal velocity</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;vel_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;disp_y&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span>   <span class="c1"># Vertical velocity</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">detected</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;vel_y&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Resultant speed</span>
+
+<span class="c1"># Acceleration (1st derivative of velocity, px/s²)</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;acc_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span> <span class="o">/</span> <span class="n">dt</span>   <span class="c1"># Horizontal acceleration</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;acc_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;vel_y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span> <span class="o">/</span> <span class="n">dt</span>   <span class="c1"># Vertical acceleration</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;acc_mag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">detected</span><span class="p">[</span><span class="s1">&#39;acc_x&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;acc_y&#39;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>  <span class="c1"># Resultant acceleration</span>
+
+<span class="c1"># Head vertical oscillation (for gait cycle analysis)</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;head_disp_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;head_y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;head_vel_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;head_disp_y&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">dt</span>
+
+<span class="c1"># Body morphology change</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;body_width_change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;body_width&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+<span class="n">detected</span><span class="p">[</span><span class="s1">&#39;height_change&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;body_height&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+
+
+<span class="c1"># =============================================================</span>
+<span class="c1"># PART 4. Compute descriptive statistics</span>
+<span class="c1"># =============================================================</span>
+
+<span class="c1"># Remove first-frame NaN from 1st and 2nd derivatives</span>
+<span class="n">valid</span> <span class="o">=</span> <span class="n">detected</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">,</span> <span class="s1">&#39;acc_x&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+<span class="c1"># List of kinematic variables for analysis</span>
+<span class="n">kinematic_vars</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Horizontal Velocity Vx (px/s)&#39;</span><span class="p">:</span>   <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Vertical Velocity Vy (px/s)&#39;</span><span class="p">:</span>     <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_y&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Resultant Speed (px/s)&#39;</span><span class="p">:</span>          <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Horizontal Accel. ax (px/s2)&#39;</span><span class="p">:</span>    <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;acc_x&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Vertical Accel. ay (px/s2)&#39;</span><span class="p">:</span>      <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;acc_y&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Resultant Accel. |a| (px/s2)&#39;</span><span class="p">:</span>    <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;acc_mag&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Head Vertical Vel. (px/s)&#39;</span><span class="p">:</span>       <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;head_vel_y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span>
+    <span class="s1">&#39;Body Height (px)&#39;</span><span class="p">:</span>                <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;body_height&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Body Width (px)&#39;</span><span class="p">:</span>                 <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;body_width&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Silhouette Area (px2)&#39;</span><span class="p">:</span>           <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;area&#39;</span><span class="p">],</span>
+<span class="p">}</span>
+
+<span class="c1"># Compute descriptive statistics per variable (mean, SD, min, max, range, median, CV)</span>
+<span class="n">stats_rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">series</span> <span class="ow">in</span> <span class="n">kinematic_vars</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">series</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">stats_rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s1">&#39;Variable&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s1">&#39;N&#39;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">s</span><span class="p">),</span>
+        <span class="s1">&#39;Mean&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;SD&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;Min&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;Max&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;Range&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">s</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;Median&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">s</span><span class="o">.</span><span class="n">median</span><span class="p">()</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;CV(%)&#39;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">std</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">abs</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mf">0.01</span> <span class="k">else</span> <span class="s2">&quot;N/A&quot;</span>
+        <span class="p">),</span>
+    <span class="p">})</span>
+
+<span class="n">stats_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">stats_rows</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">===== Descriptive Statistics =====</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">stats_df</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+<span class="c1"># --- Global movement summary ---</span>
+<span class="n">total_disp_x</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Total horizontal displacement</span>
+<span class="n">total_disp_y</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># Total vertical displacement</span>
+<span class="n">total_time</span> <span class="o">=</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">detected</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>               <span class="c1"># Total movement time</span>
+<span class="n">avg_speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">total_disp_x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">total_disp_y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">total_time</span>             <span class="c1"># Average speed</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">===== Global Movement Summary =====&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total horizontal displacement: </span><span class="si">{</span><span class="n">total_disp_x</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> px &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="s1">&#39;L to R&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">total_disp_x</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;R to L&#39;</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total vertical displacement: </span><span class="si">{</span><span class="n">total_disp_y</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> px&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total movement time: </span><span class="si">{</span><span class="n">total_time</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> s&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average speed: </span><span class="si">{</span><span class="n">avg_speed</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> px/s&quot;</span><span class="p">)</span>
+
+<span class="c1"># --- Gait cycle analysis (based on head vertical oscillation) ---</span>
+<span class="n">head_y</span> <span class="o">=</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;head_y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">head_y</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">find_peaks</span><span class="p">(</span><span class="n">head_y</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>      <span class="c1"># Vertical oscillation peaks</span>
+    <span class="n">valleys</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">find_peaks</span><span class="p">(</span><span class="o">-</span><span class="n">head_y</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>    <span class="c1"># Vertical oscillation valleys</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">===== Gait Cycle Analysis (Head Vertical Oscillation) =====&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of peaks: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of valleys: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">valleys</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">peaks</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">peak_intervals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">peaks</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>  <span class="c1"># Time intervals between peaks</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Mean peak interval (stride period): &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">peak_intervals</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> s&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated stride frequency: &quot;</span>
+              <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">peak_intervals</span><span class="p">)</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> strides/s&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># =============================================================</span>
+<span class="c1"># PART 5. Visualization (screen display only, no file saving)</span>
+<span class="c1"># =============================================================</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">20</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Running Gait Kinematic Analysis&#39;</span><span class="p">,</span>
+             <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">0.98</span><span class="p">)</span>
+
+<span class="c1"># (a) Centroid trajectory</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">],</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">],</span>
+                <span class="n">c</span><span class="o">=</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;centroid_x&#39;</span><span class="p">],</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;centroid_y&#39;</span><span class="p">],</span> <span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;X position (px)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Y position (px)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(a) Centroid Trajectory&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">sc</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># (b) Horizontal velocity</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">],</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Vx&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Mean=</span><span class="si">{</span><span class="n">valid</span><span class="p">[</span><span class="s2">&quot;vel_x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t</span><span class="p">,</span>
+                <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_x&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>  <span class="c1"># Mean ± 1SD range</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Velocity (px/s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(b) Horizontal Velocity (Vx)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># (c) Vertical velocity</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_y&#39;</span><span class="p">],</span> <span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Vy&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>       <span class="c1"># Zero reference line</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;vel_y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Mean=</span><span class="si">{</span><span class="n">valid</span><span class="p">[</span><span class="s2">&quot;vel_y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Velocity (px/s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(c) Vertical Velocity (Vy)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># (d) Resultant speed</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">],</span> <span class="s1">&#39;m-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Speed&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Mean=</span><span class="si">{</span><span class="n">valid</span><span class="p">[</span><span class="s2">&quot;speed&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">t</span><span class="p">,</span>
+                <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">-</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                <span class="n">alpha</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>  <span class="c1"># Mean ± 1SD range</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Speed (px/s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(d) Resultant Speed&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># (e) Resultant acceleration magnitude</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;acc_mag&#39;</span><span class="p">],</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;|a|&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;acc_mag&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Mean=</span><span class="si">{</span><span class="n">valid</span><span class="p">[</span><span class="s2">&quot;acc_mag&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Acceleration (px/s$^2$)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(e) Acceleration Magnitude&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># (f) Head vertical oscillation (for gait cycle identification)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">head_y_vals</span> <span class="o">=</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;head_y&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">head_y_vals</span><span class="p">,</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Head Y&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">head_y_vals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+    <span class="n">detrended</span> <span class="o">=</span> <span class="n">detrend</span><span class="p">(</span><span class="n">head_y_vals</span><span class="p">)</span>  <span class="c1"># Remove linear trend</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">detrended</span><span class="p">,</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Detrended&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Detrended (px)&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">labelcolor</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Head Y position (px)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(f) Head Vertical Oscillation&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>  <span class="c1"># Image coordinate system: Y-axis positive downward</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># (g) Body height &amp; width changes</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;body_height&#39;</span><span class="p">],</span> <span class="s1">&#39;b-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Height&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;body_width&#39;</span><span class="p">],</span> <span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Width&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Size (px)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(g) Body Height &amp; Width&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># (h) Silhouette area (body shape change indicator)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">valid</span><span class="p">[</span><span class="s1">&#39;area&#39;</span><span class="p">],</span> <span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Area&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">valid</span><span class="p">[</span><span class="s1">&#39;area&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Mean=</span><span class="si">{</span><span class="n">valid</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s1">.0f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Time (s)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Area (px$^2$)&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;(h) Silhouette Area&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">rect</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.96</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="c1"># =============================================================</span>
+<span class="c1"># PART 6. Statistics table image (screen display only)</span>
+<span class="c1"># =============================================================</span>
+
+<span class="n">fig2</span><span class="p">,</span> <span class="n">ax_tbl</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">ax_tbl</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+<span class="n">col_labels</span> <span class="o">=</span> <span class="n">stats_df</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">cell_text</span> <span class="o">=</span> <span class="n">stats_df</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+<span class="c1"># Create table</span>
+<span class="n">table</span> <span class="o">=</span> <span class="n">ax_tbl</span><span class="o">.</span><span class="n">table</span><span class="p">(</span>
+    <span class="n">cellText</span><span class="o">=</span><span class="n">cell_text</span><span class="p">,</span> <span class="n">colLabels</span><span class="o">=</span><span class="n">col_labels</span><span class="p">,</span>
+    <span class="n">loc</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">cellLoc</span><span class="o">=</span><span class="s1">&#39;center&#39;</span>
+<span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">auto_set_font_size</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">set_fontsize</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">1.6</span><span class="p">)</span>
+
+<span class="c1"># Header style (dark background + white text)</span>
+<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">col_labels</span><span class="p">)):</span>
+    <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;#2C3E50&#39;</span><span class="p">)</span>
+    <span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_text_props</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+
+<span class="c1"># Alternating row background for data rows</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cell_text</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">col_labels</span><span class="p">)):</span>
+        <span class="n">table</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;#ECF0F1&#39;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;white&#39;</span><span class="p">)</span>
+
+<span class="n">fig2</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Descriptive Statistics of Kinematic Variables&#39;</span><span class="p">,</span>
+              <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="s1">&#39;bold&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">===== Analysis Complete =====&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>FPS: 29.97, Resolution: 352x240, Total frames: 189, Duration: 6.31s
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Person detected in 51 / 189 frames
+Detection range: frame 73 to 123
+Time range: 2.436s to 4.104s
+
+===== Descriptive Statistics =====
+
+                     Variable  N    Mean      SD       Min      Max    Range  Median   CV(%)
+Horizontal Velocity Vx (px/s) 49  194.39  137.10    -76.40   451.75   528.16  226.76    70.5
+  Vertical Velocity Vy (px/s) 49    8.40  231.11   -990.27   942.92  1933.20    8.12  2751.1
+       Resultant Speed (px/s) 49  284.32  168.32     68.34   990.57   922.23  281.08    59.2
+ Horizontal Accel. ax (px/s2) 49  -91.38 2192.33  -7424.22  5277.40 12701.61 -241.82  2399.2
+   Vertical Accel. ay (px/s2) 49   84.00 7632.00 -29837.01 22343.82 52180.83   65.57  9085.3
+ Resultant Accel. |a| (px/s2) 49 4442.23 6551.72    279.28 29965.31 29686.03 2311.39   147.5
+    Head Vertical Vel. (px/s) 49   -3.06  645.99  -3716.28  2337.66  6053.95    0.00 21123.3
+             Body Height (px) 49  161.71   55.90     47.00   212.00   165.00  189.00    34.6
+              Body Width (px) 49   93.76   29.35     32.00   131.00    99.00  103.00    31.3
+        Silhouette Area (px2) 49 7671.89 3612.20    679.00 11969.00 11290.00 9017.50    47.1
+
+===== Global Movement Summary =====
+Total horizontal displacement: 323.5 px (L to R)
+Total vertical displacement: 14.5 px
+Total movement time: 1.668 s
+Average speed: 194.1 px/s
+
+===== Gait Cycle Analysis (Head Vertical Oscillation) =====
+Number of peaks: 5
+Number of valleys: 5
+Mean peak interval (stride period): 0.309 s
+Estimated stride frequency: 3.2 strides/s
+</pre></div>
+</div>
+<img alt="../_images/46cea2d5e141bbac2ad5c6de5c6e08da870ace69f7e7533de38f89906286a690.png" src="../_images/46cea2d5e141bbac2ad5c6de5c6e08da870ace69f7e7533de38f89906286a690.png" />
+<img alt="../_images/ef4a0cb928421c3a2482d02e26f380eac1738bed3571e148ff134914624d5119.png" src="../_images/ef4a0cb928421c3a2482d02e26f380eac1738bed3571e148ff134914624d5119.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>===== Analysis Complete =====
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="21_Bone_Density_Test_Interpretation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 21. Bone Density Test Interpretation</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="23_Soccer_Match_Data_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 23. Soccer Match Data Analysis</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-video-upload-kinematic-analysis"><span style="color: blue;"><strong>Running Video Upload &amp; Kinematic Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#claude-s-analysis-report"><strong>Claude’s Analysis Report</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-overview">1. Analysis Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#video-specifications">Video Specifications</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extracted-core-kinematic-variables">2. Extracted Core Kinematic Variables</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#displacement-velocity-variables">Displacement &amp; Velocity Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acceleration-variables">Acceleration Variables</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#body-morphology-variables">Body Morphology Variables</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-statistics">3. Descriptive Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-movement-summary">4. Global Movement Summary</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretation">5. Interpretation</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#horizontal-velocity">5.1 Horizontal Velocity</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vertical-velocity">5.2 Vertical Velocity</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#resultant-speed">5.3 Resultant Speed</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#acceleration">5.4 Acceleration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#head-vertical-oscillation-gait-cycle">5.5 Head Vertical Oscillation &amp; Gait Cycle</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">5.6 Body Morphology Variables</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations-recommendations">6. Limitations &amp; Recommendations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#appendix-python-code"><strong>Appendix: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

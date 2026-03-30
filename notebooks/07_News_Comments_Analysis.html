@@ -1,0 +1,902 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 7. News Comments Analysis &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/07_News_Comments_Analysis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 8. Analysis of Seoul Apartment Listing Changes" href="08_Seoul_Apartment_Listing_Analysis.html" />
+    <link rel="prev" title="Ch 6. Building a Stock Price Prediction System" href="06_Stock_Price_Prediction_System.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="08_Seoul_Apartment_Listing_Analysis.html"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/07_News_Comments_Analysis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/07_News_Comments_Analysis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 7. News Comments Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comment-input"><span style="color: blue;"><strong>1. Comment Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-analysis"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-statistics">1. Descriptive Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topic-clustering">2. Topic Clustering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sentiment-analysis">3. Sentiment Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#engagement-analysis">4. Engagement Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-top-consensus-comments-most-liked">A. Top Consensus Comments (Most Liked)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#b-controversial-comments-high-variance">B. Controversial Comments (High Variance)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-implications">5. Statistical Implications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-analysis"><span style="color: blue;"><strong>2. Visual Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini’s Analysis</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sentiment-analysis-methodology"><span style="color: blue;"><strong>3. Sentiment Analysis Methodology</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-explanation"><strong>Gemini’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dictionary-based-approach">1. Dictionary-based Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#machine-learning-approach">2. Machine Learning Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deep-learning-approach">3. Deep Learning Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-7-news-comments-analysis">
+<h1><strong>Ch 7. News Comments Analysis</strong><a class="headerlink" href="#ch-7-news-comments-analysis" title="Link to this heading">#</a></h1>
+<section id="comment-input">
+<h2><span style="color: blue;"><strong>1. Comment Input</strong></span><a class="headerlink" href="#comment-input" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;">Among the initial admission offers for the 2026 regular university admissions cycle, 107 students admitted to Seoul National University (SNU) declined enrollment. Of those who declined, 86 were in the natural sciences track, which accounts for the vast majority. Analysts suggest that top-performing students likely chose medical and pharmaceutical programs at other universities over SNU’s natural science programs…</span></p>
+<p><img alt="Comments" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/7-1.png" /></p>
+<p>(Source: <a class="reference external" href="https://n.news.naver.com/article/243/0000092729?cds=news_media_pc&amp;amp;type=editn">“Still ‘Medical School Republic’: 7.6% Gave Up SNU for Med School,” Economist Korea, 2026.02.08</a>)</p>
+</section>
+<section id="gemini-s-analysis">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#gemini-s-analysis" title="Link to this heading">#</a></h2>
+<p>The following are the results of text mining and statistical analysis performed on the provided news article comment data. The analysis targeted valid text comments, excluding those blocked by the clean bot or deleted.</p>
+<section id="descriptive-statistics">
+<h3>1. Descriptive Statistics<a class="headerlink" href="#descriptive-statistics" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Total comments analyzed:</strong> 55 (excluding deleted/blocked)</p></li>
+<li><p><strong>Total likes (agree):</strong> 259</p></li>
+<li><p><strong>Total dislikes (disagree):</strong> 84</p></li>
+<li><p><strong>Like/Dislike ratio:</strong> Approximately 3.1 : 1 (likes dominant)</p></li>
+<li><p><strong>Top keyword frequency:</strong></p></li>
+</ul>
+<ol class="arabic simple">
+<li><p><strong>Doctor/Medical school:</strong> 42 mentions (overwhelmingly 1st)</p></li>
+<li><p><strong>Money/Income/Salary:</strong> 18 mentions</p></li>
+<li><p><strong>SNU/Engineering:</strong> 16 mentions</p></li>
+<li><p><strong>AI/Robot/Musk:</strong> 12 mentions</p></li>
+<li><p><strong>Country/Doom/Worry:</strong> 10 mentions</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="topic-clustering">
+<h3>2. Topic Clustering<a class="headerlink" href="#topic-clustering" title="Link to this heading">#</a></h3>
+<p>Comments were classified by topic to analyze their proportional share.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Rank</p></th>
+<th class="head"><p>Topic</p></th>
+<th class="head"><p>Share (%)</p></th>
+<th class="head"><p>Summary</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>1</strong></p></td>
+<td><p><strong>Economic rationality &amp; realism</strong></p></td>
+<td><p><strong>35%</strong></p></td>
+<td><p>It is natural to pursue higher-paying careers in a capitalist society. Reflects job stability and demand in an aging society.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>2</strong></p></td>
+<td><p><strong>Science/Engineering crisis &amp; national competitiveness concerns</strong></p></td>
+<td><p><strong>25%</strong></p></td>
+<td><p>Concern over national losses from talent concentration. Calls for better treatment of engineering fields and pessimism about national decline.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>3</strong></p></td>
+<td><p><strong>AI and technological replacement potential</strong></p></td>
+<td><p><strong>20%</strong></p></td>
+<td><p>Numerous mentions of Elon Musk. Skeptical views that doctors may be replaced by AI/robots in the future.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>4</strong></p></td>
+<td><p><strong>Criticism of and resentment toward the medical profession</strong></p></td>
+<td><p><strong>15%</strong></p></td>
+<td><p>Negative perceptions of the medical profession as a ‘cartel’ and a ‘money-making vehicle.’ Criticism of strikes and a sense of privilege.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>5</strong></p></td>
+<td><p><strong>Criticism of the college admissions/education system</strong></p></td>
+<td><p><strong>5%</strong></p></td>
+<td><p>Criticism of SNU’s declining prestige and the rank-ordering nature of the admissions structure.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="sentiment-analysis">
+<h3>3. Sentiment Analysis<a class="headerlink" href="#sentiment-analysis" title="Link to this heading">#</a></h3>
+<p>The predominant emotional states of comment authors were classified into three categories.</p>
+<ul class="simple">
+<li><p><strong>Negative - 65%:</strong></p></li>
+<li><p>Dominated by lamentation about the current social structure (concentration on medical schools), concern for the national future, and hostility toward the medical profession.</p></li>
+<li><p><em>Keywords: decline, bitter, selfishness, cartel, turf.</em></p></li>
+<li><p><strong>Neutral/Cynical - 25%:</strong></p></li>
+<li><p>An attitude of respecting individual choice or acknowledging the inevitable reality.</p></li>
+<li><p><em>Keywords: natural, every man for himself, reality, fact.</em></p></li>
+<li><p><strong>Positive - 10%:</strong></p></li>
+<li><p>Rare expressions of support for students’ choices, or hopeful opinions emphasizing the future value of engineering and science.</p></li>
+<li><p><em>Keywords: engineering is the future, innovation.</em></p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="engagement-analysis">
+<h3>4. Engagement Analysis<a class="headerlink" href="#engagement-analysis" title="Link to this heading">#</a></h3>
+<p>The intensity of public opinion was analyzed through likes and dislikes data.</p>
+<section id="a-top-consensus-comments-most-liked">
+<h4>A. Top Consensus Comments (Most Liked)<a class="headerlink" href="#a-top-consensus-comments-most-liked" title="Link to this heading">#</a></h4>
+<p>The opinions that received the most public support emphasized <strong>“the importance of engineering/science”</strong> and <strong>“criticism of social structure.”</strong></p>
+<ol class="arabic simple">
+<li><p>ID: pch5** (“Engineering is the future..”)</p></li>
+</ol>
+<ul class="simple">
+<li><p>Likes: 51 / Dislikes: 4</p></li>
+<li><p><em>Interpretation:</em> While the reality is a rush toward medical schools, this reflects the public’s strong desire that engineering should thrive.</p></li>
+</ul>
+<ol class="arabic simple" start="2">
+<li><p>ID: dlee** (“A country where lawyers/doctors are the elite has no development”)</p></li>
+</ol>
+<ul class="simple">
+<li><p>Likes: 28 / Dislikes: 1</p></li>
+<li><p><em>Interpretation:</em> A critical consensus has formed about the dysfunctional social structure that neglects science and engineering.</p></li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p>ID: cuia** (“So many go to medical school, yet why is there a doctor shortage?”)</p></li>
+</ol>
+<ul class="simple">
+<li><p>Likes: 19 / Dislikes: 7</p></li>
+<li><p><em>Interpretation:</em> Indicates suspicion and dissatisfaction regarding the supply-demand imbalance in medical personnel.</p></li>
+</ul>
+</section>
+<section id="b-controversial-comments-high-variance">
+<h4>B. Controversial Comments (High Variance)<a class="headerlink" href="#b-controversial-comments-high-variance" title="Link to this heading">#</a></h4>
+<p>Opinions that were evenly split between support and opposition related to <strong>“limiting doctors’ income/privileges.”</strong></p>
+<ol class="arabic simple">
+<li><p>ID: pine** (“Abolish the medical license privilege, fix medical fees, and increase enrollment”)</p></li>
+</ol>
+<ul class="simple">
+<li><p>Likes: 14 / Dislikes: 14 (exactly 1:1 split)</p></li>
+<li><p><em>Interpretation:</em> Strong resentment toward the medical profession (demanding reform) and concerns about healthcare system collapse (or support for doctors) are evenly matched.</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="statistical-implications">
+<h3>5. Statistical Implications<a class="headerlink" href="#statistical-implications" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>The rapid rise of the “AI replacement” narrative:</strong> In past admissions-related comments, “money” and “prestige” were the main points of contention, but in this data, a significant proportion (approximately 20%) mentioned <strong>“the possibility of replacement by AI/robots.”</strong> This suggests that technological advancement is beginning to affect perceptions of job security.</p></li>
+<li><p><strong>The gap between ideals and reality:</strong> The most-liked comment argued “engineering is the future” (normative claim), yet the overall comment frequency was dominated by content supporting “money/pragmatic choice.” This shows that the public clearly recognizes <strong>the dilemma between “national correctness (nurturing engineering)” and “individual rationality (choosing medical school).”</strong></p></li>
+<li><p><strong>Anti-doctor sentiment detected:</strong> Despite this being an article about the medical school enrollment boom, numerous keywords criticizing the medical profession’s income monopoly and strikes were detected, indicating significant latent social conflict.</p></li>
+</ol>
+</section>
+</section>
+<section id="visual-analysis">
+<h2><span style="color: blue;"><strong>2. Visual Analysis</strong></span><a class="headerlink" href="#visual-analysis" title="Link to this heading">#</a></h2>
+</section>
+<section id="id1">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>These charts visualize the major topic distribution, sentiment analysis, and keyword frequency analyzed from the comment data.</p>
+<p><strong>1. Major Discourse Topics Analysis</strong></p>
+<p><img alt="Topics" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/7-2.png" /></p>
+<ul class="simple">
+<li><p>The horizontal bar chart shows the percentage of the most frequently discussed topics in the comments.</p></li>
+<li><p><strong>Economic rationality (35%)</strong> accounts for the largest share, followed by <strong>Science/Engineering crisis (25%)</strong> and <strong>AI replacement potential (20%)</strong>.</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>2. Sentiment Analysis Distribution</strong></p>
+<p><img alt="Sentiment" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/7-3.png" /></p>
+<ul class="simple">
+<li><p>The pie chart shows the overall emotional state of the comments.</p></li>
+<li><p><strong>Negative (65.0%)</strong> responses are overwhelmingly dominant, suggesting that concern and criticism about the current situation prevail.</p></li>
+</ul>
+<hr class="docutils" />
+<p><strong>3. Top Keyword Frequency</strong></p>
+<p><img alt="Keyword" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/7-4.png" /></p>
+<ul class="simple">
+<li><p>The vertical bar chart shows the frequency of the most commonly appearing words.</p></li>
+<li><p><strong>Doctor/Med</strong> keywords were mentioned 42 times, the most frequent, followed by income, engineering, and AI as other key terms.</p></li>
+</ul>
+</section>
+<section id="sentiment-analysis-methodology">
+<h2><span style="color: blue;"><strong>3. Sentiment Analysis Methodology</strong></span><a class="headerlink" href="#sentiment-analysis-methodology" title="Link to this heading">#</a></h2>
+</section>
+<section id="gemini-s-explanation">
+<h2><strong>Gemini’s Explanation</strong><a class="headerlink" href="#gemini-s-explanation" title="Link to this heading">#</a></h2>
+<p>Sentiment Analysis is a technique that statistically quantifies the emotions, attitudes, and opinions hidden in text, classifying them into categories such as ‘positive,’ ‘negative,’ and ‘neutral.’ It is broadly divided into three approaches.</p>
+<p><img alt="Sentiment_Analysis" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/7-5.png" /></p>
+<hr class="docutils" />
+<section id="dictionary-based-approach">
+<h3>1. Dictionary-based Approach<a class="headerlink" href="#dictionary-based-approach" title="Link to this heading">#</a></h3>
+<p>The most intuitive and fundamental method. It utilizes a pre-built ‘sentiment dictionary.’</p>
+<ul class="simple">
+<li><p><strong>Principle:</strong> Each word is assigned a score. (e.g., ‘happy’ +2, ‘sad’ -2, ‘worst’ -5)</p></li>
+<li><p><strong>Calculation:</strong> The scores of all words appearing in a sentence are summed. If the total is positive, it is classified as positive; if negative, as negative.</p></li>
+<li><p><strong>Characteristics:</strong> Fast and simple, but struggles with contexts where negation words carry positive meaning (e.g., “not bad”), or with sarcasm and irony.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="machine-learning-approach">
+<h3>2. Machine Learning Approach<a class="headerlink" href="#machine-learning-approach" title="Link to this heading">#</a></h3>
+<p>A method that employs statistical techniques in earnest. The computer is trained on tens of thousands of sentences to discover patterns on its own.</p>
+<ul class="simple">
+<li><p><strong>Data conversion:</strong> Since computers cannot read text, sentences are converted to numbers (vectors). This is typically done by counting word frequencies. (e.g., if ‘delicious’ appears frequently, the probability of positive sentiment increases)</p></li>
+<li><p><strong>Statistical algorithms:</strong></p></li>
+<li><p><strong>Naive Bayes:</strong> Calculates “the probability of being positive given this word appears” using conditional probability.</p></li>
+<li><p><strong>Logistic Regression:</strong> Draws the optimal line (function) representing the relationship between words and sentiment.</p></li>
+<li><p><strong>SVM (Support Vector Machine):</strong> Finds the decision boundary that best separates positive and negative data clusters.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="deep-learning-approach">
+<h3>3. Deep Learning Approach<a class="headerlink" href="#deep-learning-approach" title="Link to this heading">#</a></h3>
+<p>The most sophisticated and widely used method in recent years. It mimics the human brain’s neural network to understand the full context.</p>
+<ul class="simple">
+<li><p><strong>Principle:</strong> Rather than examining individual words in isolation, it captures the sequence and surrounding context of a sentence. (e.g., distinguishing whether “bank” refers to a financial institution or a river bank)</p></li>
+<li><p><strong>Models:</strong> RNN, LSTM, and recent <strong>Transformer</strong> models such as <strong>BERT</strong> and <strong>GPT</strong> fall into this category.</p></li>
+<li><p><strong>Characteristics:</strong> Requires large amounts of training data, but achieves very high accuracy even with sarcasm and complex sentence structures.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h3>
+<p>From a statistical perspective, sentiment analysis is the process of mathematically calculating <strong>“when a particular combination of words appears, is it more likely to belong to the positive group or the negative group?”</strong></p>
+</section>
+</section>
+<section id="reference-python-code">
+<h2><strong>Reference: Python Code</strong><a class="headerlink" href="#reference-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 1. Major discourse topic analysis (horizontal bar chart)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># Style settings</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+
+<span class="c1"># Data definition</span>
+<span class="n">topic_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Topic&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Economic Rationality</span><span class="se">\n</span><span class="s1">(Realism)&#39;</span><span class="p">,</span> <span class="s1">&#39;Sci/Eng Crisis</span><span class="se">\n</span><span class="s1">(National Comp.)&#39;</span><span class="p">,</span> <span class="s1">&#39;AI &amp; Tech</span><span class="se">\n</span><span class="s1">Replacement&#39;</span><span class="p">,</span> <span class="s1">&#39;Medical Sector</span><span class="se">\n</span><span class="s1">Criticism&#39;</span><span class="p">,</span> <span class="s1">&#39;Edu System</span><span class="se">\n</span><span class="s1">Criticism&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Percentage&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">35</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="n">df_topics</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">topic_data</span><span class="p">)</span>
+
+<span class="c1"># Draw chart</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">barplot</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Percentage&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Topic&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Topic&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_topics</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Major Discourse Topics Analysis (%)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Percentage (%)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+
+<span class="c1"># Add numeric labels</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">barplot</span><span class="o">.</span><span class="n">patches</span><span class="p">:</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">width</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">get_y</span><span class="p">()</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span><span class="o">/</span><span class="mf">2.</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{:1.0f}</span><span class="s1">%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">width</span><span class="p">),</span> <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/a9fe310f2822ac74c0814f6c3e2cd1325f72df3ec81ce70a96511e60f5f424e4.png" src="../_images/a9fe310f2822ac74c0814f6c3e2cd1325f72df3ec81ce70a96511e60f5f424e4.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 2. Sentiment analysis (pie chart)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="c1"># Style settings</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+
+<span class="c1"># Data definition</span>
+<span class="n">sentiment_labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Negative&#39;</span><span class="p">,</span> <span class="s1">&#39;Neutral/Cynical&#39;</span><span class="p">,</span> <span class="s1">&#39;Positive&#39;</span><span class="p">]</span>
+<span class="n">sentiment_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">65</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="c1"># Color definition (red, gray, green palette)</span>
+<span class="n">sentiment_colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#ff9999&#39;</span><span class="p">,</span> <span class="s1">&#39;#d3d3d3&#39;</span><span class="p">,</span> <span class="s1">&#39;#99ff99&#39;</span><span class="p">]</span>
+
+<span class="c1"># Draw chart</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">sentiment_sizes</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">sentiment_labels</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">sentiment_colors</span><span class="p">,</span> 
+        <span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.1f%%</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">startangle</span><span class="o">=</span><span class="mi">140</span><span class="p">,</span> <span class="n">explode</span><span class="o">=</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Sentiment Analysis Distribution&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/2976096e4330a1286c3b9789b29cab678f9e3b499e57ad9f4a6b7912f83cb432.png" src="../_images/2976096e4330a1286c3b9789b29cab678f9e3b499e57ad9f4a6b7912f83cb432.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># 3. Top keyword frequency (vertical bar chart)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="c1"># Style settings</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">&quot;whitegrid&quot;</span><span class="p">)</span>
+
+<span class="c1"># Data definition</span>
+<span class="n">keyword_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Keyword&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Doctor/Med&#39;</span><span class="p">,</span> <span class="s1">&#39;Money/Income&#39;</span><span class="p">,</span> <span class="s1">&#39;SNU/Eng&#39;</span><span class="p">,</span> <span class="s1">&#39;AI/Robot&#39;</span><span class="p">,</span> <span class="s1">&#39;Country/Worry&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Frequency&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">42</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="p">}</span>
+<span class="n">df_keywords</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">keyword_data</span><span class="p">)</span>
+
+<span class="c1"># Draw chart</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="c1"># Set hue same as x and add legend=False</span>
+<span class="n">barplot_k</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;Keyword&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Frequency&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;Keyword&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_keywords</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s1">&#39;magma&#39;</span><span class="p">,</span> <span class="n">legend</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Top Keyword Frequency&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Count&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Keywords&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add numeric labels</span>
+<span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">barplot_k</span><span class="o">.</span><span class="n">patches</span><span class="p">:</span>
+    <span class="n">barplot_k</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">format</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get_height</span><span class="p">(),</span> <span class="s1">&#39;.0f&#39;</span><span class="p">),</span> 
+                   <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">get_x</span><span class="p">()</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">get_height</span><span class="p">()),</span> 
+                   <span class="n">ha</span> <span class="o">=</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> <span class="n">va</span> <span class="o">=</span> <span class="s1">&#39;center&#39;</span><span class="p">,</span> 
+                   <span class="n">xytext</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span> 
+                   <span class="n">textcoords</span> <span class="o">=</span> <span class="s1">&#39;offset points&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/f3b6fa841e0d50a2a8a663d8e6c5080281d3a37f1f94cb0dcd1bfbea0b24ed2e.png" src="../_images/f3b6fa841e0d50a2a8a663d8e6c5080281d3a37f1f94cb0dcd1bfbea0b24ed2e.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="06_Stock_Price_Prediction_System.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 6. Building a Stock Price Prediction System</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="08_Seoul_Apartment_Listing_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#comment-input"><span style="color: blue;"><strong>1. Comment Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-analysis"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descriptive-statistics">1. Descriptive Statistics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#topic-clustering">2. Topic Clustering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sentiment-analysis">3. Sentiment Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#engagement-analysis">4. Engagement Analysis</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-top-consensus-comments-most-liked">A. Top Consensus Comments (Most Liked)</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#b-controversial-comments-high-variance">B. Controversial Comments (High Variance)</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#statistical-implications">5. Statistical Implications</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-analysis"><span style="color: blue;"><strong>2. Visual Analysis</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini’s Analysis</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sentiment-analysis-methodology"><span style="color: blue;"><strong>3. Sentiment Analysis Methodology</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-explanation"><strong>Gemini’s Explanation</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dictionary-based-approach">1. Dictionary-based Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#machine-learning-approach">2. Machine Learning Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deep-learning-approach">3. Deep Learning Approach</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

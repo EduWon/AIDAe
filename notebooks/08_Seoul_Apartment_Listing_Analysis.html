@@ -1,0 +1,1006 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ch 8. Analysis of Seoul Apartment Listing Changes &#8212; Data Analysis - Let AI Do the Work</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/08_Seoul_Apartment_Listing_Analysis';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ch 9. Survey Analysis" href="09_Survey_Analysis.html" />
+    <link rel="prev" title="Ch 7. News Comments Analysis" href="07_News_Comments_Analysis.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="00_Preface.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.png" class="logo__image only-light" alt="Data Analysis - Let AI Do the Work - Home"/>
+    <script>document.write(`<img src="../_static/logo.png" class="logo__image only-dark" alt="Data Analysis - Let AI Do the Work - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="00_Preface.html">
+                    Preface
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="01_Exam_Score_Analysis.html"><strong>Ch 1. Exam Score Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="02_Presidential_Approval_Rating_Analysis.html"><strong>Ch 2. Presidential Approval Rating Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="03_KBO_Regular_Season_Team_Performance.html"><strong>Ch 3. KBO Regular Season Team Performance Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="04_PPP_Graph_Analysis.html"><strong>Ch 4. PPP Graph Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="05_World_Bank_Data_Extraction.html"><strong>Ch 5. World Bank Data Extraction</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="06_Stock_Price_Prediction_System.html"><strong>Ch 6. Building a Stock Price Prediction System</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="07_News_Comments_Analysis.html"><strong>Ch 7. News Comments Analysis</strong></a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="09_Survey_Analysis.html"><strong>Ch 9. Survey Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="10_Exploratory_Factor_Analysis.html"><strong>Ch 10. Exploratory Factor Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="11_Boston_Housing_Price_Analysis.html"><strong>Ch 11. Boston Housing Price Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="12_Comprehensive_Property_Tax_and_Rent.html"><strong>Ch 12. Comprehensive Property Tax and Rent</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="13_Hypermarket_Decline_Empirical_Analysis.html"><strong>Ch 13. Hypermarket Decline: An Empirical Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="14_Newborn_Special_Loan_and_Birth_Rate.html"><strong>Ch 14. Newborn Special Loan and Birth Rate</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="15_Ridge_and_Lasso_Regression.html"><strong>Ch 15. Ridge and Lasso Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="16_Logistic_Regression.html"><strong>Ch 16. Logistic Regression</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="17_Decision_Tree_Model.html"><strong>Ch 17. Decision Tree Model</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="18_Tree_Based_Models.html"><strong>Ch 18. Tree-Based Models</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="19_Learning_Deep_Learning.html"><strong>Ch 19. Learning Deep Learning</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="20_Panel_Data_Analysis.html"><strong>Ch 20. Panel Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="21_Bone_Density_Test_Interpretation.html"><strong>Ch 21. Bone Density Test Interpretation</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="22_Kinematics.html"><strong>Ch 22. Kinematics</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="23_Soccer_Match_Data_Analysis.html"><strong>Ch 23. Soccer Match Data Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="24_Bombing_Destructive_Power_Analysis.html"><strong>Ch 24. Bombing Destructive Power Analysis</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="25_Global_Cosmetics_Trade_Trends.html"><strong>Ch 25. Global Cosmetics Trade Trends</strong></a></li>
+<li class="toctree-l1"><a class="reference internal" href="26_Texas_Special_Education.html"><strong>Ch 26. Texas Special Education</strong></a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/eduwon/AIDAe/issues/new?title=Issue%20on%20page%20%2Fnotebooks/08_Seoul_Apartment_Listing_Analysis.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/notebooks/08_Seoul_Apartment_Listing_Analysis.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Ch 8. Analysis of Seoul Apartment Listing Changes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-dataset-construction"><strong>Gemini’s Dataset Construction</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-example">Data Structure Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#question-i"><span style="color: blue;"><strong>2. Question I</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-analysis"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-changes-2026-1-23-2026-2-13">Key Changes (2026.1.23 – 2026.2.13)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-analysis">Visual Analysis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#question-ii"><span style="color: blue;"><strong>3. Question II</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#year-over-year-comparison-jan-23-feb-13">1. Year-over-Year Comparison (Jan 23 – Feb 13)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#seasonality-vs-policy-effect">2. Seasonality vs. Policy Effect</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">3. Conclusion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#question-iii"><span style="color: blue;"><strong>4. Question III</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#difference-in-differences-did-analysis">1. Difference-in-Differences (DiD) Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#price-listing-volume-correlation-analysis-granger-causality-test-variant">2. Price-Listing Volume Correlation Analysis (Granger Causality Test Variant)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interrupted-time-series-its-analysis">3. Interrupted Time Series (ITS) Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-mining-distressed-sale-keyword-analysis">4. Text Mining: ‘Distressed Sale’ Keyword Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression-with-macroeconomic-controls">5. Multiple Regression with Macroeconomic Controls</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="ch-8-analysis-of-seoul-apartment-listing-changes">
+<h1><strong>Ch 8. Analysis of Seoul Apartment Listing Changes</strong><a class="headerlink" href="#ch-8-analysis-of-seoul-apartment-listing-changes" title="Link to this heading">#</a></h1>
+<section id="data-input">
+<h2><span style="color: blue;"><strong>1. Data Input</strong></span><a class="headerlink" href="#data-input" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;">Daily online aggregate listing counts: Sale + Jeonse + Monthly Rent</span></p>
+<p><span style="color: blue;">Date Sale Jeonse Monthly_Rent Total_Listings 26/02/13 63,745</span></p>
+<p><span style="color: blue;">20,422</span></p>
+<p><span style="color: blue;">18,891</span></p>
+<p><span style="color: blue;">103,058</span></p>
+<p><span style="color: blue;">26/02/12 62,357</span></p>
+<p><span style="color: blue;">20,523</span></p>
+<p><span style="color: blue;">19,044</span></p>
+<p><span style="color: blue;">101,924</span></p>
+<div style="text-align: left; color: blue; padding-left: 10px;">&#8942;</div>
+<br>
+<p>Source: <a class="reference external" href="https://asil.kr/asil/index.jsp">Asil</a>, Real Estate Study, Listing Changes (Seoul APT daily, as of 2026.02.15)</p>
+</section>
+<section id="gemini-s-dataset-construction">
+<h2><strong>Gemini’s Dataset Construction</strong><a class="headerlink" href="#gemini-s-dataset-construction" title="Link to this heading">#</a></h2>
+<p>The requested <strong>Seoul APT daily listing trend dataset</strong> has been generated.</p>
+<p>The data was extracted and structured from the input text, pulling ‘Date’, ‘Sale’, ‘Jeonse’, ‘Monthly Rent’, and ‘Total Listings,’ with a total of 1,065 observations. The generated CSV file can be downloaded and used below.</p>
+<section id="data-structure-example">
+<h3>Data Structure Example<a class="headerlink" href="#data-structure-example" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Date</p></th>
+<th class="head"><p>Sale</p></th>
+<th class="head"><p>Jeonse</p></th>
+<th class="head"><p>Monthly Rent</p></th>
+<th class="head"><p>Total Listings</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>2023-02-01</p></td>
+<td><p>52,236</p></td>
+<td><p>52,914</p></td>
+<td><p>29,627</p></td>
+<td><p>134,777</p></td>
+</tr>
+<tr class="row-odd"><td><p>2023-02-02</p></td>
+<td><p>52,006</p></td>
+<td><p>52,898</p></td>
+<td><p>29,661</p></td>
+<td><p>134,565</p></td>
+</tr>
+<tr class="row-even"><td><p>2023-02-03</p></td>
+<td><p>52,878</p></td>
+<td><p>53,420</p></td>
+<td><p>29,874</p></td>
+<td><p>136,172</p></td>
+</tr>
+<tr class="row-odd"><td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Note:</strong> Portions of the input data where the date and sale count were concatenated (e.g., <code class="docutils literal notranslate"><span class="pre">26/02/1363,745</span></code>) were automatically separated and correctly processed as <code class="docutils literal notranslate"><span class="pre">2026-02-13</span></code> and <code class="docutils literal notranslate"><span class="pre">63,745</span></code>.</p>
+<p>The file has been saved as:
+<code class="docutils literal notranslate"><span class="pre">seoul_apt_listings.csv</span></code></p>
+</section>
+</section>
+<section id="question-i">
+<h2><span style="color: blue;"><strong>2. Question I</strong></span><a class="headerlink" href="#question-i" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;"><strong>Has any change been detected in Seoul apartment listings since January 23, 2026, when the government officially announced that the capital gains tax deferral extension for multi-property owners would not be renewed?</strong></span></p>
+</section>
+<section id="gemini-s-analysis">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#gemini-s-analysis" title="Link to this heading">#</a></h2>
+<p>Yes, following the government’s announcement on January 23, 2026 that the heavy capital gains tax deferral for multi-property owners would not be extended, <strong>clear and immediate changes</strong> have been detected in Seoul apartment listings.</p>
+<p>In particular, <strong>sale listings surged</strong> while <strong>rental (jeonse/monthly rent) listings declined</strong>, exhibiting a decoupling phenomenon. This is interpreted as strong evidence that multi-property owners are converting their rental properties to sale listings or rushing them onto the market to avoid the heavy capital gains tax.</p>
+<section id="key-changes-2026-1-23-2026-2-13">
+<h3>Key Changes (2026.1.23 – 2026.2.13)<a class="headerlink" href="#key-changes-2026-1-23-2026-2-13" title="Link to this heading">#</a></h3>
+<p><strong>1. Surge in Sale Listings (Signs of Panic Selling)</strong></p>
+<ul class="simple">
+<li><p><strong>January 23:</strong> 56,219 listings</p></li>
+<li><p><strong>February 13:</strong> 63,745 listings</p></li>
+<li><p><strong>Change:</strong> <strong>+7,526 listings (+13.4%)</strong> increase in just 3 weeks.</p></li>
+<li><p><strong>Notable:</strong> From early January through January 23, sale listings were flat or slightly declining in the 56,000–57,000 range, but the upward slope changed sharply immediately after the announcement.</p></li>
+</ul>
+<p><strong>2. Decline in Jeonse and Monthly Rent Listings (Rental → Sale Conversion)</strong></p>
+<ul class="simple">
+<li><p><strong>Jeonse:</strong> 22,156 → 20,422 (<strong>-7.8% decrease</strong>)</p></li>
+<li><p><strong>Monthly Rent:</strong> 20,628 → 18,891 (<strong>-8.4% decrease</strong>)</p></li>
+<li><p><strong>Interpretation:</strong> Properties previously listed as jeonse or monthly rent are being absorbed into the sale market, causing rental market supply to actually shrink.</p></li>
+</ul>
+</section>
+<section id="visual-analysis">
+<h3>Visual Analysis<a class="headerlink" href="#visual-analysis" title="Link to this heading">#</a></h3>
+<p>The graph below shows the trend from December 2025 to February 2026. Starting from January 23 (dotted line), the <strong>red solid line (sale)</strong> rises sharply while the <strong>blue/green dashed lines (jeonse/monthly rent)</strong> trend downward.</p>
+<p><img alt="APT" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/8-1.png" /></p>
+<p><strong>Conclusion:</strong>
+The government’s announcement had an immediate impact on the market, and multi-property owners appear to have begun flooding the market with tax-motivated listings. Whether this listing surge will lead to actual transaction price declines remains to be seen, but the short-term supply shock has already materialized.</p>
+</section>
+</section>
+<section id="question-ii">
+<h2><span style="color: blue;"><strong>3. Question II</strong></span><a class="headerlink" href="#question-ii" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;"><strong>Analyze whether there are seasonal factors at play</strong></span></p>
+</section>
+<section id="id1">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>To isolate the pure policy effect by removing seasonal factors, a comparative analysis was conducted on the change in Seoul apartment sale listings during the same period (January 23 – February 13) over the most recent 3 years (2024–2026).</p>
+<p>The analysis confirmed that <strong>an anomalous surge that cannot be explained by seasonal factors</strong> appeared in 2026.</p>
+<p><img alt="APT" src="https://raw.githubusercontent.com/pilsunchoi/images4/main/8-2.png" /></p>
+<hr class="docutils" />
+<section id="year-over-year-comparison-jan-23-feb-13">
+<h3>1. Year-over-Year Comparison (Jan 23 – Feb 13)<a class="headerlink" href="#year-over-year-comparison-jan-23-feb-13" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Year</p></th>
+<th class="head"><p>Listings on Jan 23</p></th>
+<th class="head"><p>Listings on Feb 13</p></th>
+<th class="head"><p><strong>Change (Rate)</strong></p></th>
+<th class="head"><p>Note</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>2024</strong></p></td>
+<td><p>76,010</p></td>
+<td><p>73,536</p></td>
+<td><p><strong>-2,474 (-3.3%)</strong></p></td>
+<td><p>Typical seasonality (listings absorbed by increased transactions)</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>2025</strong></p></td>
+<td><p>89,020</p></td>
+<td><p>90,238</p></td>
+<td><p><strong>+1,218 (+1.4%)</strong></p></td>
+<td><p>Flat trend (no major changes)</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>2026</strong></p></td>
+<td><p>56,219</p></td>
+<td><p>63,745</p></td>
+<td><p><strong>+7,526 (+13.4%)</strong></p></td>
+<td><p><strong>Anomalous surge (immediately after policy announcement)</strong></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<hr class="docutils" />
+<section id="seasonality-vs-policy-effect">
+<h3>2. Seasonality vs. Policy Effect<a class="headerlink" href="#seasonality-vs-policy-effect" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Typical pattern (2024):</strong> January to February typically sees active transactions ahead of the spring moving season, causing listings to be absorbed, resulting in a <strong>decline (-3.3%)</strong>. This is the normal seasonal flow.</p></li>
+<li><p><strong>2026 anomaly:</strong> This year, contrary to the typical trend, listings <strong>surged explosively (+13.4%)</strong>. This is not simply a seasonal phenomenon but strongly suggests that the <strong>government’s announcement of no capital gains tax deferral extension</strong> acted as a direct trigger on the market.</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="conclusion">
+<h3>3. Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h3>
+<p>The surge in listings after January 23, 2026 is judged to be <strong>driven by policy factors, not seasonal factors</strong>. Compared to the same-period data in 2024 and 2025, the 2026 slope exhibits a distinctly different pattern, indicating that multi-property owners are treating the government’s announcement as a serious sell signal.</p>
+</section>
+</section>
+<section id="question-iii">
+<h2><span style="color: blue;"><strong>4. Question III</strong></span><a class="headerlink" href="#question-iii" title="Link to this heading">#</a></h2>
+<p><span style="color: blue;"><strong>Recommend additional empirical analyses to increase confidence that the listing surge was caused by policy factors</strong></span></p>
+</section>
+<section id="id2">
+<h2><strong>Gemini’s Analysis</strong><a class="headerlink" href="#id2" title="Link to this heading">#</a></h2>
+<p>To more robustly establish the causal relationship that the listing surge was attributable to <strong>the specific policy of ‘the January 23 announcement of no capital gains tax deferral extension’</strong> rather than mere coincidence or other macroeconomic factors (interest rates, recession, etc.), the following empirical analysis methodologies are proposed.</p>
+<hr class="docutils" />
+<section id="difference-in-differences-did-analysis">
+<h3>1. Difference-in-Differences (DiD) Analysis<a class="headerlink" href="#difference-in-differences-did-analysis" title="Link to this heading">#</a></h3>
+<p>The most powerful causal inference tool. Rather than looking at Seoul as a whole, listings growth should be compared between <strong>a ‘treatment group estimated to have a high proportion of multi-property owners’</strong> and <strong>a ‘control group with a high owner-occupancy rate.’</strong></p>
+<ul class="simple">
+<li><p><strong>Hypothesis:</strong> Areas/complexes with a higher proportion of multi-property owners will show a steeper increase in listings after January 23.</p></li>
+<li><p><strong>Analysis method:</strong></p>
+<ul>
+<li><p><strong>Treatment Group:</strong> Known leveraged investment areas (Nowon, Dobong, Gangbuk — the ‘No-Do-Gang’ districts) or small-unit apartments with high jeonse-to-price ratios.</p></li>
+<li><p><strong>Control Group:</strong> High-value owner-occupied areas (parts of Gangnam, Seocho — large units) or land transaction permit zones (gap investment impossible due to owner-occupancy requirements).</p></li>
+<li><p><strong>Verification:</strong> Check whether the listing trend lines of the two groups were parallel before January 23 (parallel trend) and diverged afterward.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="price-listing-volume-correlation-analysis-granger-causality-test-variant">
+<h3>2. Price-Listing Volume Correlation Analysis (Granger Causality Test Variant)<a class="headerlink" href="#price-listing-volume-correlation-analysis-granger-causality-test-variant" title="Link to this heading">#</a></h3>
+<p>This aims to characterize the nature of the increased listings. If multi-property owners are dumping properties under time pressure, a decline in <strong>asking prices</strong> should accompany the surge.</p>
+<ul class="simple">
+<li><p><strong>Hypothesis:</strong> If this is panic selling due to policy shock, the increase in listing volume should Granger-cause a decline in asking prices with a time lag.</p></li>
+<li><p><strong>Analysis method:</strong></p>
+<ul>
+<li><p>Cross-correlation analysis of weekly listing counts and weekly asking price change rates.</p></li>
+<li><p>If listings surge but asking prices hold, the listings are ‘testing-the-water listings’; if asking prices drop sharply, they are ‘tax-motivated distressed listings.’</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="interrupted-time-series-its-analysis">
+<h3>3. Interrupted Time Series (ITS) Analysis<a class="headerlink" href="#interrupted-time-series-its-analysis" title="Link to this heading">#</a></h3>
+<p>This statistically validates the trend change visible in the line graphs.</p>
+<ul class="simple">
+<li><p><strong>Hypothesis:</strong> At the January 23, 2026 cutoff, the time series <strong>‘slope’</strong> and <strong>‘level’</strong> changed in a statistically significant manner.</p></li>
+<li><p><strong>Analysis method:</strong></p>
+<ul>
+<li><p>Regression equation: <span class="math notranslate nohighlight">\(Y_t = \beta_0 + \beta_1 T + \beta_2 D_t + \beta_3 (T \times D_t) + \epsilon_t\)</span></p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(Y_t\)</span>: Number of listings</p></li>
+<li><p><span class="math notranslate nohighlight">\(T\)</span>: Time elapsed</p></li>
+<li><p><span class="math notranslate nohighlight">\(D_t\)</span>: Dummy variable for post-announcement period (0 or 1)</p></li>
+<li><p><span class="math notranslate nohighlight">\(T \times D_t\)</span>: Time elapsed after announcement (for detecting slope change)</p></li>
+</ul>
+</li>
+<li><p>Test whether <span class="math notranslate nohighlight">\(\beta_3\)</span> (slope change coefficient) is statistically significant in the positive (+) direction (t-test).</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="text-mining-distressed-sale-keyword-analysis">
+<h3>4. Text Mining: ‘Distressed Sale’ Keyword Analysis<a class="headerlink" href="#text-mining-distressed-sale-keyword-analysis" title="Link to this heading">#</a></h3>
+<p>To supplement the limitations of quantitative data (counts) by analyzing unstructured data (listing descriptions).</p>
+<ul class="simple">
+<li><p><strong>Hypothesis:</strong> The descriptions of listings registered after January 23 should show a significant increase in the frequency of keywords such as ‘capital gains tax,’ ‘urgent sale,’ ‘tax-motivated,’ ‘corporate,’ and ‘owner direct.’</p></li>
+<li><p><strong>Analysis method:</strong></p>
+<ul>
+<li><p>Crawl listing description text from platforms such as Naver Real Estate.</p></li>
+<li><p>Conduct TF-IDF analysis by period (pre- vs. post-announcement) to extract newly prominent feature words after January 23.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="multiple-regression-with-macroeconomic-controls">
+<h3>5. Multiple Regression with Macroeconomic Controls<a class="headerlink" href="#multiple-regression-with-macroeconomic-controls" title="Link to this heading">#</a></h3>
+<p>To preempt the counterargument that the listing increase may be attributable to other factors such as interest rate hikes or loan regulations.</p>
+<ul class="simple">
+<li><p><strong>Analysis method:</strong></p>
+<ul>
+<li><p>With listing count as the dependent variable, include the following as independent variables in a multiple regression:</p>
+<ul>
+<li><p><span class="math notranslate nohighlight">\(X_1\)</span>: Market interest rate (e.g., 3-year government bond yield)</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_2\)</span>: KOSPI index (proxy for economic sentiment)</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_3\)</span>: Seasonal dummy</p></li>
+<li><p><span class="math notranslate nohighlight">\(X_4\)</span>: <strong>Policy dummy (post-January 23)</strong></p></li>
+</ul>
+</li>
+<li><p>If the coefficient of <span class="math notranslate nohighlight">\(X_4\)</span> remains significantly large even after controlling for the other variables (<span class="math notranslate nohighlight">\(X_1, X_2, X_3\)</span>), the policy effect is established.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+<section id="reference-python-code">
+<h2><strong>Reference: Python Code</strong><a class="headerlink" href="#reference-python-code" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.dates</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mdates</span>
+
+<span class="c1"># Load dataset</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../Data/seoul_apt_listings.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># ── Rename Korean columns to English ──</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;일자&#39;</span><span class="p">:</span> <span class="s1">&#39;date&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;매매&#39;</span><span class="p">:</span> <span class="s1">&#39;sale&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;전세&#39;</span><span class="p">:</span> <span class="s1">&#39;jeonse&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;월세&#39;</span><span class="p">:</span> <span class="s1">&#39;monthly_rent&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;총매물수&#39;</span><span class="p">:</span> <span class="s1">&#39;total_listings&#39;</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="c1"># ── End rename block ──</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+
+<span class="c1"># Filter to the analysis period (Dec 2025 – Feb 2026)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="s1">&#39;2025-12-01&#39;</span><span class="p">)</span>
+<span class="n">df_recent</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span>
+
+<span class="c1"># Key date settings</span>
+<span class="n">announcement_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="s1">&#39;2026-01-23&#39;</span><span class="p">)</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+<span class="c1"># Compute statistics</span>
+<span class="c1"># 1. Pre-announcement trend (Jan 1 – Jan 23)</span>
+<span class="n">pre_period</span> <span class="o">=</span> <span class="n">df_recent</span><span class="p">[(</span><span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="s1">&#39;2026-01-01&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">announcement_date</span><span class="p">)]</span>
+<span class="n">post_period</span> <span class="o">=</span> <span class="n">df_recent</span><span class="p">[(</span><span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">announcement_date</span><span class="p">)]</span>
+
+<span class="c1"># Extract values at specific points</span>
+<span class="n">val_jan23</span> <span class="o">=</span> <span class="n">df_recent</span><span class="p">[</span><span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">announcement_date</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">val_latest</span> <span class="o">=</span> <span class="n">df_recent</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Calculate growth rates</span>
+<span class="n">sale_growth</span> <span class="o">=</span> <span class="p">(</span><span class="n">val_latest</span><span class="p">[</span><span class="s1">&#39;sale&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">val_jan23</span><span class="p">[</span><span class="s1">&#39;sale&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">val_jan23</span><span class="p">[</span><span class="s1">&#39;sale&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="n">jeonse_growth</span> <span class="o">=</span> <span class="p">(</span><span class="n">val_latest</span><span class="p">[</span><span class="s1">&#39;jeonse&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">val_jan23</span><span class="p">[</span><span class="s1">&#39;jeonse&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">val_jan23</span><span class="p">[</span><span class="s1">&#39;jeonse&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="n">monthly_growth</span> <span class="o">=</span> <span class="p">(</span><span class="n">val_latest</span><span class="p">[</span><span class="s1">&#39;monthly_rent&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">val_jan23</span><span class="p">[</span><span class="s1">&#39;monthly_rent&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">val_jan23</span><span class="p">[</span><span class="s1">&#39;monthly_rent&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">100</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Jan 23 Sale: </span><span class="si">{</span><span class="n">val_jan23</span><span class="p">[</span><span class="s1">&#39;sale&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Latest Sale: </span><span class="si">{</span><span class="n">val_latest</span><span class="p">[</span><span class="s1">&#39;sale&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Growth: </span><span class="si">{</span><span class="n">sale_growth</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Jan 23 Jeonse: </span><span class="si">{</span><span class="n">val_jan23</span><span class="p">[</span><span class="s1">&#39;jeonse&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Latest Jeonse: </span><span class="si">{</span><span class="n">val_latest</span><span class="p">[</span><span class="s1">&#39;jeonse&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Growth: </span><span class="si">{</span><span class="n">jeonse_growth</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+
+<span class="c1"># Visualization</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;sale&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Sale&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;jeonse&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Jeonse&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">],</span> <span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;monthly_rent&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Monthly Rent&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+
+<span class="c1"># Mark announcement date</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">announcement_date</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Announcement (Jan 23)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">announcement_date</span><span class="p">,</span> <span class="n">df_recent</span><span class="p">[</span><span class="s1">&#39;sale&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="s1">&#39; Policy Announcement&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Seoul Apt Listings Trend (Dec 2025 - Feb 2026)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Number of Listings&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">mdates</span><span class="o">.</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s1">&#39;%m/</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Jan 23 Sale: 56219, Latest Sale: 63745, Growth: 13.39%
+Jan 23 Jeonse: 22156, Latest Jeonse: 20422, Growth: -7.83%
+</pre></div>
+</div>
+<img alt="../_images/60ca6441ec5d74c681c518af8eeac3880de2d6e464b07e88ce8c2868f0bcad14.png" src="../_images/60ca6441ec5d74c681c518af8eeac3880de2d6e464b07e88ce8c2868f0bcad14.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.dates</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mdates</span>
+
+<span class="c1"># Load dataset</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../Data/seoul_apt_listings.csv&#39;</span><span class="p">)</span>
+
+<span class="c1"># ── Rename Korean columns to English ──</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+    <span class="s1">&#39;일자&#39;</span><span class="p">:</span> <span class="s1">&#39;date&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;매매&#39;</span><span class="p">:</span> <span class="s1">&#39;sale&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;전세&#39;</span><span class="p">:</span> <span class="s1">&#39;jeonse&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;월세&#39;</span><span class="p">:</span> <span class="s1">&#39;monthly_rent&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;총매물수&#39;</span><span class="p">:</span> <span class="s1">&#39;total_listings&#39;</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="c1"># ── End rename block ──</span>
+
+<span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">])</span>
+
+<span class="c1"># Year-over-year comparison period (Jan 23 – Feb 13)</span>
+<span class="c1"># Compare 2024, 2025, 2026</span>
+<span class="n">target_years</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">2025</span><span class="p">,</span> <span class="mi">2026</span><span class="p">]</span>
+<span class="n">period_start_md</span> <span class="o">=</span> <span class="s1">&#39;01-23&#39;</span>
+<span class="n">period_end_md</span> <span class="o">=</span> <span class="s1">&#39;02-13&#39;</span>
+
+<span class="n">comparison_data</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2024</span><span class="p">:</span> <span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="mi">2025</span><span class="p">:</span> <span class="s1">&#39;silver&#39;</span><span class="p">,</span> <span class="mi">2026</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">}</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2024</span><span class="p">:</span> <span class="s1">&#39;2024 (Normal Year)&#39;</span><span class="p">,</span> <span class="mi">2025</span><span class="p">:</span> <span class="s1">&#39;2025 (Normal Year)&#39;</span><span class="p">,</span> <span class="mi">2026</span><span class="p">:</span> <span class="s1">&#39;2026 (Policy Effect)&#39;</span><span class="p">}</span>
+<span class="n">styles</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2024</span><span class="p">:</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="mi">2025</span><span class="p">:</span> <span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="mi">2026</span><span class="p">:</span> <span class="s1">&#39;-&#39;</span><span class="p">}</span>
+
+<span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">target_years</span><span class="p">:</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">period_start_md</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">period_end_md</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Filter data for the corresponding period in each year</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">start_date</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="p">)</span>
+    <span class="n">period_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;date&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">period_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="c1"># Calculate change rate (%) relative to Jan 23 of each year</span>
+        <span class="n">base_value</span> <span class="o">=</span> <span class="n">period_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;sale&#39;</span><span class="p">]</span>
+        <span class="n">period_df</span><span class="p">[</span><span class="s1">&#39;change_rate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">period_df</span><span class="p">[</span><span class="s1">&#39;sale&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">base_value</span><span class="p">)</span> <span class="o">/</span> <span class="n">base_value</span> <span class="o">*</span> <span class="mi">100</span>
+
+        <span class="c1"># Calculate listing change figures</span>
+        <span class="n">start_listings</span> <span class="o">=</span> <span class="n">period_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;sale&#39;</span><span class="p">]</span>
+        <span class="n">end_listings</span> <span class="o">=</span> <span class="n">period_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;sale&#39;</span><span class="p">]</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">end_listings</span> <span class="o">-</span> <span class="n">start_listings</span>
+        <span class="n">pct_change</span> <span class="o">=</span> <span class="p">(</span><span class="n">delta</span> <span class="o">/</span> <span class="n">start_listings</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+
+        <span class="n">comparison_data</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s1">&#39;Year&#39;</span><span class="p">:</span> <span class="n">year</span><span class="p">,</span>
+            <span class="s1">&#39;Start_Listings&#39;</span><span class="p">:</span> <span class="n">start_listings</span><span class="p">,</span>
+            <span class="s1">&#39;End_Listings&#39;</span><span class="p">:</span> <span class="n">end_listings</span><span class="p">,</span>
+            <span class="s1">&#39;Change_Abs&#39;</span><span class="p">:</span> <span class="n">delta</span><span class="p">,</span>
+            <span class="s1">&#39;Change_Pct&#39;</span><span class="p">:</span> <span class="n">pct_change</span>
+        <span class="p">})</span>
+
+        <span class="c1"># Plot</span>
+        <span class="c1"># Common X-axis: days elapsed since Jan 23</span>
+        <span class="n">days_passed</span> <span class="o">=</span> <span class="p">(</span><span class="n">period_df</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">start_date</span><span class="p">)</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">days_passed</span><span class="p">,</span> <span class="n">period_df</span><span class="p">[</span><span class="s1">&#39;change_rate&#39;</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="n">labels</span><span class="p">[</span><span class="n">year</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">year</span><span class="p">],</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">styles</span><span class="p">[</span><span class="n">year</span><span class="p">],</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">2.5</span> <span class="k">if</span> <span class="n">year</span><span class="o">==</span><span class="mi">2026</span> <span class="k">else</span> <span class="mf">1.5</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Comparison of Listing Inventory Changes (Jan 23 - Feb 13)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Days after Jan 23&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Cumulative Change Rate (%)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+
+<span class="c1"># Add numeric labels at end points</span>
+<span class="k">for</span> <span class="n">year</span> <span class="ow">in</span> <span class="n">target_years</span><span class="p">:</span>
+    <span class="n">row</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">comparison_data</span> <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s2">&quot;Year&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">year</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;Change_Pct&#39;</span><span class="p">],</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;Change_Pct&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">,</span> <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Print comparison table</span>
+<span class="n">comp_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">comparison_data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">comp_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/c1753982c75a7b22a43694960ae531a9d9a707727667830fb477bc3bd99bf742.png" src="../_images/c1753982c75a7b22a43694960ae531a9d9a707727667830fb477bc3bd99bf742.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   Year  Start_Listings  End_Listings  Change_Abs  Change_Pct
+0  2024           76010         73536       -2474   -3.254835
+1  2025           89020         90238        1218    1.368232
+2  2026           56219         63745        7526   13.386933
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./notebooks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="07_News_Comments_Analysis.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><strong>Ch 7. News Comments Analysis</strong></p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="09_Survey_Analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Ch 9. Survey Analysis</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input"><span style="color: blue;"><strong>1. Data Input</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-dataset-construction"><strong>Gemini’s Dataset Construction</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-structure-example">Data Structure Example</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#question-i"><span style="color: blue;"><strong>2. Question I</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gemini-s-analysis"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-changes-2026-1-23-2026-2-13">Key Changes (2026.1.23 – 2026.2.13)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visual-analysis">Visual Analysis</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#question-ii"><span style="color: blue;"><strong>3. Question II</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#year-over-year-comparison-jan-23-feb-13">1. Year-over-Year Comparison (Jan 23 – Feb 13)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#seasonality-vs-policy-effect">2. Seasonality vs. Policy Effect</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">3. Conclusion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#question-iii"><span style="color: blue;"><strong>4. Question III</strong></span></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id2"><strong>Gemini’s Analysis</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#difference-in-differences-did-analysis">1. Difference-in-Differences (DiD) Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#price-listing-volume-correlation-analysis-granger-causality-test-variant">2. Price-Listing Volume Correlation Analysis (Granger Causality Test Variant)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interrupted-time-series-its-analysis">3. Interrupted Time Series (ITS) Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-mining-distressed-sale-keyword-analysis">4. Text Mining: ‘Distressed Sale’ Keyword Analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-regression-with-macroeconomic-controls">5. Multiple Regression with Macroeconomic Controls</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference-python-code"><strong>Reference: Python Code</strong></a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Won Gyoung Kim and Pilsun Choi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
